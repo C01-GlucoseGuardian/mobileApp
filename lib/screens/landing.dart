@@ -2,6 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/strings.dart';
 
+/// Landing screen
+///
+/// This will be called once when opening the app for the first time
+/// Store maybe in the shared preferences a boolean indicating if the app
+/// has previously been opened or not
 class Landing extends StatelessWidget {
   const Landing({super.key});
 
