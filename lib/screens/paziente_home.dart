@@ -16,6 +16,61 @@ class PazienteHome extends StatelessWidget {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: _createAppBar(),
+      bottomNavigationBar: BottomNavigationBar(
+        elevation: 0,
+        backgroundColor: Colors.white,
+        enableFeedback: true,
+        selectedItemColor: Theme.of(context).primaryColor,
+        unselectedItemColor: Colors.black,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
+        selectedFontSize: 0,
+        items: [
+          BottomNavigationBarItem(
+            icon: CircleAvatar(
+              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+              foregroundColor: Theme.of(context).primaryColor,
+              child: const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Icon(Icons.home),
+              ),
+            ),
+            label: 'Home',
+          ),
+          const BottomNavigationBarItem(
+            icon: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              child: Icon(Icons.calendar_month_rounded),
+            ),
+            label: 'Agenda',
+          ),
+          const BottomNavigationBarItem(
+            icon: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              child: Icon(Icons.notifications_none_rounded),
+            ),
+            label: 'Notifiche',
+          ),
+          const BottomNavigationBarItem(
+            icon: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              child: Icon(Icons.medical_information_rounded),
+            ),
+            label: 'Dottore',
+          ),
+          const BottomNavigationBarItem(
+            icon: CircleAvatar(
+              backgroundColor: Colors.transparent,
+              foregroundColor: Colors.black,
+              child: Icon(Icons.person_rounded),
+            ),
+            label: 'Profilo',
+          ),
+        ],
+      ),
       body: Column(
         children: [
           const DaySelector(),
@@ -153,6 +208,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
         Icon(
           icon,
           size: 16,
+          color: Theme.of(context).primaryColor,
         ),
         const Padding(
           padding: EdgeInsets.only(left: 8),
@@ -163,6 +219,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
           children: [
             Text(
               desc,
+              style: const TextStyle(fontWeight: FontWeight.w500),
             ),
             Text.rich(
               TextSpan(
@@ -173,7 +230,12 @@ class _GlucoseCardState extends State<GlucoseCard> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const TextSpan(text: " mmol/L"),
+                  const TextSpan(
+                    text: " mmol/L",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
                 ],
               ),
             ),
