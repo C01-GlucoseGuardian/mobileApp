@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:glucose_guardian/_mock_data.dart';
+import 'package:glucose_guardian/screens/paziente_home.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 void main() {
-  runApp(const MainApp());
+  initializeDateFormatting('it', null).then((_) => runApp(const MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -9,8 +12,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(),
+    return MaterialApp(
+      themeMode: ThemeMode.light,
+      theme: ThemeData.light(useMaterial3: true),
+      home: PazienteHome(
+        user: kMockUser,
+      ),
     );
   }
 }
