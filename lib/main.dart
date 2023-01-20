@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:glucose_guardian/_mock_data.dart';
+import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -14,7 +15,8 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       themeMode: ThemeMode.light,
-      theme: ThemeData.light(useMaterial3: true),
+      theme: ThemeData.light(useMaterial3: true)
+          .copyWith(primaryColor: kOrangePrimary),
       home: PazienteHome(
         user: kMockUser,
       ),
