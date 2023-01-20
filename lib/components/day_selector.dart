@@ -46,7 +46,7 @@ class _DaySelectorState extends State<DaySelector> {
         height: 30,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? Colors.black : kBackgroundColor,
+          color: selected ? Theme.of(context).primaryColor : kBackgroundColor,
           borderRadius: BorderRadius.circular(64),
         ),
         child: Text(
