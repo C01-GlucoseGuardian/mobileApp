@@ -18,6 +18,8 @@ class _DaySelectorState extends State<DaySelector> {
   final DateTime today = DateTime.now();
   DateTime? _selectedDate;
 
+  final BorderRadius borderRadius = BorderRadius.circular(64);
+
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -36,6 +38,7 @@ class _DaySelectorState extends State<DaySelector> {
     final bool selected = (_selectedDate ?? today) == workingDate;
 
     return InkWell(
+      borderRadius: borderRadius,
       onTap: () {
         if (widget.callback != null) widget.callback!(workingDate);
         return setState(() => _selectedDate = workingDate);
@@ -47,7 +50,7 @@ class _DaySelectorState extends State<DaySelector> {
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? Theme.of(context).primaryColor : kBackgroundColor,
-          borderRadius: BorderRadius.circular(64),
+          borderRadius: borderRadius,
         ),
         child: Text(
           selected
