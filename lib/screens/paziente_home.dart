@@ -157,7 +157,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Glucosio: ${last.value.toStringAsFixed(1)} mmol/L",
+                        "Glucosio: ${last.value.toStringAsFixed(1)} ${kGlucoseUOM}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -231,7 +231,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     ),
                   ),
                   const TextSpan(
-                    text: " mmol/L",
+                    text: " ${kGlucoseUOM}",
                     style: TextStyle(
                       fontWeight: FontWeight.w300,
                     ),
