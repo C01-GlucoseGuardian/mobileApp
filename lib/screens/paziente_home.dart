@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
+import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/measurement.dart';
@@ -97,8 +99,11 @@ class PazienteHome extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {}, // TODO: bring user to CGM Selector page
-            icon: const Icon(
-              Icons.light_outlined, // TODO: correct icon for CGM Selector
+            icon: SvgPicture.asset(
+              kCgmIcon,
+              color: Colors.black,
+              width: 28,
+              height: 28,
             ),
           ),
         ],
@@ -145,7 +150,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     backgroundColor: kBackgroundColor,
                     foregroundColor: kOrangePrimary,
                     child: Icon(
-                      Icons.light_outlined,
+                      Icons.bloodtype_rounded,
                     ),
                   ),
                   const Padding(

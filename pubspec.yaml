@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_otp_text_field: ^1.1.1
+  flutter_svg: ^1.1.6
   intl: ^0.18.0
   passwordfield: ^0.1.0
 
@@ -24,3 +25,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo_transparent.png
+    - assets/cgm_icon.svg
