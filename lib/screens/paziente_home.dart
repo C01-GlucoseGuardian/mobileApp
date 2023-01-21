@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
+import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/Measurement.dart';
+import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/user.dart';
 
 class PazienteHome extends StatelessWidget {
@@ -28,7 +29,7 @@ class PazienteHome extends StatelessWidget {
         items: [
           BottomNavigationBarItem(
             icon: CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(0.5),
+              backgroundColor: kBackgroundColor,
               foregroundColor: Theme.of(context).primaryColor,
               child: const Padding(
                 padding: EdgeInsets.all(8.0),
@@ -71,14 +72,15 @@ class PazienteHome extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
+      body: ListView(
+        physics: const BouncingScrollPhysics(),
         children: [
           const DaySelector(),
           GlucoseCard(
             measurementsOfSelectedDay: kMockMeasurements,
           ),
-          const Expanded(
-            child: Placeholder(),
+          GlucoseChartCard(
+            measurementsOfSelectedDay: kMockMeasurements,
           ),
         ],
       ),
@@ -118,10 +120,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
   Widget build(BuildContext context) {
     // assuming they're already sorted by date, last is least measurement
     Measurement last = widget.measurementsOfSelectedDay.last;
-    Measurement lower = widget.measurementsOfSelectedDay.reduce(
-        (value, element) => value.value < element.value ? value : element);
-    Measurement higher = widget.measurementsOfSelectedDay.reduce(
-        (value, element) => value.value > element.value ? value : element);
+    Measurement lowest = getLowest(widget.measurementsOfSelectedDay);
+    Measurement highest = getHighest(widget.measurementsOfSelectedDay);
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -143,7 +143,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                 children: [
                   const CircleAvatar(
                     backgroundColor: kBackgroundColor,
-                    foregroundColor: Colors.black,
+                    foregroundColor: kOrangePrimary,
                     child: Icon(
                       Icons.light_outlined,
                     ),
@@ -185,11 +185,11 @@ class _GlucoseCardState extends State<GlucoseCard> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _buildMaxMinNormalWidget(
-                        higher, Icons.arrow_upward_rounded, "Alto"),
+                        highest, Icons.arrow_upward_rounded, "Alto"),
                     _buildMaxMinNormalWidget(Measurement(5.5, null),
                         Icons.check_circle_sharp, "Normale"),
                     _buildMaxMinNormalWidget(
-                        lower, Icons.arrow_downward_rounded, "Basso"),
+                        lowest, Icons.arrow_downward_rounded, "Basso"),
                   ],
                 ),
               ),
@@ -231,7 +231,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     ),
                   ),
                   const TextSpan(
-                    text: " ${kGlucoseUOM}",
+                    text: " $kGlucoseUOM",
                     style: TextStyle(
                       fontWeight: FontWeight.w300,
                     ),
