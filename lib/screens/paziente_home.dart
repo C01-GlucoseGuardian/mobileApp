@@ -87,7 +87,7 @@ class PazienteHome extends StatelessWidget {
             switch (settings.name) {
               case 'agenda':
                 return MaterialPageRoute(
-                  builder: (_) => const PazienteAgenda(),
+                  builder: (_) => PazienteAgenda(drugs: kMockFarmaci),
                 );
               case 'notifiche':
                 return MaterialPageRoute(
