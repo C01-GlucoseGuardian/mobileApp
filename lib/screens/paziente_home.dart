@@ -12,12 +12,12 @@ import 'package:glucose_guardian/models/user.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:provider/provider.dart';
 
+final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
+
 class PazienteHome extends StatelessWidget {
-  PazienteHome({super.key, required this.user});
   final User user;
 
-  final GlobalKey<NavigatorState> homeNavigatorKey =
-      GlobalKey<NavigatorState>();
+  const PazienteHome({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -83,13 +83,8 @@ class PazienteHome extends StatelessWidget {
         ),
         body: Navigator(
           key: homeNavigatorKey,
-          initialRoute: 'home',
           onGenerateRoute: (settings) {
             switch (settings.name) {
-              case 'home':
-                return MaterialPageRoute(
-                  builder: (_) => const _PazienteHomeDashboard(),
-                );
               case 'agenda':
                 return MaterialPageRoute(
                   builder: (_) => const PazienteAgenda(),
@@ -105,6 +100,11 @@ class PazienteHome extends StatelessWidget {
               case 'profilo':
                 return MaterialPageRoute(
                   builder: (_) => const Text("Profilo"),
+                );
+              case 'home':
+              default:
+                return MaterialPageRoute(
+                  builder: (_) => const _PazienteHomeDashboard(),
                 );
             }
           },
