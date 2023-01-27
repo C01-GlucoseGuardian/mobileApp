@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 
 /// checks if glucose value is normal or not
@@ -13,3 +14,29 @@ Measurement getLowest(List<Measurement> list) => list
 /// Get highest measurement in list
 Measurement getHighest(List<Measurement> list) => list
     .reduce((value, element) => value.value > element.value ? value : element);
+
+/// Define a "wrapper class" to be used by provider to find the bottomNavigationBar
+/// index up in the widget tree not confusing it with other simple integers that
+/// may be present
+class BottomNavigationBarIndex extends ChangeNotifier {
+  int _index;
+
+  BottomNavigationBarIndex(this._index);
+
+  int get index => _index;
+
+  set index(int index) {
+    _index = index;
+
+    notifyListeners();
+  }
+}
+
+/// Navigator paths of the homepage of paziente
+const List<String> kHomeNavigatorPaths = [
+  "home",
+  "agenda",
+  "notifiche",
+  "dottore",
+  "profilo"
+];

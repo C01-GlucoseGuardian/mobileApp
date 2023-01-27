@@ -9,83 +9,128 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/screens/paziente_agenda.dart';
+import 'package:provider/provider.dart';
 
 class PazienteHome extends StatelessWidget {
-  const PazienteHome({super.key, required this.user});
+  PazienteHome({super.key, required this.user});
   final User user;
+
+  final GlobalKey<NavigatorState> homeNavigatorKey =
+      GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: kBackgroundColor,
-      appBar: _createAppBar(),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        backgroundColor: Colors.white,
-        enableFeedback: true,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.black,
-        showSelectedLabels: false,
-        showUnselectedLabels: false,
-        selectedFontSize: 0,
-        items: [
-          BottomNavigationBarItem(
-            icon: CircleAvatar(
-              backgroundColor: kBackgroundColor,
-              foregroundColor: Theme.of(context).primaryColor,
-              child: const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Icon(Icons.home),
+    return ChangeNotifierProvider<BottomNavigationBarIndex>(
+      create: (_) => BottomNavigationBarIndex(0),
+      child: Scaffold(
+        backgroundColor: kBackgroundColor,
+        appBar: _createAppBar(),
+        bottomNavigationBar: Builder(
+          builder: (context) => BottomNavigationBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            enableFeedback: true,
+            selectedFontSize: 0,
+            currentIndex: Provider.of<BottomNavigationBarIndex>(context).index,
+            onTap: (newIndex) {
+              int currentIndex =
+                  Provider.of<BottomNavigationBarIndex>(context, listen: false)
+                      .index;
+              if (currentIndex != newIndex) {
+                String nextRoute = kHomeNavigatorPaths[newIndex];
+                homeNavigatorKey.currentState?.pushReplacementNamed(nextRoute);
+                Provider.of<BottomNavigationBarIndex>(context, listen: false)
+                    .index = newIndex;
+              } else {
+                // TODO: handle what should happen if the user re-clicks on the
+                // current bottomnavigationbar item
+              }
+            },
+            items: [
+              _createBottomNavigationBarItem(
+                context,
+                0,
+                'home',
+                Icons.home_rounded,
               ),
-            ),
-            label: 'Home',
+              _createBottomNavigationBarItem(
+                context,
+                1,
+                'agenda',
+                Icons.calendar_month_rounded,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                2,
+                'notifiche',
+                Icons.notifications_none_rounded,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                3,
+                'dottore',
+                Icons.medical_information_rounded, // TODO: icon
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                4,
+                'profilo',
+                Icons.person_2_rounded,
+              ),
+            ],
           ),
-          const BottomNavigationBarItem(
-            icon: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
-              child: Icon(Icons.calendar_month_rounded),
-            ),
-            label: 'Agenda',
-          ),
-          const BottomNavigationBarItem(
-            icon: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
-              child: Icon(Icons.notifications_none_rounded),
-            ),
-            label: 'Notifiche',
-          ),
-          const BottomNavigationBarItem(
-            icon: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
-              child: Icon(Icons.medical_information_rounded),
-            ),
-            label: 'Dottore',
-          ),
-          const BottomNavigationBarItem(
-            icon: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              foregroundColor: Colors.black,
-              child: Icon(Icons.person_rounded),
-            ),
-            label: 'Profilo',
-          ),
-        ],
+        ),
+        body: Navigator(
+          key: homeNavigatorKey,
+          initialRoute: 'home',
+          onGenerateRoute: (settings) {
+            switch (settings.name) {
+              case 'home':
+                return MaterialPageRoute(
+                  builder: (_) => const _PazienteHomeDashboard(),
+                );
+              case 'agenda':
+                return MaterialPageRoute(
+                  builder: (_) => const PazienteAgenda(),
+                );
+              case 'notifiche':
+                return MaterialPageRoute(
+                  builder: (_) => const Text("Notifiche"),
+                );
+              case 'dottore':
+                return MaterialPageRoute(
+                  builder: (_) => const Text("Dottore"),
+                );
+              case 'profilo':
+                return MaterialPageRoute(
+                  builder: (_) => const Text("Profilo"),
+                );
+            }
+          },
+        ),
       ),
-      body: ListView(
-        physics: const BouncingScrollPhysics(),
-        children: [
-          const DaySelector(),
-          GlucoseCard(
-            measurementsOfSelectedDay: kMockMeasurements,
-          ),
-          GlucoseChartCard(
-            measurementsOfSelectedDay: kMockMeasurements,
-          ),
-        ],
+    );
+  }
+
+  BottomNavigationBarItem _createBottomNavigationBarItem(
+      BuildContext context, int index, String label, IconData icon) {
+    int currentIndex = Provider.of<BottomNavigationBarIndex>(context).index;
+    return BottomNavigationBarItem(
+      icon: CircleAvatar(
+        backgroundColor:
+            currentIndex == index ? kBackgroundColor : Colors.transparent,
+        foregroundColor: currentIndex == index
+            ? Theme.of(context).primaryColor
+            : Colors.black,
+        child: Padding(
+          padding: currentIndex == index
+              ? const EdgeInsets.all(8.0)
+              : EdgeInsets.zero,
+          child: Icon(icon),
+        ),
       ),
+      label: label,
     );
   }
 
@@ -108,6 +153,28 @@ class PazienteHome extends StatelessWidget {
           ),
         ],
       );
+}
+
+class _PazienteHomeDashboard extends StatelessWidget {
+  const _PazienteHomeDashboard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      physics: const BouncingScrollPhysics(),
+      children: [
+        const DaySelector(),
+        GlucoseCard(
+          measurementsOfSelectedDay: kMockMeasurements,
+        ),
+        GlucoseChartCard(
+          measurementsOfSelectedDay: kMockMeasurements,
+        ),
+      ],
+    );
+  }
 }
 
 class GlucoseCard extends StatefulWidget {
