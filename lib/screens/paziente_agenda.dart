@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glucose_guardian/constants/assets.dart';
+import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
 
+// TODO: when the user clicks on "Presa" button the card should be greyed out
+// TODO: since the drug has been already administered
 class PazienteAgenda extends StatelessWidget {
   final List<Farmaco> drugs;
 
@@ -24,73 +28,88 @@ class DrugCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 200,
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(32),
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            flex: 3,
-            child: Center(
-              child: SvgPicture.asset(
-                kPrescriptionsIcon,
-                color: Colors.black,
-                width: 28,
-                height: 28,
+    return Slidable(
+      enabled: true,
+      endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+        SlidableAction(
+          borderRadius:
+              const BorderRadius.horizontal(right: Radius.circular(16)),
+          autoClose: true,
+          onPressed: (ctx) {},
+          backgroundColor: kBackgroundColor,
+          foregroundColor: Theme.of(context).primaryColor,
+          icon: Icons.check,
+          label: 'Presa',
+        ),
+      ]),
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(32),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Center(
+                child: SvgPicture.asset(
+                  kPrescriptionsIcon,
+                  color: Colors.black,
+                  width: 28,
+                  height: 28,
+                ),
               ),
             ),
-          ),
-          Expanded(
-            flex: 8,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Text(
-                    drug.name,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      overflow: TextOverflow.clip,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+            Expanded(
+              flex: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Text(
+                      drug.name,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        overflow: TextOverflow.clip,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                _buildInfoWidget(
-                  context,
-                  "Orario Assunzione",
-                  "${drug.time.hour}:${drug.time.minute}",
-                  Icons.access_time_rounded,
-                ),
-                _buildInfoWidget(
-                  context,
-                  "Dose",
-                  drug.dose,
-                  null,
-                  iconAlt: SvgPicture.asset(
-                    kSyringeIcon,
-                    color: Theme.of(context).primaryColor,
-                    width: 16,
-                    height: 16,
+                  _buildInfoWidget(
+                    context,
+                    "Orario Assunzione",
+                    "${drug.time.hour}:${drug.time.minute}",
+                    Icons.access_time_rounded,
                   ),
-                ),
-                _buildInfoWidget(
-                  context,
-                  "Via di somministrazione",
-                  drug.routeOfAdministration,
-                  Icons.remove_red_eye_rounded,
-                ),
-              ],
-            ),
-          )
-        ],
+                  _buildInfoWidget(
+                    context,
+                    "Dose",
+                    drug.dose,
+                    null,
+                    iconAlt: SvgPicture.asset(
+                      kSyringeIcon,
+                      color: Theme.of(context).primaryColor,
+                      width: 16,
+                      height: 16,
+                    ),
+                  ),
+                  _buildInfoWidget(
+                    context,
+                    "Via di somministrazione",
+                    drug.routeOfAdministration,
+                    Icons.remove_red_eye_rounded,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

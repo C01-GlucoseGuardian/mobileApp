@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_otp_text_field: ^1.1.1
+  flutter_slidable: ^2.0.0
   flutter_svg: ^1.1.6
   intl: ^0.18.0
   passwordfield: ^0.1.0
