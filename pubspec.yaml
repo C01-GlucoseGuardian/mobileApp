@@ -27,3 +27,5 @@ flutter:
   assets:
     - assets/logo_transparent.png
     - assets/cgm_icon.svg
+    - assets/prescriptions_icon.svg
+    - assets/syringe_icon.svg
