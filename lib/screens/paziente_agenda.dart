@@ -54,13 +54,16 @@ class DrugCard extends StatelessWidget {
         child: Row(
           children: [
             Expanded(
-              flex: 3,
+              flex: 2,
               child: Center(
-                child: SvgPicture.asset(
-                  kPrescriptionsIcon,
-                  color: Colors.black,
-                  width: 28,
-                  height: 28,
+                child: CircleAvatar(
+                  backgroundColor: kBackgroundColor,
+                  child: SvgPicture.asset(
+                    kPrescriptionsIcon,
+                    color: kOrangePrimary,
+                    width: 28,
+                    height: 28,
+                  ),
                 ),
               ),
             ),
