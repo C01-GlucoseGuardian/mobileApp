@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
+import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
 
 // TODO: when the user clicks on "Presa" button the card should be greyed out
@@ -87,7 +88,7 @@ class DrugCard extends StatelessWidget {
                   _buildInfoWidget(
                     context,
                     "Orario Assunzione",
-                    "${drug.time.hour}:${drug.time.minute}",
+                    formatTime(drug.time),
                     Icons.access_time_rounded,
                   ),
                   _buildInfoWidget(
