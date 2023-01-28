@@ -10,6 +10,7 @@ import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/user.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
+import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
@@ -91,7 +92,9 @@ class PazienteHome extends StatelessWidget {
                 );
               case 'notifiche':
                 return MaterialPageRoute(
-                  builder: (_) => const Text("Notifiche"),
+                  builder: (_) => PazienteNotifiche(
+                    notifications: kMockNotifiche,
+                  ),
                 );
               case 'dottore':
                 return MaterialPageRoute(
