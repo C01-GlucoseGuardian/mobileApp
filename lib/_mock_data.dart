@@ -5,7 +5,20 @@ import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/user.dart';
 
-User kMockUser = User("Vito", "Piegari");
+User kMockUser = User(
+  "Vito",
+  "Piegari",
+  "PPPVVV99G22H456F",
+  DateTime(1999, 6, 22),
+  "C.so Napoli",
+  "3729799793",
+  "vito@piegari.it",
+  "2",
+  "boh",
+  "Farmaco 1, Farmaco 2, Farmaco 3, Farmaco 4, Farmaco 5, Farmaco 6",
+  2,
+);
+
 List<Measurement> kMockMeasurements = [
   Measurement(3.5, DateTime.now().subtract(const Duration(hours: 1))),
   Measurement(4, DateTime.now().subtract(const Duration(hours: 2))),
