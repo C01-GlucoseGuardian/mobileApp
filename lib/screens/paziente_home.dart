@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
@@ -10,6 +11,7 @@ import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/user.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
+import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:provider/provider.dart';
 
@@ -53,31 +55,31 @@ class PazienteHome extends StatelessWidget {
                 context,
                 0,
                 'home',
-                Icons.home_rounded,
+                FontAwesomeIcons.house,
               ),
               _createBottomNavigationBarItem(
                 context,
                 1,
                 'agenda',
-                Icons.calendar_month_rounded,
+                FontAwesomeIcons.calendar,
               ),
               _createBottomNavigationBarItem(
                 context,
                 2,
                 'notifiche',
-                Icons.notifications_none_rounded,
+                FontAwesomeIcons.bell,
               ),
               _createBottomNavigationBarItem(
                 context,
                 3,
                 'dottore',
-                Icons.medical_information_rounded, // TODO: icon
+                FontAwesomeIcons.userDoctor,
               ),
               _createBottomNavigationBarItem(
                 context,
                 4,
                 'profilo',
-                Icons.person_2_rounded,
+                FontAwesomeIcons.user,
               ),
             ],
           ),
@@ -98,7 +100,9 @@ class PazienteHome extends StatelessWidget {
                 );
               case 'dottore':
                 return MaterialPageRoute(
-                  builder: (_) => const Text("Dottore"),
+                  builder: (_) => PazienteDoctorScreen(
+                    doctor: kMockDoctor,
+                  ),
                 );
               case 'profilo':
                 return MaterialPageRoute(
@@ -130,7 +134,10 @@ class PazienteHome extends StatelessWidget {
           padding: currentIndex == index
               ? const EdgeInsets.all(8.0)
               : EdgeInsets.zero,
-          child: Icon(icon),
+          child: Icon(
+            icon,
+            size: 18,
+          ),
         ),
       ),
       label: label,
