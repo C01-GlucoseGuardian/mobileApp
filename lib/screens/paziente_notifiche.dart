@@ -8,6 +8,7 @@ import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/notifica.dart';
+import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:intl/intl.dart';
 
 class PazienteNotifiche extends StatefulWidget {
