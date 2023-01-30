@@ -3,7 +3,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/notifica.dart';
-import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:intl/intl.dart';
 
 class PazienteNotifiche extends StatelessWidget {
@@ -13,22 +12,11 @@ class PazienteNotifiche extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
-      children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: SendFeedbackButton(),
-        ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: notifications.length,
-            itemBuilder: (context, index) => NotificationCard(
-              notification: notifications[index],
-            ),
-          ),
-        ),
-      ],
+    return ListView.builder(
+      itemCount: notifications.length,
+      itemBuilder: (context, index) => NotificationCard(
+        notification: notifications[index],
+      ),
     );
   }
 }
