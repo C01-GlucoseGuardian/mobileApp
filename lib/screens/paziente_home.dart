@@ -13,6 +13,7 @@ import 'package:glucose_guardian/models/user.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
+import 'package:glucose_guardian/screens/paziente_profilo.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
@@ -106,7 +107,7 @@ class PazienteHome extends StatelessWidget {
                 );
               case 'profilo':
                 return MaterialPageRoute(
-                  builder: (_) => const Text("Profilo"),
+                  builder: (_) => PazienteProfilo(user: user),
                 );
               case 'home':
               default:
