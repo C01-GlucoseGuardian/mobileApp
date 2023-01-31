@@ -11,6 +11,8 @@ class SharedPreferenceService {
   static late final SharedPreferences _instance;
 
   static const String _kFirstTimeOpeningApp = "firstTimeOpeningApp";
+  static const String _kBearerToken = "bearerToken";
+  static const String _kUserType = "userType";
 
   /// Creates [SharedPreferenceService._instance], this should be called in the
   /// main function after `WidgetsFlutterBinding.ensureInitialized()`
@@ -25,4 +27,47 @@ class SharedPreferenceService {
   /// This should be set to false after the landing page only once
   static set firstTimeOpeningApp(bool value) =>
       _instance.setBool(_kFirstTimeOpeningApp, value);
+
+  /// Checks if there's a bearer token saved in shared preferences,
+  /// returns true if there's something, false otherwise.
+  static bool get isLogged => _instance.getString(_kBearerToken) != null;
+
+  /// Used by login to save bearerToken string
+  static set bearerToken(String value) =>
+      _instance.setString(_kBearerToken, value);
+
+  /// Get user type, 0 is paziente, 1 is tutore.
+  /// We assume that this is called after [userType] setter
+  static UserType get userType =>
+      UserType.values[_instance.getInt(_kUserType)!];
+
+  // Set user type
+  static set userType(UserType type) =>
+      _instance.setInt(_kUserType, type.index);
+}
+
+enum UserType { paziente, tutore }
+
+enum FirstScreenState {
+  neverOpenedApp,
+  openedAppButNotLogged,
+  loggedAsPaziente,
+  loggedAsTutore
+}
+
+FirstScreenState getFirstScreenState() {
+  if (SharedPreferenceService.firstTimeOpeningApp) {
+    return FirstScreenState.neverOpenedApp;
+  } else if (SharedPreferenceService.isLogged) {
+    if (SharedPreferenceService.userType == UserType.paziente) {
+      return FirstScreenState.loggedAsPaziente;
+    } else if (SharedPreferenceService.userType == UserType.tutore) {
+      return FirstScreenState.loggedAsTutore;
+    }
+  } else {
+    return FirstScreenState.openedAppButNotLogged;
+  }
+
+  // this should never happen, but hey, linter ¯\_(ツ)_/¯
+  return FirstScreenState.openedAppButNotLogged;
 }
