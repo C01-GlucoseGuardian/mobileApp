@@ -29,7 +29,7 @@ class Notifica {
     id = json['id'];
     messaggio = json['messaggio'];
     data = json['data'];
-    ora = timeOfDayFromApiString(json['ora']);
+    ora = timeOfDayFromApiStringWithSeconds(json['ora']);
     stato = json['stato'];
     pazienteOggetto = json['pazienteOggetto'];
     pazienteDestinatario = json['pazienteDestinatario'];

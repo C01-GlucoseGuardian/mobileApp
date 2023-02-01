@@ -21,7 +21,8 @@ class AssunzioneFarmaco {
     id = json['id'];
     idFarmaco = json['idFarmaco'];
     dosaggio = json['dosaggio'];
-    orarioAssunzione = timeOfDayFromApiString(json['orarioAssunzione']);
+    orarioAssunzione =
+        timeOfDayFromApiStringNoSeconds(json['orarioAssunzione']);
     viaDiSomministrazione = json['viaDiSomministrazione'];
     noteAggiuntive = json['noteAggiuntive'];
   }
