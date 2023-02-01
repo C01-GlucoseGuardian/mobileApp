@@ -8,8 +8,9 @@ import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/glicemia.dart';
-import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/models/measurement.dart';
+import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
@@ -29,7 +30,7 @@ class PazienteHome extends StatelessWidget {
       create: (_) => BottomNavigationBarIndex(0),
       child: Scaffold(
         backgroundColor: kBackgroundColor,
-        appBar: _createAppBar(),
+        appBar: _createAppBar(context),
         bottomNavigationBar: Builder(
           builder: (context) => BottomNavigationBar(
             elevation: 0,
@@ -145,7 +146,7 @@ class PazienteHome extends StatelessWidget {
     );
   }
 
-  AppBar _createAppBar() => AppBar(
+  AppBar _createAppBar(BuildContext context) => AppBar(
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
@@ -154,7 +155,13 @@ class PazienteHome extends StatelessWidget {
         foregroundColor: Colors.black,
         actions: [
           IconButton(
-            onPressed: () {}, // TODO: bring user to CGM Selector page
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (_) => CGMConnect(),
+                ),
+              );
+            },
             icon: SvgPicture.asset(
               kCgmIcon,
               color: Colors.black,
