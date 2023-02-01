@@ -49,5 +49,9 @@ String formatTime(TimeOfDay time) =>
     "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
 
 /// Get a TimeOfDay instance from a HH:MM String
-TimeOfDay timeOfDayFromApiString(String time) =>
-    TimeOfDay.fromDateTime(DateFormat.jm().parse(time));
+TimeOfDay timeOfDayFromApiStringNoSeconds(String time) =>
+    TimeOfDay.fromDateTime(DateFormat("hh:mm").parse(time));
+
+/// Get a TimeOfDay instance from a HH:MM:SS String
+TimeOfDay timeOfDayFromApiStringWithSeconds(String time) =>
+    TimeOfDay.fromDateTime(DateFormat("hh:mm:ss").parse(time));
