@@ -1,46 +1,52 @@
-import 'package:flutter/material.dart';
-
 class Notifica {
-  final String message;
-  final DateTime date;
-  final TimeOfDay time;
+  int? id;
+  String? messaggio;
+  String? data;
+  String? ora;
+  int? stato;
+  String? pazienteOggetto;
+  String? pazienteDestinatario;
+  String? tutoreDestinatario;
+  String? adminDestinatario;
+  String? dottoreDestinatario;
 
-  final StatoNotifica status;
+  Notifica(
+      {this.id,
+      this.messaggio,
+      this.data,
+      this.ora,
+      this.stato,
+      this.pazienteOggetto,
+      this.pazienteDestinatario,
+      this.tutoreDestinatario,
+      this.adminDestinatario,
+      this.dottoreDestinatario});
 
-  Notifica(this.message, this.date, this.time, this.status);
-}
-
-enum StatoNotifica { created, sent, received, read, dismissed }
-
-extension StatoNotificaExtension on StatoNotifica {
-  int get value {
-    switch (this) {
-      case StatoNotifica.created:
-        return 0;
-      case StatoNotifica.sent:
-        return 1;
-      case StatoNotifica.received:
-        return 2;
-      case StatoNotifica.read:
-        return 3;
-      case StatoNotifica.dismissed:
-        return 4;
-    }
+  Notifica.fromJson(Map<String, dynamic> json) {
+    id = json['id'];
+    messaggio = json['messaggio'];
+    data = json['data'];
+    ora = json['ora'];
+    stato = json['stato'];
+    pazienteOggetto = json['pazienteOggetto'];
+    pazienteDestinatario = json['pazienteDestinatario'];
+    tutoreDestinatario = json['tutoreDestinatario'];
+    adminDestinatario = json['adminDestinatario'];
+    dottoreDestinatario = json['dottoreDestinatario'];
   }
-}
 
-StatoNotifica statoNotificaFromInt(int status) {
-  switch (status) {
-    case 0:
-      return StatoNotifica.created;
-    case 1:
-      return StatoNotifica.sent;
-    case 2:
-      return StatoNotifica.received;
-    case 3:
-      return StatoNotifica.read;
-    case 4:
-    default:
-      return StatoNotifica.dismissed;
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['id'] = this.id;
+    data['messaggio'] = this.messaggio;
+    data['data'] = this.data;
+    data['ora'] = this.ora;
+    data['stato'] = this.stato;
+    data['pazienteOggetto'] = this.pazienteOggetto;
+    data['pazienteDestinatario'] = this.pazienteDestinatario;
+    data['tutoreDestinatario'] = this.tutoreDestinatario;
+    data['adminDestinatario'] = this.adminDestinatario;
+    data['dottoreDestinatario'] = this.dottoreDestinatario;
+    return data;
   }
 }
