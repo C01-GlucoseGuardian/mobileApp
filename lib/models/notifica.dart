@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:glucose_guardian/constants/general.dart';
+
 class Notifica {
   int? id;
   String? messaggio;
   String? data;
-  String? ora;
+  TimeOfDay? ora;
   int? stato;
   String? pazienteOggetto;
   String? pazienteDestinatario;
@@ -26,7 +29,7 @@ class Notifica {
     id = json['id'];
     messaggio = json['messaggio'];
     data = json['data'];
-    ora = json['ora'];
+    ora = timeOfDayFromApiString(json['ora']);
     stato = json['stato'];
     pazienteOggetto = json['pazienteOggetto'];
     pazienteDestinatario = json['pazienteDestinatario'];
