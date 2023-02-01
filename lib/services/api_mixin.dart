@@ -29,7 +29,7 @@ abstract class ApiMixin {
 
   Future<Farmaco> fetchFarmacoByID(int id);
 
-  Future<Glicemia> fetchLastGlicemia();
+  Future<Glicemia> fetchLastGlicemia(String codiceFiscale);
   Future<List<Glicemia>> fetchGlicemiaInRange(
       String codiceFiscale, int startTimestamp, int endTimestamp);
 }

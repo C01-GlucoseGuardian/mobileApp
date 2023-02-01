@@ -39,8 +39,8 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
-  Future<Glicemia> fetchLastGlicemia() {
-    return provider.fetchLastGlicemia();
+  Future<Glicemia> fetchLastGlicemia(String codiceFiscale) {
+    return provider.fetchLastGlicemia(codiceFiscale);
   }
 
   @override
