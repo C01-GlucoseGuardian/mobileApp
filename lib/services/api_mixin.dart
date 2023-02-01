@@ -13,7 +13,7 @@ abstract class ApiMixin {
   Future<LoginOutput> performLoginOtp(LoginInput data);
 
   Future<Notifica> fetchNotificaByID(int id);
-  Future<Notifica> fetchNotificaByCF(String codiceFiscale);
+  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale);
 
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
 

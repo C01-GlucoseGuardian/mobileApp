@@ -49,8 +49,8 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
-  Future<Notifica> fetchNotificaByCF(String codiceFiscale) {
-    return provider.fetchNotificaByCF(codiceFiscale);
+  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale) {
+    return provider.fetchNotificheByCF(codiceFiscale);
   }
 
   @override

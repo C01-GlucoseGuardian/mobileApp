@@ -52,7 +52,7 @@ class ApiProvider implements ApiMixin {
   }
 
   @override
-  Future<Notifica> fetchNotificaByCF(String codiceFiscale) {
+  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale) {
     // TODO: implement fetchNotificaByCF
     throw UnimplementedError();
   }
