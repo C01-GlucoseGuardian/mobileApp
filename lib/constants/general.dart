@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:glucose_guardian/models/measurement.dart';
+import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:intl/intl.dart';
 
 /// checks if glucose value is normal or not
-///
-/// TODO: change UOM to mg/dL
-bool isGlucoseValueNormal(double value) => value > 3.9 && value <= 5.5;
-const String kGlucoseUOM = "mmol/L";
+bool isGlucoseValueNormal(int value) => value < 100;
+const String kGlucoseUOM = "mg/dL";
 
 /// Get lowest measurement in list
-Measurement getLowest(List<Measurement> list) => list
-    .reduce((value, element) => value.value < element.value ? value : element);
+Glicemia getLowest(List<Glicemia> list) => list.reduce((value, element) =>
+    value.livelloGlucosio! < element.livelloGlucosio! ? value : element);
 
 /// Get highest measurement in list
-Measurement getHighest(List<Measurement> list) => list
-    .reduce((value, element) => value.value > element.value ? value : element);
+Glicemia getHighest(List<Glicemia> list) => list.reduce((value, element) =>
+    value.livelloGlucosio! > element.livelloGlucosio! ? value : element);
 
 /// Define a "wrapper class" to be used by provider to find the bottomNavigationBar
 /// index up in the widget tree not confusing it with other simple integers that
@@ -44,3 +43,7 @@ const List<String> kHomeNavigatorPaths = [
 /// Returns the formatted time in the hh:mm format
 String formatTime(TimeOfDay time) =>
     "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";
+
+/// Get a TimeOfDay instance from a HH:MM String
+TimeOfDay timeOfDayFromApiString(String time) =>
+    TimeOfDay.fromDateTime(DateFormat.jm().parse(time));

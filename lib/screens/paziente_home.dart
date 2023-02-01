@@ -7,8 +7,8 @@ import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/measurement.dart';
-import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:provider/provider.dart';
@@ -16,7 +16,7 @@ import 'package:provider/provider.dart';
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
 
 class PazienteHome extends StatelessWidget {
-  final User user;
+  final Paziente user;
 
   const PazienteHome({super.key, required this.user});
 
@@ -181,7 +181,7 @@ class _PazienteHomeDashboard extends StatelessWidget {
 }
 
 class GlucoseCard extends StatefulWidget {
-  final List<Measurement> measurementsOfSelectedDay;
+  final List<Glicemia> measurementsOfSelectedDay;
   const GlucoseCard({super.key, required this.measurementsOfSelectedDay});
 
   @override
@@ -194,9 +194,10 @@ class _GlucoseCardState extends State<GlucoseCard> {
   @override
   Widget build(BuildContext context) {
     // assuming they're already sorted by date, last is least measurement
-    Measurement last = widget.measurementsOfSelectedDay.last;
-    Measurement lowest = getLowest(widget.measurementsOfSelectedDay);
-    Measurement highest = getHighest(widget.measurementsOfSelectedDay);
+    Glicemia last = widget.measurementsOfSelectedDay.last;
+    Glicemia lowest = getLowest(widget.measurementsOfSelectedDay);
+    Glicemia highest = getHighest(widget.measurementsOfSelectedDay);
+    Glicemia mean = Glicemia(); // TODO:
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -232,14 +233,14 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Glucosio: ${last.value.toStringAsFixed(1)} ${kGlucoseUOM}",
+                        "Glucosio: ${last.livelloGlucosio!} ${kGlucoseUOM}",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
                         ),
                       ),
                       Text(
-                        isGlucoseValueNormal(last.value)
+                        isGlucoseValueNormal(last.livelloGlucosio!)
                             ? "Ti dovresti sentire bene!"
                             : "Fai attenzione al livello di glucosio!",
                       ),
@@ -261,8 +262,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
                   children: [
                     _buildMaxMinNormalWidget(
                         highest, Icons.arrow_upward_rounded, "Alto"),
-                    _buildMaxMinNormalWidget(Measurement(5.5, null),
-                        Icons.check_circle_sharp, "Normale"),
+                    _buildMaxMinNormalWidget(
+                        mean, Icons.check_circle_sharp, "Medio"),
                     _buildMaxMinNormalWidget(
                         lowest, Icons.arrow_downward_rounded, "Basso"),
                   ],
@@ -274,7 +275,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
     );
   }
 
-  Row _buildMaxMinNormalWidget(Measurement higher, IconData icon, String desc) {
+  Row _buildMaxMinNormalWidget(Glicemia higher, IconData icon, String desc) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -300,7 +301,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: higher.value.toStringAsFixed(1),
+                    text: higher.livelloGlucosio!.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

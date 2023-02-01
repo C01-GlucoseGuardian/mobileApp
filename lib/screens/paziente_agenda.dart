@@ -4,10 +4,11 @@ import 'package:flutter_svg/svg.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
+import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
 
 class PazienteAgenda extends StatelessWidget {
-  final List<Farmaco> drugs;
+  final List<AssunzioneFarmaco> drugs;
 
   const PazienteAgenda({super.key, required this.drugs});
 
@@ -15,16 +16,18 @@ class PazienteAgenda extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: drugs.length,
-      itemBuilder: (context, index) => DrugCard(drug: drugs[index]),
+      itemBuilder: (context, index) =>
+          DrugCard(assunzioneFarmaco: drugs[index]),
     );
   }
 }
 
 class DrugCard extends StatefulWidget {
-  final Farmaco drug;
+  final AssunzioneFarmaco assunzioneFarmaco;
   final bool enabled;
 
-  const DrugCard({super.key, required this.drug, this.enabled = true});
+  const DrugCard(
+      {super.key, required this.assunzioneFarmaco, this.enabled = true});
 
   @override
   State<DrugCard> createState() => _DrugCardState();
@@ -41,6 +44,8 @@ class _DrugCardState extends State<DrugCard> {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: get farmaco from assunzione farmaco's id farmaco
+    Farmaco farmaco = Farmaco();
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Slidable(
@@ -94,7 +99,7 @@ class _DrugCardState extends State<DrugCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.drug.name,
+                        farmaco.nomeFarmaco!,
                         maxLines: 1,
                         style: const TextStyle(
                           overflow: TextOverflow.clip,
@@ -106,13 +111,13 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Orario Assunzione",
-                      formatTime(widget.drug.time),
+                      formatTime(widget.assunzioneFarmaco.orarioAssunzione!),
                       Icons.access_time_rounded,
                     ),
                     _buildInfoWidget(
                       context,
                       "Dose",
-                      widget.drug.dose,
+                      "${widget.assunzioneFarmaco.dosaggio!} mg",
                       null,
                       iconAlt: SvgPicture.asset(
                         kSyringeIcon,
@@ -124,7 +129,7 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Via di somministrazione",
-                      widget.drug.routeOfAdministration,
+                      widget.assunzioneFarmaco.viaDiSomministrazione!,
                       Icons.remove_red_eye_rounded,
                     ),
                   ],

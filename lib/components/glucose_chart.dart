@@ -2,13 +2,13 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/measurement.dart';
+import 'package:glucose_guardian/models/glicemia.dart';
 
 /// Glucose chart for a selected range of measurements
 ///
 /// chart card
 class GlucoseChartCard extends StatelessWidget {
-  final List<Measurement> measurementsOfSelectedDay;
+  final List<Glicemia> measurementsOfSelectedDay;
 
   const GlucoseChartCard({super.key, required this.measurementsOfSelectedDay});
   @override
@@ -78,8 +78,8 @@ class GlucoseChartCard extends StatelessWidget {
   }
 
   BarChartData mainBarData() {
-    Measurement lowest = getLowest(measurementsOfSelectedDay);
-    Measurement highest = getHighest(measurementsOfSelectedDay);
+    Glicemia lowest = getLowest(measurementsOfSelectedDay);
+    Glicemia highest = getHighest(measurementsOfSelectedDay);
 
     return BarChartData(
       barTouchData: BarTouchData(
@@ -89,10 +89,9 @@ class GlucoseChartCard extends StatelessWidget {
           tooltipBgColor: kBackgroundColor,
           tooltipRoundedRadius: 3,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
-            Measurement clickedMeasurement =
-                measurementsOfSelectedDay[groupIndex];
+            Glicemia clickedMeasurement = measurementsOfSelectedDay[groupIndex];
             return BarTooltipItem(
-              "${clickedMeasurement.value} $kGlucoseUOM",
+              "${clickedMeasurement.livelloGlucosio} $kGlucoseUOM",
               const TextStyle(
                 color: Colors.black,
                 fontWeight: FontWeight.bold,
@@ -130,17 +129,19 @@ class GlucoseChartCard extends StatelessWidget {
       barGroups: measurementsOfSelectedDay
           .map(
             (e) => BarChartGroupData(
-              x: e.time!.millisecondsSinceEpoch, // X axis
+              x: e.timestamp!, // X axis
               barRods: [
                 BarChartRodData(
-                  color: isGlucoseValueNormal(e.value)
+                  color: isGlucoseValueNormal(e.livelloGlucosio!)
                       ? kBlue
                       : Color.lerp(
                           kOrange,
                           kOrangePrimary,
-                          (e.value - lowest.value) /
-                              (highest.value - lowest.value)),
-                  toY: e.value, // Y axis
+                          (e.livelloGlucosio! - lowest.livelloGlucosio!) /
+                              (highest.livelloGlucosio! -
+                                  lowest.livelloGlucosio!),
+                        ),
+                  toY: e.livelloGlucosio!.toDouble(), // Y axis
                 ),
               ],
             ),
