@@ -45,7 +45,7 @@ class _DrugCardState extends State<DrugCard> {
   @override
   Widget build(BuildContext context) {
     // TODO: get farmaco from assunzione farmaco's id farmaco
-    Farmaco farmaco = Farmaco();
+    AssunzioneFarmaco farmaco = AssunzioneFarmaco();
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Slidable(
