@@ -1,11 +1,11 @@
-import 'package:glucose_guardian/models/farmaco.dart';
+import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 
 class Terapia {
   int? id;
   String? idPaziente;
   String? idDottore;
   String? dataInizio;
-  List<Farmaco>? farmaci;
+  List<AssunzioneFarmaco>? farmaci;
 
   Terapia(
       {this.id,
@@ -20,9 +20,9 @@ class Terapia {
     idDottore = json['idDottore'];
     dataInizio = json['dataInizio'];
     if (json['farmaci'] != null) {
-      farmaci = <Farmaco>[];
+      farmaci = <AssunzioneFarmaco>[];
       json['farmaci'].forEach((v) {
-        farmaci!.add(new Farmaco.fromJson(v));
+        farmaci!.add(new AssunzioneFarmaco.fromJson(v));
       });
     }
   }
