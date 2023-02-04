@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
@@ -9,8 +10,11 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
+import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
+import 'package:glucose_guardian/screens/paziente_profilo.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
@@ -26,7 +30,7 @@ class PazienteHome extends StatelessWidget {
       create: (_) => BottomNavigationBarIndex(0),
       child: Scaffold(
         backgroundColor: kBackgroundColor,
-        appBar: _createAppBar(),
+        appBar: _createAppBar(context),
         bottomNavigationBar: Builder(
           builder: (context) => BottomNavigationBar(
             elevation: 0,
@@ -53,31 +57,31 @@ class PazienteHome extends StatelessWidget {
                 context,
                 0,
                 'home',
-                Icons.home_rounded,
+                FontAwesomeIcons.house,
               ),
               _createBottomNavigationBarItem(
                 context,
                 1,
                 'agenda',
-                Icons.calendar_month_rounded,
+                FontAwesomeIcons.calendar,
               ),
               _createBottomNavigationBarItem(
                 context,
                 2,
                 'notifiche',
-                Icons.notifications_none_rounded,
+                FontAwesomeIcons.bell,
               ),
               _createBottomNavigationBarItem(
                 context,
                 3,
                 'dottore',
-                Icons.medical_information_rounded, // TODO: icon
+                FontAwesomeIcons.userDoctor,
               ),
               _createBottomNavigationBarItem(
                 context,
                 4,
                 'profilo',
-                Icons.person_2_rounded,
+                FontAwesomeIcons.user,
               ),
             ],
           ),
@@ -98,11 +102,13 @@ class PazienteHome extends StatelessWidget {
                 );
               case 'dottore':
                 return MaterialPageRoute(
-                  builder: (_) => const Text("Dottore"),
+                  builder: (_) => PazienteDoctorScreen(
+                    doctor: kMockDoctor,
+                  ),
                 );
               case 'profilo':
                 return MaterialPageRoute(
-                  builder: (_) => const Text("Profilo"),
+                  builder: (_) => PazienteProfilo(user: user),
                 );
               case 'home':
               default:
@@ -130,14 +136,17 @@ class PazienteHome extends StatelessWidget {
           padding: currentIndex == index
               ? const EdgeInsets.all(8.0)
               : EdgeInsets.zero,
-          child: Icon(icon),
+          child: Icon(
+            icon,
+            size: 18,
+          ),
         ),
       ),
       label: label,
     );
   }
 
-  AppBar _createAppBar() => AppBar(
+  AppBar _createAppBar(BuildContext context) => AppBar(
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
@@ -146,7 +155,13 @@ class PazienteHome extends StatelessWidget {
         foregroundColor: Colors.black,
         actions: [
           IconButton(
-            onPressed: () {}, // TODO: bring user to CGM Selector page
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (_) => CGMConnect(),
+                ),
+              );
+            },
             icon: SvgPicture.asset(
               kCgmIcon,
               color: Colors.black,

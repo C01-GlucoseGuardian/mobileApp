@@ -1,7 +1,10 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/constants/assets.dart';
+import 'package:glucose_guardian/screens/paziente_home.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:passwordfield/passwordfield.dart';
 
 /// Login screen
@@ -102,7 +105,16 @@ class _LoginState extends State<Login> {
                           40,
                         ),
                       ),
-                      onPressed: () {}, // TODO: add login logic
+                      onPressed: () {
+                        // TODO: add login logic
+                        SharedPreferenceService.bearerToken = "testtest";
+                        SharedPreferenceService.userType = UserType.paziente;
+                        Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => PazienteHome(user: kMockUser),
+                          ),
+                        );
+                      },
                       child: const Text(
                         "LOGIN",
                       ),

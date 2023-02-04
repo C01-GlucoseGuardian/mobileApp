@@ -1,10 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:glucose_guardian/models/doctor.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
 import 'package:glucose_guardian/models/measurement.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/user.dart';
 
-User kMockUser = User("Vito", "Piegari");
+User kMockUser = User(
+  "Vito",
+  "Piegari",
+  "PPPVVV99G22H456F",
+  DateTime(1999, 6, 22),
+  "C.so Napoli",
+  "3729799793",
+  "vito@piegari.it",
+  "2",
+  "boh",
+  "Farmaco 1, Farmaco 2, Farmaco 3, Farmaco 4, Farmaco 5, Farmaco 6",
+  2,
+);
+
 List<Measurement> kMockMeasurements = [
   Measurement(3.5, DateTime.now().subtract(const Duration(hours: 1))),
   Measurement(4, DateTime.now().subtract(const Duration(hours: 2))),
@@ -57,3 +71,16 @@ List<Notifica> kMockNotifiche = [
       const TimeOfDay(hour: 22, minute: 30),
       StatoNotifica.dismissed),
 ];
+
+Doctor kMockDoctor = Doctor(
+  "Franco",
+  "Esposito",
+  "FRNSPT30G12D425H",
+  DateTime(1930, 6, 12),
+  "C.so Garibaldi, 12",
+  "3663636636",
+  "frnssp@unisa.ac.za",
+  "diabetologo",
+  "Clinica Maddalena",
+  "Via Toledo, 12",
+);

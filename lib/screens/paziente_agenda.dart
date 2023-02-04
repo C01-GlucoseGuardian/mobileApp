@@ -5,6 +5,7 @@ import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
+import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 
 class PazienteAgenda extends StatelessWidget {
   final List<Farmaco> drugs;
@@ -13,9 +14,20 @@ class PazienteAgenda extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: drugs.length,
-      itemBuilder: (context, index) => DrugCard(drug: drugs[index]),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        const Padding(
+          padding: EdgeInsets.only(right: 16),
+          child: SendFeedbackButton(),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: drugs.length,
+            itemBuilder: (context, index) => DrugCard(drug: drugs[index]),
+          ),
+        ),
+      ],
     );
   }
 }
