@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/screens/landing.dart';
 import 'package:glucose_guardian/screens/login.dart';
@@ -30,7 +29,7 @@ class MainApp extends StatelessWidget {
         home = const Login();
         break;
       case FirstScreenState.loggedAsPaziente:
-        home = PazienteHome(user: kMockUser);
+        home = const PazienteHome();
         break;
       case FirstScreenState.loggedAsTutore:
         home = Container();

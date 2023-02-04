@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/constants/colors.dart';
-import 'package:glucose_guardian/models/doctor.dart';
+import 'package:glucose_guardian/models/dottore.dart';
 import 'package:glucose_guardian/screens/paziente_send_feedback.dart';
 import 'package:intl/intl.dart';
 
 class PazienteDoctorScreen extends StatelessWidget {
-  final Doctor doctor;
+  final Dottore doctor;
 
   const PazienteDoctorScreen({super.key, required this.doctor});
 
@@ -59,52 +59,52 @@ class PazienteDoctorScreen extends StatelessWidget {
                   children: [
                     _buildField(
                       "nome",
-                      doctor.nome,
+                      doctor.nome!,
                     ),
                     sizedBox,
                     _buildField(
                       "cognome",
-                      doctor.cognome,
+                      doctor.cognome!,
                     ),
                     sizedBox,
                     _buildField(
                       "codice fiscale",
-                      doctor.codiceFiscale,
+                      doctor.codiceFiscale!,
                     ),
                     sizedBox,
                     _buildField(
                       "data di nascita",
-                      DateFormat("dd/MM/yyyy").format(doctor.dataNascita),
+                      DateFormat("dd/MM/yyyy").format(doctor.dataNascita!),
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo",
-                      doctor.indirizzo,
+                      doctor.indirizzo!,
                     ),
                     sizedBox,
                     _buildField(
                       "telefono",
-                      doctor.telefono,
+                      doctor.telefono!,
                     ),
                     sizedBox,
                     _buildField(
                       "email",
-                      doctor.email,
+                      doctor.email!,
                     ),
                     sizedBox,
                     _buildField(
                       "specializzazione",
-                      doctor.specializzazione,
+                      doctor.specializzazione!,
                     ),
                     sizedBox,
                     _buildField(
                       "nome struttura medica",
-                      doctor.nomeStruttura,
+                      doctor.nomeStruttura!,
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo struttura medica",
-                      doctor.indirizzoStruttura,
+                      doctor.indirizzoStruttura!,
                     ),
                     const Align(
                       alignment: Alignment.bottomRight,

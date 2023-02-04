@@ -25,7 +25,9 @@ class PazienteAgenda extends StatelessWidget {
         Expanded(
           child: ListView.builder(
             itemCount: drugs.length,
-            itemBuilder: (context, index) => DrugCard(drug: drugs[index]),
+            itemBuilder: (context, index) => DrugCard(
+              assunzioneFarmaco: drugs[index],
+            ),
           ),
         ),
       ],
@@ -56,7 +58,7 @@ class _DrugCardState extends State<DrugCard> {
   @override
   Widget build(BuildContext context) {
     // TODO: get farmaco from assunzione farmaco's id farmaco
-    AssunzioneFarmaco farmaco = AssunzioneFarmaco();
+    Farmaco farmaco = Farmaco();
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Slidable(

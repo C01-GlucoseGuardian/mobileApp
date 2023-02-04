@@ -70,19 +70,19 @@ class NotificationCard extends StatelessWidget {
                   _buildInfoWidget(
                     context,
                     "Data",
-                    DateFormat("dd MMMM yyyy", 'it').format(notification.date),
+                    DateFormat("dd MMMM yyyy", 'it').format(notification.data!),
                     Icons.access_time_rounded,
                   ),
                   _buildInfoWidget(
                     context,
                     "Ora",
-                    formatTime(notification.time),
+                    formatTime(notification.ora!),
                     Icons.access_time_rounded,
                   ),
                   const SizedBox(
                     height: 16,
                   ),
-                  Text(notification.message),
+                  Text(notification.messaggio!),
                 ],
               ),
             )

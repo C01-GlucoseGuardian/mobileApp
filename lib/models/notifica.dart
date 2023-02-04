@@ -4,7 +4,7 @@ import 'package:glucose_guardian/constants/general.dart';
 class Notifica {
   int? id;
   String? messaggio;
-  String? data;
+  DateTime? data;
   TimeOfDay? ora;
   int? stato;
   String? pazienteOggetto;
@@ -28,7 +28,7 @@ class Notifica {
   Notifica.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     messaggio = json['messaggio'];
-    data = json['data'];
+    data = DateTime.parse(json['data']);
     ora = timeOfDayFromApiStringWithSeconds(json['ora']);
     stato = json['stato'];
     pazienteOggetto = json['pazienteOggetto'];

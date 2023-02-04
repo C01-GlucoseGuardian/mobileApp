@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/constants/colors.dart';
-import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/models/paziente.dart';
 import 'package:intl/intl.dart';
 
 class PazienteProfilo extends StatelessWidget {
-  final User user;
+  final Paziente user;
 
   const PazienteProfilo({super.key, required this.user});
 
@@ -58,49 +58,49 @@ class PazienteProfilo extends StatelessWidget {
                   children: [
                     _buildField(
                       "nome",
-                      user.nome,
+                      user.nome!,
                     ),
                     sizedBox,
                     _buildField(
                       "cognome",
-                      user.cognome,
+                      user.cognome!,
                     ),
                     sizedBox,
                     _buildField(
                       "codice fiscale",
-                      user.codiceFiscale,
+                      user.codiceFiscale!,
                     ),
                     sizedBox,
                     _buildField(
                       "data di nascita",
-                      DateFormat("dd/MM/yyyy").format(user.dataNascita),
+                      DateFormat("dd/MM/yyyy").format(user.dataNascita!),
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo",
-                      user.indirizzo,
+                      user.indirizzo!,
                     ),
                     sizedBox,
                     _buildField(
                       "telefono",
-                      user.telefono,
+                      user.telefono!,
                     ),
                     sizedBox,
                     _buildField(
                       "email",
-                      user.email,
+                      user.email!,
                     ),
                     _buildField(
                       "Tipo diabete",
-                      user.tipoDiabete,
+                      user.tipoDiabete!,
                     ),
                     _buildField(
                       "Comorbilità",
-                      user.comorbilita,
+                      user.comorbilita!,
                     ),
                     _buildField(
                       "Farmaci assunti",
-                      user.farmaciAssunti,
+                      user.farmaciAssunti!,
                     ),
                   ],
                 ),

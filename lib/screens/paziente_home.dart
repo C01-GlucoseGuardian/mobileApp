@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:glucose_guardian/_mock_data.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/measurement.dart';
-import 'package:glucose_guardian/models/user.dart';
+import 'package:glucose_guardian/models/assunzione_farmaco.dart';
+import 'package:glucose_guardian/models/dottore.dart';
+import 'package:glucose_guardian/models/farmaco.dart';
+import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:glucose_guardian/models/notifica.dart';
+import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
@@ -19,15 +22,24 @@ import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
 
-class PazienteHome extends StatelessWidget {
-  final Paziente user;
+final Paziente paziente = Paziente(); // TODO: only here because I hate errors
+final Dottore dottore = Dottore();
+final Farmaco farmaco = Farmaco();
+final List<AssunzioneFarmaco> farmaci = List.empty();
+final List<Notifica> notifiche = List.empty();
+final List<Glicemia> misurazioni = List.empty();
 
-  const PazienteHome({super.key, required this.user});
+class PazienteHome extends StatelessWidget {
+  const PazienteHome({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider<BottomNavigationBarIndex>(
-      create: (_) => BottomNavigationBarIndex(0),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<BottomNavigationBarIndex>(
+          create: (_) => BottomNavigationBarIndex(0),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: kBackgroundColor,
         appBar: _createAppBar(context),
@@ -92,23 +104,23 @@ class PazienteHome extends StatelessWidget {
             switch (settings.name) {
               case 'agenda':
                 return MaterialPageRoute(
-                  builder: (_) => PazienteAgenda(drugs: kMockFarmaci),
+                  builder: (_) => PazienteAgenda(drugs: farmaci),
                 );
               case 'notifiche':
                 return MaterialPageRoute(
                   builder: (_) => PazienteNotifiche(
-                    notifications: kMockNotifiche,
+                    notifications: notifiche,
                   ),
                 );
               case 'dottore':
                 return MaterialPageRoute(
                   builder: (_) => PazienteDoctorScreen(
-                    doctor: kMockDoctor,
+                    doctor: dottore,
                   ),
                 );
               case 'profilo':
                 return MaterialPageRoute(
-                  builder: (_) => PazienteProfilo(user: user),
+                  builder: (_) => PazienteProfilo(user: paziente),
                 );
               case 'home':
               default:
@@ -150,7 +162,7 @@ class PazienteHome extends StatelessWidget {
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
-        title: Text("Ciao, ${user.nome}!"),
+        title: Text("Ciao, ${paziente.nome}!"),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         foregroundColor: Colors.black,
         actions: [
@@ -185,10 +197,10 @@ class _PazienteHomeDashboard extends StatelessWidget {
       children: [
         const DaySelector(),
         GlucoseCard(
-          measurementsOfSelectedDay: kMockMeasurements,
+          measurementsOfSelectedDay: misurazioni,
         ),
         GlucoseChartCard(
-          measurementsOfSelectedDay: kMockMeasurements,
+          measurementsOfSelectedDay: misurazioni,
         ),
       ],
     );

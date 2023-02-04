@@ -2,7 +2,7 @@ class Dottore {
   String? codiceFiscale;
   String? nome;
   String? cognome;
-  String? dataNascita;
+  DateTime? dataNascita;
   String? indirizzo;
   String? telefono;
   String? email;
@@ -32,7 +32,7 @@ class Dottore {
     codiceFiscale = json['codiceFiscale'];
     nome = json['nome'];
     cognome = json['cognome'];
-    dataNascita = json['dataNascita'];
+    dataNascita = DateTime.parse(json['dataNascita']);
     indirizzo = json['indirizzo'];
     telefono = json['telefono'];
     email = json['email'];
