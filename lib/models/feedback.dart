@@ -15,7 +15,7 @@ class FeedbackInput {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['statoSalute'] = this.statoSalute;
     data['oreSonno'] = this.oreSonno;
     data['dolori'] = this.dolori;
@@ -56,7 +56,7 @@ class Feedback {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['statoSalute'] = this.statoSalute;
     data['oreSonno'] = this.oreSonno;
     data['dolori'] = this.dolori;

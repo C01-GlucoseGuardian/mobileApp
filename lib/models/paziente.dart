@@ -46,13 +46,13 @@ class Paziente {
     if (json['numeriUtili'] != null) {
       numeriUtili = <NumeroUtile>[];
       json['numeriUtili'].forEach((v) {
-        numeriUtili!.add(new NumeroUtile.fromJson(v));
+        numeriUtili!.add(NumeroUtile.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['codiceFiscale'] = this.codiceFiscale;
     data['nome'] = this.nome;
     data['cognome'] = this.cognome;

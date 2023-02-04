@@ -22,13 +22,13 @@ class Terapia {
     if (json['farmaci'] != null) {
       farmaci = <AssunzioneFarmaco>[];
       json['farmaci'].forEach((v) {
-        farmaci!.add(new AssunzioneFarmaco.fromJson(v));
+        farmaci!.add(AssunzioneFarmaco.fromJson(v));
       });
     }
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['id'] = this.id;
     data['idPaziente'] = this.idPaziente;
     data['idDottore'] = this.idDottore;

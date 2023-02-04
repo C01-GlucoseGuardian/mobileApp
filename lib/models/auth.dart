@@ -12,7 +12,7 @@ class LoginInput {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['email'] = this.email;
     data['password'] = this.password;
     data['otp'] = this.otp;
@@ -37,7 +37,7 @@ class LoginOutput {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['needOtp'] = this.needOtp;
     data['idUtente'] = this.idUtente;
     data['tipoUtente'] = this.tipoUtente;
@@ -61,7 +61,7 @@ class ChangePassword {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
+    final Map<String, dynamic> data = Map<String, dynamic>();
     data['password'] = this.password;
     data['newPassword'] = this.newPassword;
     data['otp'] = this.otp;
