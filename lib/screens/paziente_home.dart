@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/measurements/measurements_bloc.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
+import 'package:glucose_guardian/constants/dates.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
@@ -177,28 +182,96 @@ class PazienteHome extends StatelessWidget {
       );
 }
 
-class _PazienteHomeDashboard extends StatelessWidget {
+class _PazienteHomeDashboard extends StatefulWidget {
   const _PazienteHomeDashboard({
     super.key,
   });
 
   @override
+  State<_PazienteHomeDashboard> createState() => _PazienteHomeDashboardState();
+}
+
+class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
+  final MeasurementsBloc _bloc = MeasurementsBloc();
+
+  @override
+  void initState() {
+    _bloc.add(
+      GetMeasurementsInRange(
+        lastMidnight.millisecondsSinceEpoch,
+        now.millisecondsSinceEpoch,
+      ),
+    );
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    List<Glicemia> misurazioni = [];
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: _buildContent(),
+    );
+  }
+
+  ListView _buildContent() {
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: [
-        if (misurazioni.isNotEmpty) ...[
-          const DaySelector(),
-          GlucoseCard(
-            measurementsOfSelectedDay: misurazioni,
-          ),
-          GlucoseChartCard(
-            measurementsOfSelectedDay: misurazioni,
-          ),
-        ],
-        if (misurazioni.isEmpty)
-          const EmptyData(text: "Non ci sono misurazioni recenti!"),
+        DaySelector(
+          callback: (day) {
+            List<DateTime> span = getDayTimeSpan(day);
+            _bloc.add(GetMeasurementsInRange(span[0].millisecondsSinceEpoch,
+                span[1].millisecondsSinceEpoch));
+          },
+        ),
+        BlocBuilder<MeasurementsBloc, MeasurementsState>(
+          builder: (context, state) {
+            if (state is MeasurementsInitial || state is MeasurementsLoading) {
+              return const Loading(
+                child: CircleAvatar(
+                  backgroundColor: kBackgroundColor,
+                  child: Icon(
+                    Icons.bloodtype_rounded,
+                    size: 20,
+                    color: kOrangePrimary,
+                  ),
+                ),
+              );
+            } else if (state is MeasurementsLoaded) {
+              List<Glicemia> measurements = state.measurements;
+
+              return GlucoseCard(
+                measurementsOfSelectedDay: measurements,
+              );
+            } else {
+              return const ErrorScreen(text: "Errore"); // TODO:
+            }
+          },
+        ),
+        BlocBuilder<MeasurementsBloc, MeasurementsState>(
+          builder: (context, state) {
+            if (state is MeasurementsInitial || state is MeasurementsLoading) {
+              return const Loading(
+                child: CircleAvatar(
+                  backgroundColor: kBackgroundColor,
+                  child: Icon(
+                    Icons.bloodtype_rounded,
+                    size: 20,
+                    color: kOrangePrimary,
+                  ),
+                ),
+              );
+            } else if (state is MeasurementsLoaded) {
+              List<Glicemia> measurements = state.measurements;
+
+              return GlucoseChartCard(
+                measurementsOfSelectedDay: measurements,
+              );
+            } else {
+              return const ErrorScreen(text: "Errore"); // TODO:
+            }
+          },
+        ),
       ],
     );
   }
@@ -222,7 +295,12 @@ class _GlucoseCardState extends State<GlucoseCard> {
     Glicemia last = widget.measurementsOfSelectedDay.last;
     Glicemia lowest = getLowest(widget.measurementsOfSelectedDay);
     Glicemia highest = getHighest(widget.measurementsOfSelectedDay);
-    Glicemia mean = Glicemia(); // TODO:
+    int mean = (widget.measurementsOfSelectedDay.fold(
+                0,
+                (previousValue, element) =>
+                    previousValue + element.livelloGlucosio!) /
+            widget.measurementsOfSelectedDay.length)
+        .floor();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -288,7 +366,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     _buildMaxMinNormalWidget(
                         highest, Icons.arrow_upward_rounded, "Alto"),
                     _buildMaxMinNormalWidget(
-                        mean, Icons.check_circle_sharp, "Medio"),
+                        null, Icons.check_circle_sharp, "Medio",
+                        value: mean),
                     _buildMaxMinNormalWidget(
                         lowest, Icons.arrow_downward_rounded, "Basso"),
                   ],
@@ -300,7 +379,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
     );
   }
 
-  Row _buildMaxMinNormalWidget(Glicemia higher, IconData icon, String desc) {
+  Row _buildMaxMinNormalWidget(Glicemia? higher, IconData icon, String desc,
+      {int? value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -326,7 +406,9 @@ class _GlucoseCardState extends State<GlucoseCard> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: higher.livelloGlucosio!.toString(),
+                    text: higher != null
+                        ? higher.livelloGlucosio!.toString()
+                        : value!.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
