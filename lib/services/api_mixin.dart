@@ -10,9 +10,11 @@ import 'package:glucose_guardian/models/terapia.dart';
 
 abstract class ApiMixin {
   Future<LoginOutput> performLogin(LoginInput data);
+
   Future<LoginOutput> performLoginOtp(LoginInput data);
 
   Future<Notifica> fetchNotificaByID(int id);
+
   Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale);
 
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
@@ -30,6 +32,7 @@ abstract class ApiMixin {
   Future<Farmaco> fetchFarmacoByID(int id);
 
   Future<Glicemia> fetchLastGlicemia(String codiceFiscale);
+
   Future<List<Glicemia>> fetchGlicemiaInRange(
       String codiceFiscale, int startTimestamp, int endTimestamp);
 }

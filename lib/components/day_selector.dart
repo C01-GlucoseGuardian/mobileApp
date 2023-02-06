@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 /// selected day using [callback].
 class DaySelector extends StatefulWidget {
   final Function(DateTime)? callback;
+
   const DaySelector({super.key, this.callback});
 
   @override

@@ -11,6 +11,7 @@ class GlucoseChartCard extends StatelessWidget {
   final List<Glicemia> measurementsOfSelectedDay;
 
   const GlucoseChartCard({super.key, required this.measurementsOfSelectedDay});
+
   @override
   Widget build(BuildContext context) {
     return Container(

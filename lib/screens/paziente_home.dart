@@ -217,6 +217,7 @@ class _PazienteHomeDashboard extends StatelessWidget {
 
 class GlucoseCard extends StatefulWidget {
   final List<Glicemia> measurementsOfSelectedDay;
+
   const GlucoseCard({super.key, required this.measurementsOfSelectedDay});
 
   @override

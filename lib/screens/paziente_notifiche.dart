@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/bloc/notifications/notifications_bloc.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/components/error_screen.dart';

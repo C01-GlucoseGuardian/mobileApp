@@ -10,7 +10,6 @@ import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/assunzione_farmaco.dart';
-import 'package:glucose_guardian/models/farmaco.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 
 class PazienteAgenda extends StatefulWidget {

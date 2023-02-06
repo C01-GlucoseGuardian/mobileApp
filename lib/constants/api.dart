@@ -22,5 +22,6 @@ enum ApiEndPoints {
   glicemiaInRange("/glicemia/getRange");
 
   final String value;
+
   const ApiEndPoints(this.value);
 }

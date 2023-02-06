@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart' hide Feedback;
 import 'package:glucose_guardian/constants/api.dart';
-import 'package:glucose_guardian/models/terapia.dart';
-import 'package:glucose_guardian/models/paziente.dart';
-import 'package:glucose_guardian/models/notifica.dart';
-import 'package:glucose_guardian/models/glicemia.dart';
-import 'package:glucose_guardian/models/feedback.dart';
-import 'package:glucose_guardian/models/farmaco.dart';
-import 'package:glucose_guardian/models/dottore.dart';
-import 'package:glucose_guardian/models/auth.dart';
 import 'package:glucose_guardian/models/assunzione_farmaco.dart';
+import 'package:glucose_guardian/models/auth.dart';
+import 'package:glucose_guardian/models/dottore.dart';
+import 'package:glucose_guardian/models/farmaco.dart';
+import 'package:glucose_guardian/models/feedback.dart';
+import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:glucose_guardian/models/notifica.dart';
+import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/models/terapia.dart';
 import 'package:glucose_guardian/services/api_mixin.dart';
 
 class ApiProvider implements ApiMixin {

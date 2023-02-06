@@ -1,6 +1,5 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:glucose_guardian/bloc/common.dart';
 import 'package:glucose_guardian/models/dottore.dart';
 
