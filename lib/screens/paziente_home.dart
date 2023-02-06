@@ -8,12 +8,7 @@ import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
-import 'package:glucose_guardian/models/assunzione_farmaco.dart';
-import 'package:glucose_guardian/models/dottore.dart';
-import 'package:glucose_guardian/models/farmaco.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
-import 'package:glucose_guardian/models/notifica.dart';
-import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
@@ -22,13 +17,6 @@ import 'package:glucose_guardian/screens/paziente_profilo.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
-
-final Paziente paziente = Paziente(); // TODO: only here because I hate errors
-final Dottore dottore = Dottore();
-final Farmaco farmaco = Farmaco();
-final List<AssunzioneFarmaco> farmaci = List.empty();
-final List<Notifica> notifiche = List.empty();
-final List<Glicemia> misurazioni = List.empty();
 
 class PazienteHome extends StatelessWidget {
   const PazienteHome({super.key});
@@ -166,7 +154,7 @@ class PazienteHome extends StatelessWidget {
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
-        title: Text("Ciao, ${paziente.nome}!"),
+        title: Text("Ciao, nome!"), // TODO:
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         foregroundColor: Colors.black,
         actions: [
@@ -196,6 +184,7 @@ class _PazienteHomeDashboard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    List<Glicemia> misurazioni = [];
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: [
