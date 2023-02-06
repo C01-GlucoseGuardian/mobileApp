@@ -112,9 +112,7 @@ class PazienteHome extends StatelessWidget {
             switch (settings.name) {
               case 'agenda':
                 return builder(
-                  PazienteAgenda(
-                    drugs: farmaci,
-                  ),
+                  const PazienteAgenda(),
                 );
               case 'notifiche':
                 return builder(

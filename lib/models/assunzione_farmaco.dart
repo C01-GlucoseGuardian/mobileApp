@@ -8,6 +8,7 @@ class AssunzioneFarmaco {
   TimeOfDay? orarioAssunzione;
   String? viaDiSomministrazione;
   String? noteAggiuntive;
+  String? nomeFarmaco;
 
   AssunzioneFarmaco(
       {this.id,
@@ -15,7 +16,8 @@ class AssunzioneFarmaco {
       this.dosaggio,
       this.orarioAssunzione,
       this.viaDiSomministrazione,
-      this.noteAggiuntive});
+      this.noteAggiuntive,
+      this.nomeFarmaco});
 
   AssunzioneFarmaco.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -25,6 +27,7 @@ class AssunzioneFarmaco {
         timeOfDayFromApiStringNoSeconds(json['orarioAssunzione']);
     viaDiSomministrazione = json['viaDiSomministrazione'];
     noteAggiuntive = json['noteAggiuntive'];
+    nomeFarmaco = json['nomeFarmaco'];
   }
 
   Map<String, dynamic> toJson() {
@@ -35,6 +38,7 @@ class AssunzioneFarmaco {
     data['orarioAssunzione'] = this.orarioAssunzione;
     data['viaDiSomministrazione'] = this.viaDiSomministrazione;
     data['noteAggiuntive'] = this.noteAggiuntive;
+    data['nomeFarmaco'] = this.nomeFarmaco;
     return data;
   }
 }

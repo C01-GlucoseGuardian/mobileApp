@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:glucose_guardian/bloc/agenda/agenda_bloc.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
@@ -9,13 +13,54 @@ import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 import 'package:glucose_guardian/models/farmaco.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 
-class PazienteAgenda extends StatelessWidget {
-  final List<AssunzioneFarmaco> drugs;
+class PazienteAgenda extends StatefulWidget {
+  const PazienteAgenda({super.key});
 
-  const PazienteAgenda({super.key, required this.drugs});
+  @override
+  State<PazienteAgenda> createState() => _PazienteAgendaState();
+}
+
+class _PazienteAgendaState extends State<PazienteAgenda> {
+  final AgendaBloc _bloc = AgendaBloc();
+
+  @override
+  void initState() {
+    _bloc.add(GetAgenda());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    List<AssunzioneFarmaco> drugs;
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: BlocBuilder<AgendaBloc, AgendaState>(
+        builder: (context, state) {
+          if (state is AgendaInitial || state is AgendaLoading) {
+            return Loading(
+              child: CircleAvatar(
+                backgroundColor: kBackgroundColor,
+                child: SvgPicture.asset(
+                  kPrescriptionsIcon,
+                  color: kOrangePrimary,
+                  width: 28,
+                  height: 28,
+                ),
+              ),
+            );
+          } else if (state is AgendaLoaded) {
+            List<AssunzioneFarmaco> drugs = state.agenda;
+
+            return _buildContent(drugs);
+          } else {
+            return const ErrorScreen(text: "Errore"); // TODO:
+          }
+        },
+      ),
+    );
+  }
+
+  Column _buildContent(List<AssunzioneFarmaco> drugs) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
@@ -60,8 +105,6 @@ class _DrugCardState extends State<DrugCard> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: get farmaco from assunzione farmaco's id farmaco
-    Farmaco farmaco = Farmaco();
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Slidable(
@@ -115,7 +158,7 @@ class _DrugCardState extends State<DrugCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        farmaco.nomeFarmaco!,
+                        widget.assunzioneFarmaco.nomeFarmaco ?? "NON PRESENTE",
                         maxLines: 1,
                         style: const TextStyle(
                           overflow: TextOverflow.clip,
@@ -127,7 +170,10 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Orario Assunzione",
-                      formatTime(widget.assunzioneFarmaco.orarioAssunzione!),
+                      widget.assunzioneFarmaco.orarioAssunzione != null
+                          ? formatTime(
+                              widget.assunzioneFarmaco.orarioAssunzione!)
+                          : "NON PRESENTE",
                       Icons.access_time_rounded,
                     ),
                     _buildInfoWidget(
@@ -145,7 +191,8 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Via di somministrazione",
-                      widget.assunzioneFarmaco.viaDiSomministrazione!,
+                      widget.assunzioneFarmaco.viaDiSomministrazione ??
+                          "NON PRESENTE",
                       Icons.remove_red_eye_rounded,
                     ),
                   ],
