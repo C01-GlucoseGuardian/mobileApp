@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/notifica.dart';
@@ -12,6 +13,10 @@ class PazienteNotifiche extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (notifications.isEmpty) {
+      return const EmptyData(text: "Non ci sono notifiche recenti!");
+    }
+
     return ListView.builder(
       itemCount: notifications.length,
       itemBuilder: (context, index) => NotificationCard(
