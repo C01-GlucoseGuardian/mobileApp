@@ -195,13 +195,33 @@ class _PazienteHomeDashboard extends StatelessWidget {
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: [
-        const DaySelector(),
-        GlucoseCard(
-          measurementsOfSelectedDay: misurazioni,
-        ),
-        GlucoseChartCard(
-          measurementsOfSelectedDay: misurazioni,
-        ),
+        if (misurazioni.isNotEmpty) ...[
+          const DaySelector(),
+          GlucoseCard(
+            measurementsOfSelectedDay: misurazioni,
+          ),
+          GlucoseChartCard(
+            measurementsOfSelectedDay: misurazioni,
+          ),
+        ],
+        if (misurazioni.isEmpty)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SvgPicture.asset(
+                kUndrawErrEng,
+                width: 400,
+              ),
+              const SizedBox(height: 20),
+              const Text(
+                "Non ci sono misurazioni recenti!",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              )
+            ],
+          )
       ],
     );
   }
