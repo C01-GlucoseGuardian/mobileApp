@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
@@ -22,14 +23,16 @@ class PazienteAgenda extends StatelessWidget {
           padding: EdgeInsets.only(right: 16),
           child: SendFeedbackButton(),
         ),
-        Expanded(
-          child: ListView.builder(
-            itemCount: drugs.length,
-            itemBuilder: (context, index) => DrugCard(
-              assunzioneFarmaco: drugs[index],
+        if (drugs.isNotEmpty)
+          Expanded(
+            child: ListView.builder(
+              itemCount: drugs.length,
+              itemBuilder: (context, index) => DrugCard(
+                assunzioneFarmaco: drugs[index],
+              ),
             ),
           ),
-        ),
+        if (drugs.isEmpty) const EmptyData(text: "L'agenda è vuota!"),
       ],
     );
   }
