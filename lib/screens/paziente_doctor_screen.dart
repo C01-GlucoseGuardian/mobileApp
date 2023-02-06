@@ -59,52 +59,54 @@ class PazienteDoctorScreen extends StatelessWidget {
                   children: [
                     _buildField(
                       "nome",
-                      doctor.nome!,
+                      doctor.nome ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "cognome",
-                      doctor.cognome!,
+                      doctor.cognome ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "codice fiscale",
-                      doctor.codiceFiscale!,
+                      doctor.codiceFiscale ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "data di nascita",
-                      DateFormat("dd/MM/yyyy").format(doctor.dataNascita!),
+                      doctor.dataNascita != null
+                          ? DateFormat("dd/MM/yyyy").format(doctor.dataNascita!)
+                          : "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo",
-                      doctor.indirizzo!,
+                      doctor.indirizzo ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "telefono",
-                      doctor.telefono!,
+                      doctor.telefono ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "email",
-                      doctor.email!,
+                      doctor.email ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "specializzazione",
-                      doctor.specializzazione!,
+                      doctor.specializzazione ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "nome struttura medica",
-                      doctor.nomeStruttura!,
+                      doctor.nomeStruttura ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo struttura medica",
-                      doctor.indirizzoStruttura!,
+                      doctor.indirizzoStruttura ?? "NON PRESENTE",
                     ),
                     const Align(
                       alignment: Alignment.bottomRight,
