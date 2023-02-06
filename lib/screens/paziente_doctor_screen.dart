@@ -1,21 +1,39 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/doctor/doctor_bloc.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/dottore.dart';
 import 'package:glucose_guardian/screens/paziente_send_feedback.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
-class PazienteDoctorScreen extends StatelessWidget {
-  final Dottore doctor;
+class PazienteDoctorScreen extends StatefulWidget {
+  const PazienteDoctorScreen({super.key});
 
-  const PazienteDoctorScreen({super.key, required this.doctor});
+  @override
+  State<PazienteDoctorScreen> createState() => _PazienteDoctorScreenState();
+}
+
+class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
+  final DoctorBloc _bloc = DoctorBloc();
+
+  final sizedBox = const SizedBox(
+    height: 8,
+  );
+
+  @override
+  void initState() {
+    // check if codiceFiscale is null before here
+    _bloc.add(GetDoctor(SharedPreferenceService.codiceFiscale!));
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const sizedBox = SizedBox(
-      height: 8,
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -29,96 +47,124 @@ class PazienteDoctorScreen extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Expanded(
-                flex: 2,
-                child: CircleAvatar(
-                  backgroundColor: kBackgroundColor,
-                  child: Icon(
-                    FontAwesomeIcons.userDoctor,
-                    size: 20,
-                    color: kOrangePrimary,
+        BlocProvider(
+          create: (_) => _bloc,
+          child: BlocBuilder<DoctorBloc, DoctorState>(
+            builder: (context, state) {
+              if (state is DoctorInitial || state is DoctorLoading) {
+                return const Loading(
+                  child: CircleAvatar(
+                    backgroundColor: kBackgroundColor,
+                    child: Icon(
+                      FontAwesomeIcons.userDoctor,
+                      size: 20,
+                      color: kOrangePrimary,
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildField(
-                      "nome",
-                      doctor.nome ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "cognome",
-                      doctor.cognome ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "codice fiscale",
-                      doctor.codiceFiscale ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "data di nascita",
-                      doctor.dataNascita != null
-                          ? DateFormat("dd/MM/yyyy").format(doctor.dataNascita!)
-                          : "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "indirizzo",
-                      doctor.indirizzo ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "telefono",
-                      doctor.telefono ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "email",
-                      doctor.email ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "specializzazione",
-                      doctor.specializzazione ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "nome struttura medica",
-                      doctor.nomeStruttura ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "indirizzo struttura medica",
-                      doctor.indirizzoStruttura ?? "NON PRESENTE",
-                    ),
-                    const Align(
-                      alignment: Alignment.bottomRight,
-                      child: SendFeedbackButton(),
-                    )
-                  ],
-                ),
-              ),
-            ],
+                );
+              } else if (state is DoctorLoaded) {
+                Dottore dottore = state.dottore;
+
+                return _buildContent(context, dottore);
+              } else {
+                return const ErrorScreen(text: "Errore"); // TODO:
+              }
+            },
           ),
         ),
       ],
+    );
+  }
+
+  Container _buildContent(BuildContext context, Dottore doctor) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Expanded(
+            flex: 2,
+            child: CircleAvatar(
+              backgroundColor: kBackgroundColor,
+              child: Icon(
+                FontAwesomeIcons.userDoctor,
+                size: 20,
+                color: kOrangePrimary,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildField(
+                  "nome",
+                  doctor.nome ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "cognome",
+                  doctor.cognome ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "codice fiscale",
+                  doctor.codiceFiscale ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "data di nascita",
+                  doctor.dataNascita != null
+                      ? DateFormat("dd/MM/yyyy").format(doctor.dataNascita!)
+                      : "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "indirizzo",
+                  doctor.indirizzo ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "telefono",
+                  doctor.telefono ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "email",
+                  doctor.email ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "specializzazione",
+                  doctor.specializzazione ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "nome struttura medica",
+                  doctor.nomeStruttura ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "indirizzo struttura medica",
+                  doctor.indirizzoStruttura ?? "NON PRESENTE",
+                ),
+                const Align(
+                  alignment: Alignment.bottomRight,
+                  child: SendFeedbackButton(),
+                )
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

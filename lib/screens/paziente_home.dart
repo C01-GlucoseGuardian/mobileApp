@@ -122,9 +122,7 @@ class PazienteHome extends StatelessWidget {
                 ));
               case 'dottore':
                 return builder(
-                  PazienteDoctorScreen(
-                    doctor: dottore,
-                  ),
+                  const PazienteDoctorScreen(),
                 );
               case 'profilo':
                 return builder(

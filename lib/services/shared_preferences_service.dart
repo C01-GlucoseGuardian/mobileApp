@@ -13,6 +13,7 @@ class SharedPreferenceService {
   static const String _kFirstTimeOpeningApp = "firstTimeOpeningApp";
   static const String _kBearerToken = "bearerToken";
   static const String _kUserType = "userType";
+  static const String _kCodiceFiscale = "codiceFiscale";
 
   /// Creates [SharedPreferenceService._instance], this should be called in the
   /// main function after `WidgetsFlutterBinding.ensureInitialized()`
@@ -41,9 +42,19 @@ class SharedPreferenceService {
   static UserType get userType =>
       UserType.values[_instance.getInt(_kUserType)!];
 
-  // Set user type
+  /// Set user type
   static set userType(UserType type) =>
       _instance.setInt(_kUserType, type.index);
+
+  /// Set after first login, cleared by eventual log out
+  static String? get codiceFiscale => _instance.getString(_kCodiceFiscale);
+
+  /// Set after first login
+  ///
+  /// HACK: since set and get should have the same type,
+  /// HACK: this setter gets a String? but it should never be null
+  static set codiceFiscale(String? value) =>
+      _instance.setString(_kCodiceFiscale, value!);
 }
 
 enum UserType { paziente, tutore }

@@ -7,4 +7,8 @@ abstract class DoctorEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetDoctor extends DoctorEvent {}
+class GetDoctor extends DoctorEvent {
+  final String codiceFiscale;
+
+  const GetDoctor(this.codiceFiscale);
+}
