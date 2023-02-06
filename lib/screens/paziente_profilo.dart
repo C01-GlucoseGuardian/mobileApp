@@ -1,20 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/patient/patient_bloc.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:intl/intl.dart';
 
-class PazienteProfilo extends StatelessWidget {
-  final Paziente user;
+class PazienteProfilo extends StatefulWidget {
+  const PazienteProfilo({super.key});
 
-  const PazienteProfilo({super.key, required this.user});
+  @override
+  State<PazienteProfilo> createState() => _PazienteProfiloState();
+}
+
+class _PazienteProfiloState extends State<PazienteProfilo> {
+  final PatientBloc _bloc = PatientBloc();
+  final sizedBox = const SizedBox(
+    height: 8,
+  );
+
+  @override
+  void initState() {
+    _bloc.add(GetPatient());
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    const sizedBox = SizedBox(
-      height: 8,
-    );
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -28,89 +43,117 @@ class PazienteProfilo extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          width: MediaQuery.of(context).size.width,
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(32),
-          ),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              const Expanded(
-                flex: 2,
-                child: CircleAvatar(
-                  backgroundColor: kBackgroundColor,
-                  child: Icon(
-                    FontAwesomeIcons.userDoctor,
-                    size: 20,
-                    color: kOrangePrimary,
+        BlocProvider(
+          create: (_) => _bloc,
+          child: BlocBuilder<PatientBloc, PatientState>(
+            builder: (context, state) {
+              if (state is PatientInitial || state is PatientLoading) {
+                return const Loading(
+                  child: CircleAvatar(
+                    backgroundColor: kBackgroundColor,
+                    child: Icon(
+                      FontAwesomeIcons.userDoctor,
+                      size: 20,
+                      color: kOrangePrimary,
+                    ),
                   ),
-                ),
-              ),
-              Expanded(
-                flex: 8,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildField(
-                      "nome",
-                      user.nome ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "cognome",
-                      user.cognome ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "codice fiscale",
-                      user.codiceFiscale ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "data di nascita",
-                      user.dataNascita != null
-                          ? DateFormat("dd/MM/yyyy").format(user.dataNascita!)
-                          : "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "indirizzo",
-                      user.indirizzo ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "telefono",
-                      user.telefono ?? "NON PRESENTE",
-                    ),
-                    sizedBox,
-                    _buildField(
-                      "email",
-                      user.email ?? "NON PRESENTE",
-                    ),
-                    _buildField(
-                      "Tipo diabete",
-                      user.tipoDiabete ?? "NON PRESENTE",
-                    ),
-                    _buildField(
-                      "Comorbilità",
-                      user.comorbilita ?? "NON PRESENTE",
-                    ),
-                    _buildField(
-                      "Farmaci assunti",
-                      user.farmaciAssunti ?? "NON PRESENTE",
-                    ),
-                  ],
-                ),
-              ),
-            ],
+                );
+              } else if (state is PatientLoaded) {
+                Paziente paziente = state.patient;
+
+                return _buildContent(context, paziente);
+              } else {
+                return const ErrorScreen(text: "Errore"); // TODO:
+              }
+            },
           ),
         ),
       ],
+    );
+  }
+
+  Container _buildContent(BuildContext context, Paziente user) {
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(32),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const Expanded(
+            flex: 2,
+            child: CircleAvatar(
+              backgroundColor: kBackgroundColor,
+              child: Icon(
+                FontAwesomeIcons.userDoctor,
+                size: 20,
+                color: kOrangePrimary,
+              ),
+            ),
+          ),
+          Expanded(
+            flex: 8,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildField(
+                  "nome",
+                  user.nome ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "cognome",
+                  user.cognome ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "codice fiscale",
+                  user.codiceFiscale ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "data di nascita",
+                  user.dataNascita != null
+                      ? DateFormat("dd/MM/yyyy").format(user.dataNascita!)
+                      : "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "indirizzo",
+                  user.indirizzo ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "telefono",
+                  user.telefono ?? "NON PRESENTE",
+                ),
+                sizedBox,
+                _buildField(
+                  "email",
+                  user.email ?? "NON PRESENTE",
+                ),
+                _buildField(
+                  "Tipo diabete",
+                  user.tipoDiabete ?? "NON PRESENTE",
+                ),
+                _buildField(
+                  "Comorbilità",
+                  user.comorbilita ?? "NON PRESENTE",
+                ),
+                _buildField(
+                  "Farmaci assunti",
+                  user.farmaciAssunti ?? "NON PRESENTE",
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 

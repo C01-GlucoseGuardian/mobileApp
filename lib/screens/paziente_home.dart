@@ -128,9 +128,7 @@ class PazienteHome extends StatelessWidget {
                 );
               case 'profilo':
                 return builder(
-                  PazienteProfilo(
-                    user: paziente,
-                  ),
+                  const PazienteProfilo(),
                 );
               case 'home':
               default:
