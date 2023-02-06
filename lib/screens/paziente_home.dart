@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
+import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
@@ -205,23 +206,7 @@ class _PazienteHomeDashboard extends StatelessWidget {
           ),
         ],
         if (misurazioni.isEmpty)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                kUndrawErrEng,
-                width: 400,
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                "Non ci sono misurazioni recenti!",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                ),
-              )
-            ],
-          )
+          const EmptyData(text: "Non ci sono misurazioni recenti!"),
       ],
     );
   }
