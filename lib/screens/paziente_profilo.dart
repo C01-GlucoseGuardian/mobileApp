@@ -58,49 +58,51 @@ class PazienteProfilo extends StatelessWidget {
                   children: [
                     _buildField(
                       "nome",
-                      user.nome!,
+                      user.nome ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "cognome",
-                      user.cognome!,
+                      user.cognome ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "codice fiscale",
-                      user.codiceFiscale!,
+                      user.codiceFiscale ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "data di nascita",
-                      DateFormat("dd/MM/yyyy").format(user.dataNascita!),
+                      user.dataNascita != null
+                          ? DateFormat("dd/MM/yyyy").format(user.dataNascita!)
+                          : "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "indirizzo",
-                      user.indirizzo!,
+                      user.indirizzo ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "telefono",
-                      user.telefono!,
+                      user.telefono ?? "NON PRESENTE",
                     ),
                     sizedBox,
                     _buildField(
                       "email",
-                      user.email!,
+                      user.email ?? "NON PRESENTE",
                     ),
                     _buildField(
                       "Tipo diabete",
-                      user.tipoDiabete!,
+                      user.tipoDiabete ?? "NON PRESENTE",
                     ),
                     _buildField(
                       "Comorbilità",
-                      user.comorbilita!,
+                      user.comorbilita ?? "NON PRESENTE",
                     ),
                     _buildField(
                       "Farmaci assunti",
-                      user.farmaciAssunti!,
+                      user.farmaciAssunti ?? "NON PRESENTE",
                     ),
                   ],
                 ),
