@@ -102,31 +102,40 @@ class PazienteHome extends StatelessWidget {
         body: Navigator(
           key: homeNavigatorKey,
           onGenerateRoute: (settings) {
+            // local function, animations disabled
+            PageRouteBuilder builder(Widget page) => PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => page,
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                );
+
             switch (settings.name) {
               case 'agenda':
-                return MaterialPageRoute(
-                  builder: (_) => PazienteAgenda(drugs: farmaci),
-                );
-              case 'notifiche':
-                return MaterialPageRoute(
-                  builder: (_) => PazienteNotifiche(
-                    notifications: notifiche,
+                return builder(
+                  PazienteAgenda(
+                    drugs: farmaci,
                   ),
                 );
+              case 'notifiche':
+                return builder(PazienteNotifiche(
+                  notifications: notifiche,
+                ));
               case 'dottore':
-                return MaterialPageRoute(
-                  builder: (_) => PazienteDoctorScreen(
+                return builder(
+                  PazienteDoctorScreen(
                     doctor: dottore,
                   ),
                 );
               case 'profilo':
-                return MaterialPageRoute(
-                  builder: (_) => PazienteProfilo(user: paziente),
+                return builder(
+                  PazienteProfilo(
+                    user: paziente,
+                  ),
                 );
               case 'home':
               default:
-                return MaterialPageRoute(
-                  builder: (_) => const _PazienteHomeDashboard(),
+                return builder(
+                  const _PazienteHomeDashboard(),
                 );
             }
           },
