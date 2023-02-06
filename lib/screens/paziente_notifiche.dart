@@ -1,18 +1,62 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/notifications/notifications_bloc.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:intl/intl.dart';
 
-class PazienteNotifiche extends StatelessWidget {
-  final List<Notifica> notifications;
+class PazienteNotifiche extends StatefulWidget {
+  const PazienteNotifiche({super.key});
 
-  const PazienteNotifiche({super.key, required this.notifications});
+  @override
+  State<PazienteNotifiche> createState() => _PazienteNotificheState();
+}
+
+class _PazienteNotificheState extends State<PazienteNotifiche> {
+  final NotificationsBloc _bloc = NotificationsBloc();
+
+  @override
+  void initState() {
+    _bloc.add(GetNotifications());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: BlocBuilder<NotificationsBloc, NotificationsState>(
+        builder: (context, state) {
+          if (state is NotificationsInitial || state is NotificationsLoading) {
+            return const Loading(
+              child: CircleAvatar(
+                backgroundColor: kBackgroundColor,
+                child: Icon(
+                  Icons.notifications_active_rounded,
+                  size: 20,
+                  color: kOrangePrimary,
+                ),
+              ),
+            );
+          } else if (state is NotificationsLoaded) {
+            List<Notifica> notifications = state.notifications;
+
+            return _buildContent(notifications);
+          } else {
+            return const ErrorScreen(text: "Errore"); // TODO:
+          }
+        },
+      ),
+    );
+  }
+
+  StatelessWidget _buildContent(List<Notifica> notifications) {
     if (notifications.isEmpty) {
       return const EmptyData(text: "Non ci sono notifiche recenti!");
     }

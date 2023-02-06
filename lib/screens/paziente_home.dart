@@ -117,9 +117,9 @@ class PazienteHome extends StatelessWidget {
                   ),
                 );
               case 'notifiche':
-                return builder(PazienteNotifiche(
-                  notifications: notifiche,
-                ));
+                return builder(
+                  const PazienteNotifiche(),
+                );
               case 'dottore':
                 return builder(
                   const PazienteDoctorScreen(),
