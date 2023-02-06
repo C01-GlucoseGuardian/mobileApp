@@ -55,6 +55,11 @@ class SharedPreferenceService {
   /// HACK: this setter gets a String? but it should never be null
   static set codiceFiscale(String? value) =>
       _instance.setString(_kCodiceFiscale, value!);
+
+  /// NSA/Andrea Mennillo control zone
+  /// This sets/gets custom api url
+  static set customApiUrl(String value) => _instance.setString("api", value);
+  static String get customApiUrl => _instance.getString("api") ?? "";
 }
 
 enum UserType { paziente, tutore }

@@ -11,6 +11,7 @@ import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
 import 'package:glucose_guardian/services/api_mixin.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 
 class ApiProvider implements ApiMixin {
   final Dio _client;
@@ -25,7 +26,9 @@ class ApiProvider implements ApiMixin {
       : _client = client ??
             Dio(
               BaseOptions(
-                baseUrl: kApiUrl,
+                baseUrl: SharedPreferenceService.customApiUrl.isNotEmpty
+                    ? SharedPreferenceService.customApiUrl
+                    : kApiUrl,
                 connectTimeout: 10000,
                 receiveTimeout: 10000,
                 contentType: "application/json",
