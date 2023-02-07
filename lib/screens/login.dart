@@ -67,11 +67,13 @@ class _LoginState extends State<Login> {
               ),
             );
           } else if (state is AuthError) {
+            debugPrint(state.error);
             AwesomeDialog(
               context: context,
               dialogType: DialogType.error,
               title: "Errore nel login",
-              desc: state.error,
+              desc:
+                  "Riprova oppure controlla se email e password sono corrette",
             ).show();
 
             Loader.hide();
@@ -108,6 +110,7 @@ class _LoginState extends State<Login> {
                               : 16, // adds padding only if otp field is not shown
                         ),
                         child: PasswordField(
+                          passwordConstraint: r'[0-9a-zA-Z]{4,}',
                           controller: passwordController,
                           border: PasswordBorder(
                             border: OutlineInputBorder(
@@ -141,15 +144,15 @@ class _LoginState extends State<Login> {
                           onPressed: () {
                             if (_validEmail(emailController.text) == null &&
                                 passwordController.text.isNotEmpty) {
-                              if (showOTPCodeInput == false) {
+                              if (showOTPCodeInput != null &&
+                                  showOTPCodeInput!) {
+                              } else {
                                 _bloc.add(
                                   PerformLogin(
                                     emailController.text,
                                     passwordController.text,
                                   ),
                                 );
-                              } else {
-                                // TODO: handle otp
                               }
                             } else {
                               AwesomeDialog(
