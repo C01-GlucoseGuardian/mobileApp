@@ -4,7 +4,7 @@ import 'package:glucose_guardian/constants/general.dart';
 const String kApiUrl = kAppStatus == 3
     ? "prod"
     : kAppStatus == 2
-        ? "staging"
+        ? "https://api.glucoseguardian.it"
         : "http://127.0.0.1:3000";
 
 enum ApiEndPoints {
