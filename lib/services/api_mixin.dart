@@ -25,7 +25,7 @@ abstract class ApiMixin {
   Future<List<AssunzioneFarmaco>> fetchAssunzioneFarmacoByCF(
       String codiceFiscale);
 
-  Future<Paziente> fetchLoggedPaziente();
+  Future<Paziente> fetchLoggedPaziente(String codiceFiscale);
 
   Future<Dottore> fetchDottoreByPazienteCF(String codiceFiscale);
 

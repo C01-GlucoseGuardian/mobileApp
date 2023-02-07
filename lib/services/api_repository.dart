@@ -44,8 +44,8 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
-  Future<Paziente> fetchLoggedPaziente() {
-    return provider.fetchLoggedPaziente();
+  Future<Paziente> fetchLoggedPaziente(String codiceFiscale) {
+    return provider.fetchLoggedPaziente(codiceFiscale);
   }
 
   @override
