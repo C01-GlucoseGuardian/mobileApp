@@ -1,6 +1,9 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
+import 'package:glucose_guardian/bloc/auth/auth_bloc.dart';
 import 'package:glucose_guardian/constants/api.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
@@ -27,96 +30,133 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
+  AuthBloc _bloc = AuthBloc();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Logo(),
-          Expanded(
-            flex: 1,
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: TextFormField(
-                      autovalidateMode: AutovalidateMode.always,
-                      controller: emailController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty || value == " ") {
-                          return null;
-                        }
-                        return EmailValidator.validate(value)
-                            ? null
-                            : "Email non valida";
-                      },
-                      decoration: InputDecoration(
-                        hintText: "Email",
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(
-                      bottom: showOTPCodeInput ?? false
-                          ? 0
-                          : 16, // adds padding only if otp field is not shown
-                    ),
-                    child: PasswordField(
-                      controller: passwordController,
-                      border: PasswordBorder(
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (showOTPCodeInput ?? false)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: OtpTextField(
-                        clearText: true,
-                        onSubmit: (value) {
-                          // ready to check if otp is valid
-                        },
-                      ),
-                    ),
-                  Semantics(
-                    button: true,
-                    hint: "Bottone per proseguire nel processo di login",
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        minimumSize: const Size.fromHeight(
-                          40,
-                        ),
-                      ),
-                      onPressed: () {
-                        // TODO: add login logic
-                        SharedPreferenceService.bearerToken = "testtest";
-                        SharedPreferenceService.userType = UserType.paziente;
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (_) => const PazienteHome(),
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        "LOGIN",
-                      ),
-                    ),
-                  )
-                ],
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+          // TODO: check if input is valid
+          if (state is AuthLoading || state is AuthInitial) {
+            Loader.show(context);
+          } else if (state is AuthLoggedNeedsOtp) {
+            // TODO: show snackbar telling the user to insert otp
+            Loader.hide();
+            setState(() {
+              showOTPCodeInput = true;
+            });
+          } else if (state is AuthLogged) {
+            SharedPreferenceService.bearerToken = state.token;
+            SharedPreferenceService.userType =
+                state.tipoUtente == 2 ? UserType.paziente : UserType.tutore;
+            SharedPreferenceService.codiceFiscale = state.codiceFiscale;
+            Loader.hide();
+
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) =>
+                    SharedPreferenceService.userType == UserType.paziente
+                        ? const PazienteHome()
+                        : Container(), // TODO: tutore home
               ),
-            ),
+            );
+          } else if (state is AuthError) {
+            // TODO: error
+            Loader.hide();
+          }
+        },
+        child: Scaffold(
+          body: Column(
+            children: [
+              const Logo(),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 16),
+                        child: TextFormField(
+                          autovalidateMode: AutovalidateMode.always,
+                          controller: emailController,
+                          validator: (value) {
+                            if (value == null ||
+                                value.isEmpty ||
+                                value == " ") {
+                              return null;
+                            }
+                            return EmailValidator.validate(value)
+                                ? null
+                                : "Email non valida";
+                          },
+                          decoration: InputDecoration(
+                            hintText: "Email",
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                          bottom: showOTPCodeInput ?? false
+                              ? 0
+                              : 16, // adds padding only if otp field is not shown
+                        ),
+                        child: PasswordField(
+                          controller: passwordController,
+                          border: PasswordBorder(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      if (showOTPCodeInput ?? false)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 16),
+                          child: OtpTextField(
+                            clearText: true,
+                            onSubmit: (value) {
+                              // ready to check if otp is valid
+                            },
+                          ),
+                        ),
+                      Semantics(
+                        button: true,
+                        hint: "Bottone per proseguire nel processo di login",
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            minimumSize: const Size.fromHeight(
+                              40,
+                            ),
+                          ),
+                          onPressed: () {
+                            _bloc.add(
+                              PerformLogin(
+                                emailController.text,
+                                passwordController.text,
+                              ),
+                            );
+                          },
+                          child: const Text(
+                            "LOGIN",
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
