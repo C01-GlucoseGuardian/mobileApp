@@ -43,7 +43,7 @@ void main() {
     });
 
     test('api.fetchLoggedPaziente', () async {
-      Paziente res = await api.fetchLoggedPaziente();
+      Paziente res = await api.fetchLoggedPaziente("ABAB");
       print(res.toJson());
     });
 
