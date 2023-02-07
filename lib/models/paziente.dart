@@ -1,4 +1,5 @@
 import 'package:glucose_guardian/models/numero_utile.dart';
+import 'package:intl/intl.dart';
 
 class Paziente {
   String? codiceFiscale;
@@ -34,7 +35,7 @@ class Paziente {
     codiceFiscale = json['codiceFiscale'];
     nome = json['nome'];
     cognome = json['cognome'];
-    dataNascita = DateTime.parse(json['dataNascita']);
+    dataNascita = DateFormat("yyyy/MM/dd").parse(json['dataNascita']);
     indirizzo = json['indirizzo'];
     telefono = json['telefono'];
     email = json['email'];

@@ -15,7 +15,7 @@ class LoginInput {
     final Map<String, dynamic> data = Map<String, dynamic>();
     data['email'] = this.email;
     data['password'] = this.password;
-    data['otp'] = this.otp;
+    if (otp != null) data['otp'] = this.otp;
     return data;
   }
 }

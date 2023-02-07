@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Dottore {
   String? codiceFiscale;
   String? nome;
@@ -32,7 +34,7 @@ class Dottore {
     codiceFiscale = json['codiceFiscale'];
     nome = json['nome'];
     cognome = json['cognome'];
-    dataNascita = DateTime.parse(json['dataNascita']);
+    dataNascita = DateFormat("yyyy/MM/dd").parse(json['dataNascita']);
     indirizzo = json['indirizzo'];
     telefono = json['telefono'];
     email = json['email'];
