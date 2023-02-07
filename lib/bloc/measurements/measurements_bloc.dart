@@ -30,7 +30,7 @@ class MeasurementsBloc extends Bloc<MeasurementsEvent, MeasurementsState> {
         int endTime = event.endTime;
 
         List<Glicemia> measurements = await api.fetchGlicemiaInRange(
-          SharedPreferenceService.codiceFiscale!,
+          event.codiceFiscalePaziente ?? SharedPreferenceService.codiceFiscale!,
           startTime,
           endTime,
         );

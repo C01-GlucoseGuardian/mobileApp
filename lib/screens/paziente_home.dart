@@ -130,7 +130,7 @@ class PazienteHome extends StatelessWidget {
                 case 'home':
                 default:
                   return builder(
-                    const _PazienteHomeDashboard(),
+                    const PazienteHomeDashboard(),
                   );
               }
             },
@@ -199,14 +199,15 @@ class PazienteHome extends StatelessWidget {
       );
 }
 
-class _PazienteHomeDashboard extends StatefulWidget {
-  const _PazienteHomeDashboard();
+class PazienteHomeDashboard extends StatefulWidget {
+  final String? codiceFiscalePaziente;
+  const PazienteHomeDashboard({super.key, this.codiceFiscalePaziente});
 
   @override
-  State<_PazienteHomeDashboard> createState() => _PazienteHomeDashboardState();
+  State<PazienteHomeDashboard> createState() => _PazienteHomeDashboardState();
 }
 
-class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
+class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
   final MeasurementsBloc _bloc = MeasurementsBloc();
 
   @override
@@ -215,6 +216,7 @@ class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
       GetMeasurementsInRange(
         lastMidnight.millisecondsSinceEpoch,
         now.millisecondsSinceEpoch,
+        codiceFiscalePaziente: widget.codiceFiscalePaziente,
       ),
     );
     super.initState();

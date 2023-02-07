@@ -7,4 +7,8 @@ abstract class AgendaEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetAgenda extends AgendaEvent {}
+class GetAgenda extends AgendaEvent {
+  final String? codiceFiscalePaziente;
+
+  const GetAgenda({this.codiceFiscalePaziente});
+}

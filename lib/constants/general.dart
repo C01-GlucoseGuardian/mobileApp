@@ -44,6 +44,14 @@ const List<String> kHomeNavigatorPaths = [
   "profilo"
 ];
 
+/// Navigator paths of the homepage of tutore
+const List<String> kTutoreHomeNavigatorPaths = [
+  "home",
+  "agenda",
+  "dottore",
+  "profilo"
+];
+
 /// Returns the formatted time in the hh:mm format
 String formatTime(TimeOfDay time) =>
     "${time.hour.toString().padLeft(2, '0')}:${time.minute.toString().padLeft(2, '0')}";

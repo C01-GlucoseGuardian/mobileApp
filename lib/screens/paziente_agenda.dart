@@ -13,7 +13,9 @@ import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 
 class PazienteAgenda extends StatefulWidget {
-  const PazienteAgenda({super.key});
+  final String? codiceFiscalePaziente;
+
+  const PazienteAgenda({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteAgenda> createState() => _PazienteAgendaState();
@@ -24,7 +26,7 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
 
   @override
   void initState() {
-    _bloc.add(GetAgenda());
+    _bloc.add(GetAgenda(codiceFiscalePaziente: widget.codiceFiscalePaziente));
     super.initState();
   }
 
@@ -65,10 +67,11 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        const Padding(
-          padding: EdgeInsets.only(right: 16),
-          child: SendFeedbackButton(),
-        ),
+        if (widget.codiceFiscalePaziente == null)
+          const Padding(
+            padding: EdgeInsets.only(right: 16),
+            child: SendFeedbackButton(),
+          ),
         if (drugs.isNotEmpty)
           Expanded(
             child: ListView.builder(

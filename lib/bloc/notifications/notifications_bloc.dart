@@ -13,8 +13,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<GetNotifications>((event, emit) async {
       try {
         emit(NotificationsLoading());
-        List<Notifica> notifications = await api
-            .fetchNotificheByCF(SharedPreferenceService.codiceFiscale!);
+        List<Notifica> notifications = await api.fetchNotificheByCF(
+            event.codiceFiscalePaziente ??
+                SharedPreferenceService.codiceFiscale!);
         emit(NotificationsLoaded(notifications));
       } on ApiException catch (e) {
         emit(NotificationsError(e.msg));

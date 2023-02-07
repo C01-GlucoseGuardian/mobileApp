@@ -13,8 +13,9 @@ class AgendaBloc extends Bloc<AgendaEvent, AgendaState> {
     on<GetAgenda>((event, emit) async {
       try {
         emit(AgendaLoading());
-        List<AssunzioneFarmaco> agenda = await api
-            .fetchAssunzioneFarmacoByCF(SharedPreferenceService.codiceFiscale!);
+        List<AssunzioneFarmaco> agenda = await api.fetchAssunzioneFarmacoByCF(
+            event.codiceFiscalePaziente ??
+                SharedPreferenceService.codiceFiscale!);
         emit(AgendaLoaded(agenda));
       } on ApiException catch (e) {
         emit(AgendaError(e.msg));

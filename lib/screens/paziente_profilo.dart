@@ -11,7 +11,9 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
 class PazienteProfilo extends StatefulWidget {
-  const PazienteProfilo({super.key});
+  final String? codiceFiscalePaziente;
+
+  const PazienteProfilo({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteProfilo> createState() => _PazienteProfiloState();
@@ -25,7 +27,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
 
   @override
   void initState() {
-    _bloc.add(GetPatient());
+    _bloc.add(GetPatient(codiceFiscalePaziente: widget.codiceFiscalePaziente));
 
     super.initState();
   }
@@ -154,25 +156,27 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                   "Farmaci assunti",
                   user.farmaciAssunti ?? "NON PRESENTE",
                 ),
-                TextButton.icon(
-                  style: TextButton.styleFrom(
-                    backgroundColor: kBackgroundColor,
-                    foregroundColor: kOrangePrimary,
-                  ),
-                  onPressed: () {
-                    SharedPreferenceService.logout();
-                    Navigator.of(context, rootNavigator: true).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => const Login(),
-                      ),
-                    );
-                  },
-                  label: const Text("Log out"),
-                  icon: const Icon(
-                    Icons.logout,
-                    color: kOrangePrimary,
-                  ),
-                )
+                if (widget.codiceFiscalePaziente == null)
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: kBackgroundColor,
+                      foregroundColor: kOrangePrimary,
+                    ),
+                    onPressed: () {
+                      SharedPreferenceService.logout();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const Login(),
+                        ),
+                      );
+                    },
+                    label: const Text("Log out"),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: kOrangePrimary,
+                    ),
+                  )
               ],
             ),
           ),

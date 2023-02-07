@@ -13,8 +13,9 @@ class PatientBloc extends Bloc<PatientEvent, PatientState> {
     on<GetPatient>((event, emit) async {
       try {
         emit(PatientLoading());
-        Paziente patient = await api
-            .fetchLoggedPaziente(SharedPreferenceService.codiceFiscale!);
+        Paziente patient = await api.fetchLoggedPaziente(
+            event.codiceFiscalePaziente ??
+                SharedPreferenceService.codiceFiscale!);
         emit(PatientLoaded(patient));
       } on ApiException catch (e) {
         emit(PatientError(e.msg));

@@ -4,7 +4,7 @@ import 'package:glucose_guardian/constants/general.dart';
 class AssunzioneFarmaco {
   int? id;
   int? idFarmaco;
-  int? dosaggio;
+  String? dosaggio;
   TimeOfDay? orarioAssunzione;
   String? viaDiSomministrazione;
   String? noteAggiuntive;

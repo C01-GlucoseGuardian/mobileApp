@@ -4,9 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:glucose_guardian/bloc/common.dart';
 import 'package:glucose_guardian/bloc/tutore/tutore_bloc.dart';
+import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/numero_utile.dart';
+import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/tutore_paziente_details.dart';
 
 import '../components/loading.dart';
 import '../services/shared_preferences_service.dart';
@@ -52,85 +55,15 @@ class _TutoreHomeState extends State<TutoreHome> {
                   ),
                 );
               } else if (state is TutoreLoaded) {
+                if (state.tutore.pazienteList == null ||
+                    state.tutore.pazienteList!.isEmpty) {
+                  return const EmptyData(
+                      text: "Non ci sono pazienti collegati a questo tutore");
+                }
                 return ListView.builder(
-                  itemCount: state.tutore.pazienteList?.length ?? 0,
-                  itemBuilder: (context, index) => Container(
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16)),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Expanded(
-                          flex: 4,
-                          child: CircleAvatar(
-                            backgroundColor: kBackgroundColor,
-                            child: Icon(
-                              FontAwesomeIcons.user,
-                              size: 20,
-                              color: kOrangePrimary,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          flex: 8,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              _buildField(
-                                "nome",
-                                state.tutore.pazienteList![index].nome!,
-                              ),
-                              sizedBox,
-                              _buildField(
-                                "cognome",
-                                state.tutore.pazienteList![index].cognome!,
-                              ),
-                              sizedBox,
-                              _buildField(
-                                "codice fiscale",
-                                state
-                                    .tutore.pazienteList![index].codiceFiscale!,
-                              ),
-                              sizedBox,
-                              if (state.tutore.pazienteList![index]
-                                      .numeriUtili !=
-                                  null)
-                                Column(
-                                  children: [
-                                    for (NumeroUtile n in state.tutore
-                                        .pazienteList![index].numeriUtili!)
-                                      Row(
-                                        children: [
-                                          const Icon(
-                                            Icons.phone,
-                                            color: kOrangePrimary,
-                                          ),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(
-                                            n.numero!,
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 10,
-                                            ),
-                                          )
-                                        ],
-                                      )
-                                  ],
-                                ),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                    itemCount: state.tutore.pazienteList?.length ?? 0,
+                    itemBuilder: (context, index) =>
+                        _buildPatientCard(state.tutore.pazienteList![index]));
               } else {
                 return ErrorScreen(
                   text:
@@ -143,6 +76,87 @@ class _TutoreHomeState extends State<TutoreHome> {
       ),
     );
   }
+
+  Widget _buildPatientCard(Paziente paziente) => InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => TutorePazienteDetails(
+              paziente: paziente,
+            ),
+          ),
+        ),
+        child: Container(
+          margin: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(16)),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Expanded(
+                flex: 4,
+                child: CircleAvatar(
+                  backgroundColor: kBackgroundColor,
+                  child: Icon(
+                    FontAwesomeIcons.user,
+                    size: 20,
+                    color: kOrangePrimary,
+                  ),
+                ),
+              ),
+              Expanded(
+                flex: 8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    _buildField(
+                      "nome",
+                      paziente.nome!,
+                    ),
+                    sizedBox,
+                    _buildField(
+                      "cognome",
+                      paziente.cognome!,
+                    ),
+                    sizedBox,
+                    _buildField(
+                      "codice fiscale",
+                      paziente.codiceFiscale!,
+                    ),
+                    sizedBox,
+                    if (paziente.numeriUtili != null)
+                      Column(
+                        children: [
+                          for (NumeroUtile n in paziente.numeriUtili!)
+                            Row(
+                              children: [
+                                const Icon(
+                                  Icons.phone,
+                                  color: kOrangePrimary,
+                                ),
+                                const SizedBox(
+                                  width: 8,
+                                ),
+                                Text(
+                                  n.numero!,
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 10,
+                                  ),
+                                )
+                              ],
+                            )
+                        ],
+                      ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
+      );
 
   Widget _buildField(String desc, String content) {
     return Column(

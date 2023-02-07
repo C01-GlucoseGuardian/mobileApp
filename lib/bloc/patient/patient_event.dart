@@ -7,4 +7,8 @@ abstract class PatientEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class GetPatient extends PatientEvent {}
+class GetPatient extends PatientEvent {
+  final String? codiceFiscalePaziente;
+
+  const GetPatient({this.codiceFiscalePaziente});
+}

@@ -11,7 +11,9 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
 class PazienteDoctorScreen extends StatefulWidget {
-  const PazienteDoctorScreen({super.key});
+  final String? codiceFiscalePaziente;
+
+  const PazienteDoctorScreen({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteDoctorScreen> createState() => _PazienteDoctorScreenState();
@@ -27,7 +29,8 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
   @override
   void initState() {
     // check if codiceFiscale is null before here
-    _bloc.add(GetDoctor(SharedPreferenceService.codiceFiscale!));
+    _bloc.add(GetDoctor(widget.codiceFiscalePaziente ??
+        SharedPreferenceService.codiceFiscale!));
 
     super.initState();
   }
@@ -159,10 +162,11 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
                   "indirizzo struttura medica",
                   doctor.indirizzoStruttura ?? "NON PRESENTE",
                 ),
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: SendFeedbackButton(),
-                )
+                if (widget.codiceFiscalePaziente == null)
+                  const Align(
+                    alignment: Alignment.bottomRight,
+                    child: SendFeedbackButton(),
+                  )
               ],
             ),
           ),
