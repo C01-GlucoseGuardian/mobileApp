@@ -244,13 +244,13 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
         BlocBuilder<MeasurementsBloc, MeasurementsState>(
           builder: (context, state) {
             if (state is MeasurementsInitial || state is MeasurementsLoading) {
-              return const Loading(
+              return Loading(
                 child: CircleAvatar(
                   backgroundColor: kBackgroundColor,
                   child: Icon(
                     Icons.bloodtype_rounded,
                     size: 20,
-                    color: kOrangePrimary,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               );
@@ -341,10 +341,10 @@ class _GlucoseCardState extends State<GlucoseCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     backgroundColor: kBackgroundColor,
-                    foregroundColor: kOrangePrimary,
-                    child: Icon(
+                    foregroundColor: Theme.of(context).primaryColor,
+                    child: const Icon(
                       Icons.bloodtype_rounded,
                     ),
                   ),

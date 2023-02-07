@@ -52,13 +52,13 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
           child: BlocBuilder<PatientBloc, PatientState>(
             builder: (context, state) {
               if (state is PatientInitial || state is PatientLoading) {
-                return const Loading(
+                return Loading(
                   child: CircleAvatar(
                     backgroundColor: kBackgroundColor,
                     child: Icon(
                       FontAwesomeIcons.userDoctor,
                       size: 20,
-                      color: kOrangePrimary,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 );
@@ -92,14 +92,14 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Expanded(
+          Expanded(
             flex: 2,
             child: CircleAvatar(
               backgroundColor: kBackgroundColor,
               child: Icon(
                 FontAwesomeIcons.userDoctor,
                 size: 20,
-                color: kOrangePrimary,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),

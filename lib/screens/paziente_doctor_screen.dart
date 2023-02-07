@@ -55,13 +55,13 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
           child: BlocBuilder<DoctorBloc, DoctorState>(
             builder: (context, state) {
               if (state is DoctorInitial || state is DoctorLoading) {
-                return const Loading(
+                return Loading(
                   child: CircleAvatar(
                     backgroundColor: kBackgroundColor,
                     child: Icon(
                       FontAwesomeIcons.userDoctor,
                       size: 20,
-                      color: kOrangePrimary,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 );
@@ -95,14 +95,14 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Expanded(
+          Expanded(
             flex: 2,
             child: CircleAvatar(
               backgroundColor: kBackgroundColor,
               child: Icon(
                 FontAwesomeIcons.userDoctor,
                 size: 20,
-                color: kOrangePrimary,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),

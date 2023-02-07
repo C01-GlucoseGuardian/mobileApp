@@ -36,48 +36,55 @@ class _TutoreHomeState extends State<TutoreHome> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        backgroundColor: kBackgroundColor,
-        appBar: _createAppBar(context),
-        body: BlocProvider(
-          create: (context) => _bloc,
-          child: BlocBuilder<TutoreBloc, TutoreState>(
-            builder: (context, state) {
-              if (state is TutoreLoading || state is TutoreInitial) {
-                return const Loading(
-                  child: CircleAvatar(
-                    backgroundColor: kBackgroundColor,
-                    child: Icon(
-                      FontAwesomeIcons.userDoctor,
-                      size: 20,
-                      color: kOrangePrimary,
-                    ),
-                  ),
-                );
-              } else if (state is TutoreLoaded) {
-                if (state.tutore.pazienteList == null ||
-                    state.tutore.pazienteList!.isEmpty) {
-                  return const EmptyData(
-                      text: "Non ci sono pazienti collegati a questo tutore");
-                }
-                return ListView.builder(
-                    itemCount: state.tutore.pazienteList?.length ?? 0,
-                    itemBuilder: (context, index) =>
-                        _buildPatientCard(state.tutore.pazienteList![index]));
-              } else {
-                return ErrorScreen(
-                  text:
-                      "Errore.\nMessaggio: ${state is TutoreError ? state.error : 'NON PRESENTE'}",
-                );
-              }
-            },
-          ),
-        ),
+      theme: ThemeData.light().copyWith(primaryColor: kBlue),
+      home: Builder(
+        builder: (context) {
+          return Scaffold(
+            backgroundColor: kBackgroundColor,
+            appBar: _createAppBar(context),
+            body: BlocProvider(
+              create: (context) => _bloc,
+              child: BlocBuilder<TutoreBloc, TutoreState>(
+                builder: (context, state) {
+                  if (state is TutoreLoading || state is TutoreInitial) {
+                    return Loading(
+                      child: CircleAvatar(
+                        backgroundColor: kBackgroundColor,
+                        child: Icon(
+                          FontAwesomeIcons.userDoctor,
+                          size: 20,
+                          color: Theme.of(context).primaryColor,
+                        ),
+                      ),
+                    );
+                  } else if (state is TutoreLoaded) {
+                    if (state.tutore.pazienteList == null ||
+                        state.tutore.pazienteList!.isEmpty) {
+                      return const EmptyData(
+                          text:
+                              "Non ci sono pazienti collegati a questo tutore");
+                    }
+                    return ListView.builder(
+                      itemCount: state.tutore.pazienteList?.length ?? 0,
+                      itemBuilder: (context, index) => _buildPatientCard(
+                          context, state.tutore.pazienteList![index]),
+                    );
+                  } else {
+                    return ErrorScreen(
+                      text:
+                          "Errore.\nMessaggio: ${state is TutoreError ? state.error : 'NON PRESENTE'}",
+                    );
+                  }
+                },
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  Widget _buildPatientCard(Paziente paziente) => InkWell(
+  Widget _buildPatientCard(BuildContext context, Paziente paziente) => InkWell(
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(
             builder: (_) => TutorePazienteDetails(
@@ -94,14 +101,14 @@ class _TutoreHomeState extends State<TutoreHome> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Expanded(
+              Expanded(
                 flex: 4,
                 child: CircleAvatar(
                   backgroundColor: kBackgroundColor,
                   child: Icon(
                     FontAwesomeIcons.user,
                     size: 20,
-                    color: kOrangePrimary,
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
               ),
@@ -132,9 +139,9 @@ class _TutoreHomeState extends State<TutoreHome> {
                           for (NumeroUtile n in paziente.numeriUtili!)
                             Row(
                               children: [
-                                const Icon(
+                                Icon(
                                   Icons.phone,
-                                  color: kOrangePrimary,
+                                  color: Theme.of(context).primaryColor,
                                 ),
                                 const SizedBox(
                                   width: 8,

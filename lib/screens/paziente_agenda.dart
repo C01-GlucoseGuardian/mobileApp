@@ -42,7 +42,7 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
                 backgroundColor: kBackgroundColor,
                 child: SvgPicture.asset(
                   kPrescriptionsIcon,
-                  color: kOrangePrimary,
+                  color: Theme.of(context).primaryColor,
                   width: 28,
                   height: 28,
                 ),
@@ -147,7 +147,7 @@ class _DrugCardState extends State<DrugCard> {
                     backgroundColor: kBackgroundColor,
                     child: SvgPicture.asset(
                       kPrescriptionsIcon,
-                      color: kOrangePrimary,
+                      color: Theme.of(context).primaryColor,
                       width: 28,
                       height: 28,
                     ),

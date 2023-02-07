@@ -9,7 +9,6 @@ import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
-import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/paziente_profilo.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +22,7 @@ class TutorePazienteDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData.light().copyWith(primaryColor: kBlue),
       home: MultiProvider(
         providers: [
           ChangeNotifierProvider<BottomNavigationBarIndex>(
