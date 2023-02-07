@@ -34,6 +34,7 @@ class _LandingState extends State<Landing> {
     _LandingPageContent(
       title: "Cos'è Glucose Guardian?",
       description: kAppDescription,
+      shrinkIcon: true,
     ),
   ];
 
@@ -123,11 +124,13 @@ class _LandingPageContent extends StatelessWidget {
   final String title;
   final String description;
   final String? asset;
+  final bool shrinkIcon;
 
   const _LandingPageContent({
     required this.title,
     required this.description,
     this.asset,
+    this.shrinkIcon = false,
   });
 
   @override
@@ -146,7 +149,7 @@ class _LandingPageContent extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1,
+          flex: shrinkIcon ? 2 : 1,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
