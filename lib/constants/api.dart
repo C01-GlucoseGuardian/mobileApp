@@ -19,7 +19,8 @@ enum ApiEndPoints {
   dottByPCF("/dottore/getByPaziente"),
   farmacoByID("/farmaco/get"),
   lastGlicemia("/glicemia/getLast"),
-  glicemiaInRange("/glicemia/getRange");
+  glicemiaInRange("/glicemia/getRange"),
+  getTutore("/tutore/get");
 
   final String value;
 

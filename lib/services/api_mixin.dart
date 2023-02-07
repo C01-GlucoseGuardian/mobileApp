@@ -7,6 +7,7 @@ import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 
 abstract class ApiMixin {
   Future<LoginOutput> performLogin(LoginInput data);
@@ -35,4 +36,6 @@ abstract class ApiMixin {
 
   Future<List<Glicemia>> fetchGlicemiaInRange(
       String codiceFiscale, int startTimestamp, int endTimestamp);
+
+  Future<Tutore> fetchLoggedTutore(String codiceFiscale);
 }

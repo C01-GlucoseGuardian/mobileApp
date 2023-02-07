@@ -7,6 +7,7 @@ import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 import 'package:glucose_guardian/services/api_mixin.dart';
 import 'package:glucose_guardian/services/api_provider.dart';
 
@@ -76,5 +77,10 @@ class ApiRepository implements ApiMixin {
   @override
   Future<Feedback> sendFeedback(FeedbackInput input) {
     return provider.sendFeedback(input);
+  }
+
+  @override
+  Future<Tutore> fetchLoggedTutore(String codiceFiscale) {
+    return provider.fetchLoggedTutore(codiceFiscale);
   }
 }

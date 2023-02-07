@@ -8,6 +8,7 @@ import 'package:glucose_guardian/bloc/auth/auth_bloc.dart';
 import 'package:glucose_guardian/constants/api.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
+import 'package:glucose_guardian/screens/tutore_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:passwordfield/passwordfield.dart';
 
@@ -63,7 +64,7 @@ class _LoginState extends State<Login> {
                 builder: (_) =>
                     SharedPreferenceService.userType == UserType.paziente
                         ? const PazienteHome()
-                        : Container(), // TODO: tutore home
+                        : const TutoreHome(),
               ),
             );
           } else if (state is AuthError) {

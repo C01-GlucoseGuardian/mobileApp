@@ -10,6 +10,7 @@ import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 import 'package:glucose_guardian/services/api_mixin.dart';
 import 'package:glucose_guardian/services/exceptions/api_exception.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
@@ -259,6 +260,25 @@ class ApiProvider implements ApiMixin {
     }
 
     return Feedback.fromJson(resp.data);
+  }
+
+  @override
+  Future<Tutore> fetchLoggedTutore(String codiceFiscale) async {
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.getTutore.value,
+      body: {
+        "codiceFiscale": codiceFiscale,
+      },
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return Tutore.fromJson(resp.data);
   }
 
   /// Utility function for post requests
