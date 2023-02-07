@@ -6,6 +6,8 @@ import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/login.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
 class PazienteProfilo extends StatefulWidget {
@@ -152,6 +154,25 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                   "Farmaci assunti",
                   user.farmaciAssunti ?? "NON PRESENTE",
                 ),
+                TextButton.icon(
+                  style: TextButton.styleFrom(
+                    backgroundColor: kBackgroundColor,
+                    foregroundColor: kOrangePrimary,
+                  ),
+                  onPressed: () {
+                    SharedPreferenceService.logout();
+                    Navigator.of(context, rootNavigator: true).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => const Login(),
+                      ),
+                    );
+                  },
+                  label: const Text("Log out"),
+                  icon: const Icon(
+                    Icons.logout,
+                    color: kOrangePrimary,
+                  ),
+                )
               ],
             ),
           ),

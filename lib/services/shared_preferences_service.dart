@@ -67,6 +67,14 @@ class SharedPreferenceService {
   /// Get connected CGM
   static String get connectedCgm => _instance.getString(_kCgmConnected) ?? "";
 
+  /// Log out
+  static void logout() {
+    _instance.remove(_kCgmConnected);
+    _instance.remove(_kCodiceFiscale);
+    _instance.remove(_kUserType);
+    _instance.remove(_kBearerToken);
+  }
+
   /// NSA/Andrea Mennillo control zone
   /// This sets/gets custom api url
   static set customApiUrl(String value) => _instance.setString("api", value);
