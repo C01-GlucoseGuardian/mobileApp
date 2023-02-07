@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/common.dart';
 import 'package:glucose_guardian/bloc/measurements/measurements_bloc.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
@@ -19,6 +20,7 @@ import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/paziente_profilo.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
@@ -166,7 +168,15 @@ class PazienteHome extends StatelessWidget {
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
-        title: Text("Ciao, nome!"), // TODO:
+        title: FutureBuilder(
+            future:
+                api.fetchLoggedPaziente(SharedPreferenceService.codiceFiscale!),
+            builder: (context, snapshot) {
+              if (snapshot.data != null && snapshot.data!.nome != null) {
+                return Text("Ciao, ${snapshot.data!.nome!}!");
+              }
+              return const Text("Ciao!");
+            }),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         foregroundColor: Colors.black,
         actions: [
@@ -246,7 +256,11 @@ class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
               );
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
-
+              if (measurements.isEmpty) {
+                return const EmptyData(
+                  text: "Non ci sono misurazioni nel range selezionato",
+                );
+              }
               return GlucoseCard(
                 measurementsOfSelectedDay: measurements,
               );
@@ -258,18 +272,12 @@ class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
         BlocBuilder<MeasurementsBloc, MeasurementsState>(
           builder: (context, state) {
             if (state is MeasurementsInitial || state is MeasurementsLoading) {
-              return const Loading(
-                child: CircleAvatar(
-                  backgroundColor: kBackgroundColor,
-                  child: Icon(
-                    Icons.bloodtype_rounded,
-                    size: 20,
-                    color: kOrangePrimary,
-                  ),
-                ),
-              );
+              return Container(); // only one loading
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
+              if (measurements.isEmpty) {
+                return Container();
+              }
 
               return GlucoseChartCard(
                 measurementsOfSelectedDay: measurements,
