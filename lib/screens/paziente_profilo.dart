@@ -36,7 +36,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
         const Padding(
           padding: EdgeInsets.all(16),
           child: Text(
-            "Informazioni dottore",
+            "Informazioni paziente",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
