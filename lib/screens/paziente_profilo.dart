@@ -34,8 +34,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return ListView(
       children: [
         const Padding(
           padding: EdgeInsets.all(16),
@@ -79,7 +78,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
     );
   }
 
-  Container _buildContent(BuildContext context, Paziente user) {
+  Widget _buildContent(BuildContext context, Paziente user) {
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

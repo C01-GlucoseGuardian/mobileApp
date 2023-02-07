@@ -82,109 +82,116 @@ class _LoginState extends State<Login> {
           }
         },
         child: Scaffold(
-          body: Column(
-            children: [
-              const Logo(),
-              Expanded(
-                flex: 1,
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 16),
-                        child: TextFormField(
-                          autovalidateMode: AutovalidateMode.always,
-                          controller: emailController,
-                          validator: _validEmail,
-                          decoration: InputDecoration(
-                            hintText: "Email",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+          body: SingleChildScrollView(
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  const Logo(),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: TextFormField(
+                              autovalidateMode: AutovalidateMode.always,
+                              controller: emailController,
+                              validator: _validEmail,
+                              decoration: InputDecoration(
+                                hintText: "Email",
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(
-                          bottom: showOTPCodeInput ?? false
-                              ? 0
-                              : 16, // adds padding only if otp field is not shown
-                        ),
-                        child: PasswordField(
-                          passwordConstraint: r'[0-9a-zA-Z]{4,}',
-                          controller: passwordController,
-                          border: PasswordBorder(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(16),
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: showOTPCodeInput ?? false
+                                  ? 0
+                                  : 16, // adds padding only if otp field is not shown
+                            ),
+                            child: PasswordField(
+                              passwordConstraint: r'[0-9a-zA-Z]{4,}',
+                              controller: passwordController,
+                              border: PasswordBorder(
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      if (showOTPCodeInput ?? false)
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: OTPTextField(
-                            onCompleted: (value) => setState(() {
-                              otp = value;
-                            }),
-                            length: 6,
-                            width: MediaQuery.of(context).size.width,
-                          ),
-                        ),
-                      Semantics(
-                        button: true,
-                        hint: "Bottone per proseguire nel processo di login",
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
+                          if (showOTPCodeInput ?? false)
+                            Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: OTPTextField(
+                                onCompleted: (value) => setState(() {
+                                  otp = value;
+                                }),
+                                length: 6,
+                                width: MediaQuery.of(context).size.width,
+                              ),
                             ),
-                            minimumSize: const Size.fromHeight(
-                              40,
-                            ),
-                          ),
-                          onPressed: () {
-                            if (_validEmail(emailController.text) == null &&
-                                passwordController.text.isNotEmpty) {
-                              if (showOTPCodeInput != null &&
-                                  showOTPCodeInput!) {
-                                if (otp != null && otp!.isNotEmpty) {
-                                  _bloc.add(
-                                    PerformLoginNeedsOtp(
-                                      emailController.text,
-                                      passwordController.text,
-                                      otp!,
-                                    ),
-                                  );
+                          Semantics(
+                            button: true,
+                            hint:
+                                "Bottone per proseguire nel processo di login",
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(16),
+                                ),
+                                minimumSize: const Size.fromHeight(
+                                  40,
+                                ),
+                              ),
+                              onPressed: () {
+                                if (_validEmail(emailController.text) == null &&
+                                    passwordController.text.isNotEmpty) {
+                                  if (showOTPCodeInput != null &&
+                                      showOTPCodeInput!) {
+                                    if (otp != null && otp!.isNotEmpty) {
+                                      _bloc.add(
+                                        PerformLoginNeedsOtp(
+                                          emailController.text,
+                                          passwordController.text,
+                                          otp!,
+                                        ),
+                                      );
+                                    }
+                                  } else {
+                                    _bloc.add(
+                                      PerformLogin(
+                                        emailController.text,
+                                        passwordController.text,
+                                      ),
+                                    );
+                                  }
+                                } else {
+                                  AwesomeDialog(
+                                    context: context,
+                                    dialogType: DialogType.error,
+                                    title: "Email o password non valida",
+                                  ).show();
+                                  return;
                                 }
-                              } else {
-                                _bloc.add(
-                                  PerformLogin(
-                                    emailController.text,
-                                    passwordController.text,
-                                  ),
-                                );
-                              }
-                            } else {
-                              AwesomeDialog(
-                                context: context,
-                                dialogType: DialogType.error,
-                                title: "Email o password non valida",
-                              ).show();
-                              return;
-                            }
-                          },
-                          child: const Text(
-                            "LOGIN",
-                          ),
-                        ),
-                      )
-                    ],
+                              },
+                              child: const Text(
+                                "LOGIN",
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -288,7 +295,7 @@ class _ControlRoomState extends State<ControlRoom> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
+      body: ListView(
         children: [
           Image.network(
             "https://media2.giphy.com/media/3o6gb3NDIb4lpesGWI/giphy.gif",
