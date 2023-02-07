@@ -5,8 +5,8 @@ import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/services/exceptions/api_exception.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 
-part 'patient_event.dart';
 part 'patient_state.dart';
+part 'patient_event.dart';
 
 class PatientBloc extends Bloc<PatientEvent, PatientState> {
   PatientBloc() : super(PatientInitial()) {
