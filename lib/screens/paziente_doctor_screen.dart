@@ -216,7 +216,7 @@ class SendFeedbackButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-            builder: (_) => const PazienteSendFeedback(),
+            builder: (_) => PazienteSendFeedback(),
           ),
         );
       },

@@ -240,7 +240,7 @@ class ApiProvider implements ApiMixin {
   }
 
   @override
-  Future<Feedback> sendFeedback(FeedbackInput input) async {
+  Future<bool> sendFeedback(FeedbackInput input) async {
     var resp = await _makePostRequest(
       path: ApiEndPoints.sendFeedback.value,
       body: input.toJson(),
@@ -253,7 +253,7 @@ class ApiProvider implements ApiMixin {
       throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
     }
 
-    return Feedback.fromJson(resp.data);
+    return true;
   }
 
   @override

@@ -75,7 +75,7 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
-  Future<Feedback> sendFeedback(FeedbackInput input) {
+  Future<bool> sendFeedback(FeedbackInput input) {
     return provider.sendFeedback(input);
   }
 
