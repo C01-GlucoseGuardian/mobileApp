@@ -11,7 +11,9 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
 class PazienteDoctorScreen extends StatefulWidget {
-  const PazienteDoctorScreen({super.key});
+  final String? codiceFiscalePaziente;
+
+  const PazienteDoctorScreen({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteDoctorScreen> createState() => _PazienteDoctorScreenState();
@@ -27,7 +29,8 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
   @override
   void initState() {
     // check if codiceFiscale is null before here
-    _bloc.add(GetDoctor(SharedPreferenceService.codiceFiscale!));
+    _bloc.add(GetDoctor(widget.codiceFiscalePaziente ??
+        SharedPreferenceService.codiceFiscale!));
 
     super.initState();
   }
@@ -52,13 +55,13 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
           child: BlocBuilder<DoctorBloc, DoctorState>(
             builder: (context, state) {
               if (state is DoctorInitial || state is DoctorLoading) {
-                return const Loading(
+                return Loading(
                   child: CircleAvatar(
                     backgroundColor: kBackgroundColor,
                     child: Icon(
                       FontAwesomeIcons.userDoctor,
                       size: 20,
-                      color: kOrangePrimary,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 );
@@ -67,7 +70,10 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
 
                 return _buildContent(context, dottore);
               } else {
-                return const ErrorScreen(text: "Errore"); // TODO:
+                return ErrorScreen(
+                  text:
+                      "Errore.\nMessaggio: ${state is DoctorError ? state.error : 'NON PRESENTE'}",
+                );
               }
             },
           ),
@@ -89,14 +95,14 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Expanded(
+          Expanded(
             flex: 2,
             child: CircleAvatar(
               backgroundColor: kBackgroundColor,
               child: Icon(
                 FontAwesomeIcons.userDoctor,
                 size: 20,
-                color: kOrangePrimary,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -156,10 +162,11 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
                   "indirizzo struttura medica",
                   doctor.indirizzoStruttura ?? "NON PRESENTE",
                 ),
-                const Align(
-                  alignment: Alignment.bottomRight,
-                  child: SendFeedbackButton(),
-                )
+                if (widget.codiceFiscalePaziente == null)
+                  const Align(
+                    alignment: Alignment.bottomRight,
+                    child: SendFeedbackButton(),
+                  )
               ],
             ),
           ),
@@ -209,7 +216,7 @@ class SendFeedbackButton extends StatelessWidget {
       onPressed: () {
         Navigator.of(context, rootNavigator: true).push(
           MaterialPageRoute(
-            builder: (_) => const PazienteSendFeedback(),
+            builder: (_) => PazienteSendFeedback(),
           ),
         );
       },

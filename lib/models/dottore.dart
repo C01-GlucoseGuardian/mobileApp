@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class Dottore {
   String? codiceFiscale;
   String? nome;
@@ -32,7 +34,7 @@ class Dottore {
     codiceFiscale = json['codiceFiscale'];
     nome = json['nome'];
     cognome = json['cognome'];
-    dataNascita = DateTime.parse(json['dataNascita']);
+    dataNascita = DateFormat("yyyy/MM/dd").parse(json['dataNascita']);
     indirizzo = json['indirizzo'];
     telefono = json['telefono'];
     email = json['email'];
@@ -45,20 +47,20 @@ class Dottore {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['codiceFiscale'] = this.codiceFiscale;
-    data['nome'] = this.nome;
-    data['cognome'] = this.cognome;
-    data['dataNascita'] = this.dataNascita;
-    data['indirizzo'] = this.indirizzo;
-    data['telefono'] = this.telefono;
-    data['email'] = this.email;
-    data['sesso'] = this.sesso;
-    data['specializzazione'] = this.specializzazione;
-    data['codiceAlbo'] = this.codiceAlbo;
-    data['nomeStruttura'] = this.nomeStruttura;
-    data['indirizzoStruttura'] = this.indirizzoStruttura;
-    data['stato'] = this.stato;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codiceFiscale'] = codiceFiscale;
+    data['nome'] = nome;
+    data['cognome'] = cognome;
+    data['dataNascita'] = dataNascita;
+    data['indirizzo'] = indirizzo;
+    data['telefono'] = telefono;
+    data['email'] = email;
+    data['sesso'] = sesso;
+    data['specializzazione'] = specializzazione;
+    data['codiceAlbo'] = codiceAlbo;
+    data['nomeStruttura'] = nomeStruttura;
+    data['indirizzoStruttura'] = indirizzoStruttura;
+    data['stato'] = stato;
     return data;
   }
 }

@@ -3,6 +3,7 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/screens/landing.dart';
 import 'package:glucose_guardian/screens/login.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
+import 'package:glucose_guardian/screens/tutore_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -32,7 +33,7 @@ class MainApp extends StatelessWidget {
         home = const PazienteHome();
         break;
       case FirstScreenState.loggedAsTutore:
-        home = Container();
+        home = const TutoreHome();
         break;
     }
 

@@ -41,6 +41,7 @@ class _DaySelectorState extends State<DaySelector> {
     return InkWell(
       borderRadius: borderRadius,
       onTap: () {
+        if (_selectedDate == workingDate) return;
         if (widget.callback != null) widget.callback!(workingDate);
         return setState(() => _selectedDate = workingDate);
       },

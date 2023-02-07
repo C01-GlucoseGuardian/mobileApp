@@ -14,6 +14,7 @@ class SharedPreferenceService {
   static const String _kBearerToken = "bearerToken";
   static const String _kUserType = "userType";
   static const String _kCodiceFiscale = "codiceFiscale";
+  static const String _kCgmConnected = "cgmConnected";
 
   /// Creates [SharedPreferenceService._instance], this should be called in the
   /// main function after `WidgetsFlutterBinding.ensureInitialized()`
@@ -37,7 +38,10 @@ class SharedPreferenceService {
   static set bearerToken(String value) =>
       _instance.setString(_kBearerToken, value);
 
-  /// Get user type, 0 is paziente, 1 is tutore.
+  /// Get bearerToken
+  static String get bearerToken => _instance.getString(_kBearerToken) ?? "";
+
+  /// Get user type, 2 is paziente, 3 is tutore.
   /// We assume that this is called after [userType] setter
   static UserType get userType =>
       UserType.values[_instance.getInt(_kUserType)!];
@@ -52,9 +56,29 @@ class SharedPreferenceService {
   /// Set after first login
   ///
   /// HACK: since set and get should have the same type,
-  /// HACK: this setter gets a String? but it should never be null
+  /// this setter gets a String? but it should never be null
   static set codiceFiscale(String? value) =>
       _instance.setString(_kCodiceFiscale, value!);
+
+  /// Save connected CGM
+  static set connectedCgm(String value) =>
+      _instance.setString(_kCgmConnected, value);
+
+  /// Get connected CGM
+  static String get connectedCgm => _instance.getString(_kCgmConnected) ?? "";
+
+  /// Log out
+  static void logout() {
+    _instance.remove(_kCgmConnected);
+    _instance.remove(_kCodiceFiscale);
+    _instance.remove(_kUserType);
+    _instance.remove(_kBearerToken);
+  }
+
+  /// NSA/Andrea Mennillo control zone
+  /// This sets/gets custom api url
+  static set customApiUrl(String value) => _instance.setString("api", value);
+  static String get customApiUrl => _instance.getString("api") ?? "";
 }
 
 enum UserType { paziente, tutore }

@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:glucose_guardian/bloc/common.dart';
+import 'package:glucose_guardian/bloc/measurements/measurements_bloc.dart';
 import 'package:glucose_guardian/components/day_selector.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
+import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/components/glucose_chart.dart';
+import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
+import 'package:glucose_guardian/constants/dates.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
@@ -14,6 +20,7 @@ import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/paziente_profilo.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
@@ -29,98 +36,105 @@ class PazienteHome extends StatelessWidget {
           create: (_) => BottomNavigationBarIndex(0),
         ),
       ],
-      child: Scaffold(
-        backgroundColor: kBackgroundColor,
-        appBar: _createAppBar(context),
-        bottomNavigationBar: Builder(
-          builder: (context) => BottomNavigationBar(
-            elevation: 0,
-            backgroundColor: Colors.white,
-            enableFeedback: true,
-            selectedFontSize: 0,
-            currentIndex: Provider.of<BottomNavigationBarIndex>(context).index,
-            onTap: (newIndex) {
-              int currentIndex =
+      child: Banner(
+        location: BannerLocation.topEnd,
+        message: "HACKER",
+        child: Scaffold(
+          backgroundColor: kBackgroundColor,
+          appBar: _createAppBar(context),
+          bottomNavigationBar: Builder(
+            builder: (context) => BottomNavigationBar(
+              elevation: 0,
+              backgroundColor: Colors.white,
+              enableFeedback: true,
+              selectedFontSize: 0,
+              currentIndex:
+                  Provider.of<BottomNavigationBarIndex>(context).index,
+              onTap: (newIndex) {
+                int currentIndex = Provider.of<BottomNavigationBarIndex>(
+                        context,
+                        listen: false)
+                    .index;
+                if (currentIndex != newIndex) {
+                  String nextRoute = kHomeNavigatorPaths[newIndex];
+                  homeNavigatorKey.currentState
+                      ?.pushReplacementNamed(nextRoute);
                   Provider.of<BottomNavigationBarIndex>(context, listen: false)
-                      .index;
-              if (currentIndex != newIndex) {
-                String nextRoute = kHomeNavigatorPaths[newIndex];
-                homeNavigatorKey.currentState?.pushReplacementNamed(nextRoute);
-                Provider.of<BottomNavigationBarIndex>(context, listen: false)
-                    .index = newIndex;
-              } else {
-                // TODO: handle what should happen if the user re-clicks on the
-                // current bottomnavigationbar item
+                      .index = newIndex;
+                } else {
+                  // user re-clicks on the
+                  // current bottomnavigationbar item
+                }
+              },
+              items: [
+                _createBottomNavigationBarItem(
+                  context,
+                  0,
+                  'home',
+                  FontAwesomeIcons.house,
+                ),
+                _createBottomNavigationBarItem(
+                  context,
+                  1,
+                  'agenda',
+                  FontAwesomeIcons.calendar,
+                ),
+                _createBottomNavigationBarItem(
+                  context,
+                  2,
+                  'notifiche',
+                  FontAwesomeIcons.bell,
+                ),
+                _createBottomNavigationBarItem(
+                  context,
+                  3,
+                  'dottore',
+                  FontAwesomeIcons.userDoctor,
+                ),
+                _createBottomNavigationBarItem(
+                  context,
+                  4,
+                  'profilo',
+                  FontAwesomeIcons.user,
+                ),
+              ],
+            ),
+          ),
+          body: Navigator(
+            key: homeNavigatorKey,
+            onGenerateRoute: (settings) {
+              // local function, animations disabled
+              PageRouteBuilder builder(Widget page) => PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => page,
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  );
+
+              switch (settings.name) {
+                case 'agenda':
+                  return builder(
+                    const PazienteAgenda(),
+                  );
+                case 'notifiche':
+                  return builder(
+                    const PazienteNotifiche(),
+                  );
+                case 'dottore':
+                  return builder(
+                    const PazienteDoctorScreen(),
+                  );
+                case 'profilo':
+                  return builder(
+                    const PazienteProfilo(),
+                  );
+                case 'home':
+                default:
+                  return builder(
+                    const PazienteHomeDashboard(),
+                  );
               }
             },
-            items: [
-              _createBottomNavigationBarItem(
-                context,
-                0,
-                'home',
-                FontAwesomeIcons.house,
-              ),
-              _createBottomNavigationBarItem(
-                context,
-                1,
-                'agenda',
-                FontAwesomeIcons.calendar,
-              ),
-              _createBottomNavigationBarItem(
-                context,
-                2,
-                'notifiche',
-                FontAwesomeIcons.bell,
-              ),
-              _createBottomNavigationBarItem(
-                context,
-                3,
-                'dottore',
-                FontAwesomeIcons.userDoctor,
-              ),
-              _createBottomNavigationBarItem(
-                context,
-                4,
-                'profilo',
-                FontAwesomeIcons.user,
-              ),
-            ],
           ),
-        ),
-        body: Navigator(
-          key: homeNavigatorKey,
-          onGenerateRoute: (settings) {
-            // local function, animations disabled
-            PageRouteBuilder builder(Widget page) => PageRouteBuilder(
-                  pageBuilder: (_, __, ___) => page,
-                  transitionDuration: Duration.zero,
-                  reverseTransitionDuration: Duration.zero,
-                );
-
-            switch (settings.name) {
-              case 'agenda':
-                return builder(
-                  const PazienteAgenda(),
-                );
-              case 'notifiche':
-                return builder(
-                  const PazienteNotifiche(),
-                );
-              case 'dottore':
-                return builder(
-                  const PazienteDoctorScreen(),
-                );
-              case 'profilo':
-                return builder(
-                  const PazienteProfilo(),
-                );
-              case 'home':
-              default:
-                return builder(
-                  const _PazienteHomeDashboard(),
-                );
-            }
-          },
         ),
       ),
     );
@@ -154,7 +168,15 @@ class PazienteHome extends StatelessWidget {
         backgroundColor: kBackgroundColor,
         elevation: 0,
         centerTitle: false,
-        title: Text("Ciao, nome!"), // TODO:
+        title: FutureBuilder(
+            future:
+                api.fetchLoggedPaziente(SharedPreferenceService.codiceFiscale!),
+            builder: (context, snapshot) {
+              if (snapshot.data != null && snapshot.data!.nome != null) {
+                return Text("Ciao, ${snapshot.data!.nome!}!");
+              }
+              return const Text("Ciao!");
+            }),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         foregroundColor: Colors.black,
         actions: [
@@ -162,7 +184,7 @@ class PazienteHome extends StatelessWidget {
             onPressed: () {
               Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
-                  builder: (_) => CGMConnect(),
+                  builder: (_) => const CGMConnect(),
                 ),
               );
             },
@@ -177,28 +199,100 @@ class PazienteHome extends StatelessWidget {
       );
 }
 
-class _PazienteHomeDashboard extends StatelessWidget {
-  const _PazienteHomeDashboard({
-    super.key,
-  });
+class PazienteHomeDashboard extends StatefulWidget {
+  final String? codiceFiscalePaziente;
+  const PazienteHomeDashboard({super.key, this.codiceFiscalePaziente});
+
+  @override
+  State<PazienteHomeDashboard> createState() => _PazienteHomeDashboardState();
+}
+
+class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
+  final MeasurementsBloc _bloc = MeasurementsBloc();
+
+  @override
+  void initState() {
+    _bloc.add(
+      GetMeasurementsInRange(
+        lastMidnight.millisecondsSinceEpoch,
+        now.millisecondsSinceEpoch,
+        codiceFiscalePaziente: widget.codiceFiscalePaziente,
+      ),
+    );
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<Glicemia> misurazioni = [];
+    return BlocProvider(
+      create: (context) => _bloc,
+      child: _buildContent(),
+    );
+  }
+
+  ListView _buildContent() {
     return ListView(
       physics: const BouncingScrollPhysics(),
       children: [
-        if (misurazioni.isNotEmpty) ...[
-          const DaySelector(),
-          GlucoseCard(
-            measurementsOfSelectedDay: misurazioni,
-          ),
-          GlucoseChartCard(
-            measurementsOfSelectedDay: misurazioni,
-          ),
-        ],
-        if (misurazioni.isEmpty)
-          const EmptyData(text: "Non ci sono misurazioni recenti!"),
+        DaySelector(
+          callback: (day) {
+            List<DateTime> span = getDayTimeSpan(day);
+            _bloc.add(GetMeasurementsInRange(span[0].millisecondsSinceEpoch,
+                span[1].millisecondsSinceEpoch));
+          },
+        ),
+        BlocBuilder<MeasurementsBloc, MeasurementsState>(
+          builder: (context, state) {
+            if (state is MeasurementsInitial || state is MeasurementsLoading) {
+              return Loading(
+                child: CircleAvatar(
+                  backgroundColor: kBackgroundColor,
+                  child: Icon(
+                    Icons.bloodtype_rounded,
+                    size: 20,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              );
+            } else if (state is MeasurementsLoaded) {
+              List<Glicemia> measurements = state.measurements;
+              if (measurements.isEmpty) {
+                return const EmptyData(
+                  text: "Non ci sono misurazioni nel range selezionato",
+                );
+              }
+              return GlucoseCard(
+                measurementsOfSelectedDay: measurements,
+              );
+            } else {
+              return ErrorScreen(
+                text:
+                    "Errore.\nMessaggio: ${state is MeasurementsError ? state.error : 'NON PRESENTE'}",
+              );
+            }
+          },
+        ),
+        BlocBuilder<MeasurementsBloc, MeasurementsState>(
+          builder: (context, state) {
+            if (state is MeasurementsInitial || state is MeasurementsLoading) {
+              return Container(); // only one loading
+            } else if (state is MeasurementsLoaded) {
+              List<Glicemia> measurements = state.measurements;
+              if (measurements.isEmpty) {
+                return Container();
+              }
+
+              return GlucoseChartCard(
+                measurementsOfSelectedDay: measurements,
+              );
+            } else {
+              return ErrorScreen(
+                text:
+                    "Errore.\nMessaggio: ${state is MeasurementsError ? state.error : 'NON PRESENTE'}",
+              );
+            }
+          },
+        ),
       ],
     );
   }
@@ -222,7 +316,12 @@ class _GlucoseCardState extends State<GlucoseCard> {
     Glicemia last = widget.measurementsOfSelectedDay.last;
     Glicemia lowest = getLowest(widget.measurementsOfSelectedDay);
     Glicemia highest = getHighest(widget.measurementsOfSelectedDay);
-    Glicemia mean = Glicemia(); // TODO:
+    int mean = (widget.measurementsOfSelectedDay.fold(
+                0,
+                (previousValue, element) =>
+                    previousValue + element.livelloGlucosio!) /
+            widget.measurementsOfSelectedDay.length)
+        .floor();
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 250),
@@ -242,10 +341,10 @@ class _GlucoseCardState extends State<GlucoseCard> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const CircleAvatar(
+                  CircleAvatar(
                     backgroundColor: kBackgroundColor,
-                    foregroundColor: kOrangePrimary,
-                    child: Icon(
+                    foregroundColor: Theme.of(context).primaryColor,
+                    child: const Icon(
                       Icons.bloodtype_rounded,
                     ),
                   ),
@@ -258,7 +357,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Glucosio: ${last.livelloGlucosio!} ${kGlucoseUOM}",
+                        "Glucosio: ${last.livelloGlucosio!} $kGlucoseUOM",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,
@@ -288,7 +387,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     _buildMaxMinNormalWidget(
                         highest, Icons.arrow_upward_rounded, "Alto"),
                     _buildMaxMinNormalWidget(
-                        mean, Icons.check_circle_sharp, "Medio"),
+                        null, Icons.check_circle_sharp, "Medio",
+                        value: mean),
                     _buildMaxMinNormalWidget(
                         lowest, Icons.arrow_downward_rounded, "Basso"),
                   ],
@@ -300,7 +400,8 @@ class _GlucoseCardState extends State<GlucoseCard> {
     );
   }
 
-  Row _buildMaxMinNormalWidget(Glicemia higher, IconData icon, String desc) {
+  Row _buildMaxMinNormalWidget(Glicemia? higher, IconData icon, String desc,
+      {int? value}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -326,7 +427,9 @@ class _GlucoseCardState extends State<GlucoseCard> {
               TextSpan(
                 children: [
                   TextSpan(
-                    text: higher.livelloGlucosio!.toString(),
+                    text: higher != null
+                        ? higher.livelloGlucosio!.toString()
+                        : value!.toString(),
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                     ),

@@ -4,12 +4,11 @@ import 'package:glucose_guardian/constants/general.dart';
 const String kApiUrl = kAppStatus == 3
     ? "prod"
     : kAppStatus == 2
-        ? "staging"
+        ? "https://api.glucoseguardian.it"
         : "http://127.0.0.1:3000";
 
 enum ApiEndPoints {
   login("/auth/login"),
-  loginOtp("/auth/loginOtp"),
   notificaByID("/notifica/get"),
   notificheByCF("/notifica/getByPaziente"),
   terapiaByCF("/terapia/getByPaziente"),
@@ -19,7 +18,8 @@ enum ApiEndPoints {
   dottByPCF("/dottore/getByPaziente"),
   farmacoByID("/farmaco/get"),
   lastGlicemia("/glicemia/getLast"),
-  glicemiaInRange("/glicemia/getRange");
+  glicemiaInRange("/glicemia/getRange"),
+  getTutore("/tutore/get");
 
   final String value;
 

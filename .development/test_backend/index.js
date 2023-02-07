@@ -271,45 +271,26 @@ app.post("/glicemia/getRange", (req, res) => {
     });
   }
 
+  function rn(min, max) {  
+    return Math.floor(
+      Math.random() * (max - min) + min
+    )
+  }
+  
+  
+  var l = [];
+  var random = rn(10, 80);
+
+  for (var i = 0; i < random; i++) {
+    var randomValue = rn(80, 170);
+    l.push({
+      livelloGlucosio: randomValue,
+      timestamp: 1675164427,
+    });
+  }
+
   res.status(200).json({
-    list: [
-      {
-        livelloGlucosio: 300,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 289,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 292,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 490,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 122,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 80,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 60,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 20,
-        timestamp: 1675164427,
-      },
-      {
-        livelloGlucosio: 1292,
-        timestamp: 1675164427,
-      },
-    ],
+    list: l
   });
 });
 

@@ -6,10 +6,14 @@ import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/login.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
 class PazienteProfilo extends StatefulWidget {
-  const PazienteProfilo({super.key});
+  final String? codiceFiscalePaziente;
+
+  const PazienteProfilo({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteProfilo> createState() => _PazienteProfiloState();
@@ -23,7 +27,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
 
   @override
   void initState() {
-    _bloc.add(GetPatient());
+    _bloc.add(GetPatient(codiceFiscalePaziente: widget.codiceFiscalePaziente));
 
     super.initState();
   }
@@ -36,7 +40,7 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
         const Padding(
           padding: EdgeInsets.all(16),
           child: Text(
-            "Informazioni dottore",
+            "Informazioni paziente",
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 20,
@@ -48,13 +52,13 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
           child: BlocBuilder<PatientBloc, PatientState>(
             builder: (context, state) {
               if (state is PatientInitial || state is PatientLoading) {
-                return const Loading(
+                return Loading(
                   child: CircleAvatar(
                     backgroundColor: kBackgroundColor,
                     child: Icon(
                       FontAwesomeIcons.userDoctor,
                       size: 20,
-                      color: kOrangePrimary,
+                      color: Theme.of(context).primaryColor,
                     ),
                   ),
                 );
@@ -63,7 +67,10 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
 
                 return _buildContent(context, paziente);
               } else {
-                return const ErrorScreen(text: "Errore"); // TODO:
+                return ErrorScreen(
+                  text:
+                      "Errore.\nMessaggio: ${state is PatientError ? state.error : 'NON PRESENTE'}",
+                );
               }
             },
           ),
@@ -85,14 +92,14 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          const Expanded(
+          Expanded(
             flex: 2,
             child: CircleAvatar(
               backgroundColor: kBackgroundColor,
               child: Icon(
                 FontAwesomeIcons.userDoctor,
                 size: 20,
-                color: kOrangePrimary,
+                color: Theme.of(context).primaryColor,
               ),
             ),
           ),
@@ -149,6 +156,27 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                   "Farmaci assunti",
                   user.farmaciAssunti ?? "NON PRESENTE",
                 ),
+                if (widget.codiceFiscalePaziente == null)
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: kBackgroundColor,
+                      foregroundColor: kOrangePrimary,
+                    ),
+                    onPressed: () {
+                      SharedPreferenceService.logout();
+                      Navigator.of(context, rootNavigator: true)
+                          .pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const Login(),
+                        ),
+                      );
+                    },
+                    label: const Text("Log out"),
+                    icon: const Icon(
+                      Icons.logout,
+                      color: kOrangePrimary,
+                    ),
+                  )
               ],
             ),
           ),

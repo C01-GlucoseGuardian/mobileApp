@@ -12,6 +12,8 @@ class GetLast extends MeasurementsEvent {}
 class GetMeasurementsInRange extends MeasurementsEvent {
   final int startTime;
   final int endTime;
+  final String? codiceFiscalePaziente;
 
-  const GetMeasurementsInRange(this.startTime, this.endTime);
+  const GetMeasurementsInRange(this.startTime, this.endTime,
+      {this.codiceFiscalePaziente});
 }

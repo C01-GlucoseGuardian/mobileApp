@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 
 class CGMConnect extends StatefulWidget {
   const CGMConnect({super.key});
@@ -32,84 +33,93 @@ class _CGMConnectState extends State<CGMConnect> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: kBackgroundColor,
-        body: SingleChildScrollView(
-          physics: const NeverScrollableScrollPhysics(),
-          child: Column(
-            children: [
-              AnimatedContainer(
-                decoration: const BoxDecoration(
-                  color: kBackgroundColor,
-                ),
-                duration: const Duration(milliseconds: 1000),
-                height: cgmFound ? height / 1.6 : height,
+        body: SharedPreferenceService.connectedCgm.isNotEmpty
+            ? Padding(
+                padding: const EdgeInsets.all(16),
                 child: Center(
-                  child: AvatarGlow(
-                    glowColor: kOrangePrimary,
-                    endRadius: 180.0,
-                    duration: const Duration(milliseconds: 1000),
-                    repeat: !cgmFound,
-                    showTwoGlows: true,
-                    repeatPauseDuration: const Duration(milliseconds: 20),
-                    child: Material(
-                      shape: const CircleBorder(),
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundColor: Colors.grey[100],
-                        child: SvgPicture.asset(
-                          kCgmIcon,
+                  child: SizedBox(height: 100, child: _buildCard()),
+                ),
+              )
+            : SingleChildScrollView(
+                physics: const NeverScrollableScrollPhysics(),
+                child: Column(
+                  children: [
+                    AnimatedContainer(
+                      decoration: const BoxDecoration(
+                        color: kBackgroundColor,
+                      ),
+                      duration: const Duration(milliseconds: 1000),
+                      height: cgmFound ? height / 1.6 : height,
+                      child: Center(
+                        child: AvatarGlow(
+                          glowColor: kOrangePrimary,
+                          endRadius: 180.0,
+                          duration: const Duration(milliseconds: 1000),
+                          repeat: !cgmFound,
+                          showTwoGlows: true,
+                          repeatPauseDuration: const Duration(milliseconds: 20),
+                          child: Material(
+                            shape: const CircleBorder(),
+                            child: CircleAvatar(
+                              radius: 80,
+                              backgroundColor: Colors.grey[100],
+                              child: SvgPicture.asset(
+                                kCgmIcon,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
+                    if (cgmFound)
+                      GestureDetector(
+                        onTap: () => Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => const ConfirmPairing(),
+                          ),
+                        ),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 1000),
+                          width: MediaQuery.of(context).size.width,
+                          margin: const EdgeInsets.all(16),
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 32, horizontal: 16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: _buildCard(),
+                        ),
+                      ),
+                  ],
                 ),
               ),
-              if (cgmFound)
-                GestureDetector(
-                  onTap: () => Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => const ConfirmPairing(),
-                    ),
-                  ),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 1000),
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.all(16),
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 32, horizontal: 16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        Hero(
-                          tag: 'cgm',
-                          child: SvgPicture.asset(
-                            kCgmIcon,
-                            width: 44,
-                            height: 44,
-                            color: kOrangePrimary,
-                          ),
-                        ),
-                        const SizedBox(
-                          width: 16,
-                        ),
-                        const Text(
-                          "CGM di Vito Piegari",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ),
       ),
     );
   }
+
+  Widget _buildCard() => Row(
+        children: [
+          Hero(
+            tag: 'cgm',
+            child: SvgPicture.asset(
+              kCgmIcon,
+              width: 44,
+              height: 44,
+              color: kOrangePrimary,
+            ),
+          ),
+          const SizedBox(
+            width: 16,
+          ),
+          Text(
+            "CGM di ${SharedPreferenceService.codiceFiscale}",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
 }
 
 class ConfirmPairing extends StatefulWidget {
@@ -149,6 +159,8 @@ class _ConfirmPairingState extends State<ConfirmPairing> {
               child: Material(
                 shape: const CircleBorder(),
                 child: AnimatedContainer(
+                  onEnd: () => SharedPreferenceService.connectedCgm =
+                      "CGM di ${SharedPreferenceService.codiceFiscale}",
                   duration: const Duration(milliseconds: 800),
                   decoration: BoxDecoration(
                     color: connected ? Colors.green : Colors.grey[100],

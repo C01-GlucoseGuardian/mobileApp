@@ -125,7 +125,6 @@ class _LandingPageContent extends StatelessWidget {
   final String? asset;
 
   const _LandingPageContent({
-    super.key,
     required this.title,
     required this.description,
     this.asset,

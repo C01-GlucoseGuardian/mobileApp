@@ -28,13 +28,13 @@ class Terapia {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['idPaziente'] = this.idPaziente;
-    data['idDottore'] = this.idDottore;
-    data['dataInizio'] = this.dataInizio;
-    if (this.farmaci != null) {
-      data['farmaci'] = this.farmaci!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['idPaziente'] = idPaziente;
+    data['idDottore'] = idDottore;
+    data['dataInizio'] = dataInizio;
+    if (farmaci != null) {
+      data['farmaci'] = farmaci!.map((v) => v.toJson()).toList();
     }
     return data;
   }

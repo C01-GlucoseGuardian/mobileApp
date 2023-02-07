@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 
 /// 1 for development mode, 2 for staging, 3 for prod
 /// this choses the server in constants/api.dart
-const int kAppStatus = 1;
+const int kAppStatus = 2;
 
 /// checks if glucose value is normal or not
 bool isGlucoseValueNormal(int value) => value < 100;
@@ -40,6 +40,14 @@ const List<String> kHomeNavigatorPaths = [
   "home",
   "agenda",
   "notifiche",
+  "dottore",
+  "profilo"
+];
+
+/// Navigator paths of the homepage of tutore
+const List<String> kTutoreHomeNavigatorPaths = [
+  "home",
+  "agenda",
   "dottore",
   "profilo"
 ];

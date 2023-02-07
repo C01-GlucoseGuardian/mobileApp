@@ -11,7 +11,8 @@ import 'package:glucose_guardian/models/notifica.dart';
 import 'package:intl/intl.dart';
 
 class PazienteNotifiche extends StatefulWidget {
-  const PazienteNotifiche({super.key});
+  final String? codiceFiscalePaziente;
+  const PazienteNotifiche({super.key, this.codiceFiscalePaziente});
 
   @override
   State<PazienteNotifiche> createState() => _PazienteNotificheState();
@@ -22,7 +23,8 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
 
   @override
   void initState() {
-    _bloc.add(GetNotifications());
+    _bloc.add(
+        GetNotifications(codiceFiscalePaziente: widget.codiceFiscalePaziente));
     super.initState();
   }
 
@@ -48,7 +50,10 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
 
             return _buildContent(notifications);
           } else {
-            return const ErrorScreen(text: "Errore"); // TODO:
+            if (state is NotificationsError) {
+              return ErrorScreen(text: state.error ?? "Errore");
+            }
+            return const ErrorScreen(text: "Errore");
           }
         },
       ),

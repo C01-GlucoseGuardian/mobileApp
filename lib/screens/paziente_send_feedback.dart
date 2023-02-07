@@ -1,10 +1,19 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:glucose_guardian/bloc/common.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/strings.dart';
+import 'package:glucose_guardian/models/feedback.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 
 class PazienteSendFeedback extends StatelessWidget {
-  const PazienteSendFeedback({super.key});
+  final TextEditingController fController = TextEditingController();
+  final TextEditingController sController = TextEditingController();
+  final TextEditingController tController = TextEditingController();
+  final TextEditingController qController = TextEditingController();
+
+  PazienteSendFeedback({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +43,9 @@ class PazienteSendFeedback extends StatelessWidget {
           body: ListView(
             padding: const EdgeInsets.all(16),
             children: [
-              TextField(
+              TextFormField(
+                controller: fController,
+                maxLength: 300,
                 minLines: 6,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -49,7 +60,9 @@ class PazienteSendFeedback extends StatelessWidget {
                 ),
               ),
               sizedBox,
-              TextField(
+              TextFormField(
+                controller: sController,
+                maxLength: 300,
                 minLines: 6,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -64,7 +77,9 @@ class PazienteSendFeedback extends StatelessWidget {
                 ),
               ),
               sizedBox,
-              TextField(
+              TextFormField(
+                controller: tController,
+                maxLength: 300,
                 minLines: 6,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -79,7 +94,9 @@ class PazienteSendFeedback extends StatelessWidget {
                 ),
               ),
               sizedBox,
-              TextField(
+              TextFormField(
+                controller: qController,
+                maxLength: 300,
                 minLines: 6,
                 maxLines: null,
                 keyboardType: TextInputType.multiline,
@@ -100,7 +117,45 @@ class PazienteSendFeedback extends StatelessWidget {
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32))),
-                onPressed: () {},
+                onPressed: () async {
+                  if (fController.text.trim().isEmpty ||
+                      sController.text.trim().isEmpty ||
+                      tController.text.trim().isEmpty ||
+                      qController.text.trim().isEmpty) {
+                    AwesomeDialog(
+                      dialogType: DialogType.info,
+                      context: context,
+                      title: "Completa tutti i campi",
+                    ).show();
+                  } else {
+                    try {
+                      await api.sendFeedback(
+                        FeedbackInput(
+                          SharedPreferenceService.codiceFiscale!,
+                          fController.text,
+                          sController.text,
+                          tController.text,
+                          qController.text,
+                        ),
+                      );
+
+                      // ignore: use_build_context_synchronously
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.success,
+                        title: "Inviato",
+                      ).show().then(
+                            (value) => Navigator.of(context).pop(),
+                          );
+                    } catch (e) {
+                      AwesomeDialog(
+                        context: context,
+                        dialogType: DialogType.error,
+                        title: "Errore nell'invio feedback",
+                      ).show();
+                    }
+                  }
+                },
                 child: const Text("INVIA"),
               ),
             ],

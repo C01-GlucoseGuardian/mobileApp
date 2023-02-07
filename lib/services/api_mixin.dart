@@ -7,6 +7,7 @@ import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 
 abstract class ApiMixin {
   Future<LoginOutput> performLogin(LoginInput data);
@@ -19,13 +20,12 @@ abstract class ApiMixin {
 
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
 
-  // TODO: this doesn't return Feedback
-  Future<Feedback> sendFeedback(FeedbackInput input);
+  Future<bool> sendFeedback(FeedbackInput input);
 
   Future<List<AssunzioneFarmaco>> fetchAssunzioneFarmacoByCF(
       String codiceFiscale);
 
-  Future<Paziente> fetchLoggedPaziente();
+  Future<Paziente> fetchLoggedPaziente(String codiceFiscale);
 
   Future<Dottore> fetchDottoreByPazienteCF(String codiceFiscale);
 
@@ -35,4 +35,6 @@ abstract class ApiMixin {
 
   Future<List<Glicemia>> fetchGlicemiaInRange(
       String codiceFiscale, int startTimestamp, int endTimestamp);
+
+  Future<Tutore> fetchLoggedTutore(String codiceFiscale);
 }

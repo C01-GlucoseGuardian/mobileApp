@@ -4,7 +4,7 @@ import 'package:glucose_guardian/constants/general.dart';
 class AssunzioneFarmaco {
   int? id;
   int? idFarmaco;
-  int? dosaggio;
+  String? dosaggio;
   TimeOfDay? orarioAssunzione;
   String? viaDiSomministrazione;
   String? noteAggiuntive;
@@ -31,14 +31,14 @@ class AssunzioneFarmaco {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['idFarmaco'] = this.idFarmaco;
-    data['dosaggio'] = this.dosaggio;
-    data['orarioAssunzione'] = this.orarioAssunzione;
-    data['viaDiSomministrazione'] = this.viaDiSomministrazione;
-    data['noteAggiuntive'] = this.noteAggiuntive;
-    data['nomeFarmaco'] = this.nomeFarmaco;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['idFarmaco'] = idFarmaco;
+    data['dosaggio'] = dosaggio;
+    data['orarioAssunzione'] = orarioAssunzione;
+    data['viaDiSomministrazione'] = viaDiSomministrazione;
+    data['noteAggiuntive'] = noteAggiuntive;
+    data['nomeFarmaco'] = nomeFarmaco;
     return data;
   }
 }
