@@ -8,8 +8,8 @@ class NumeroUtile {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['numero'] = this.numero;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['numero'] = numero;
     return data;
   }
 }

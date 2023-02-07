@@ -39,17 +39,17 @@ class Notifica {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['id'] = this.id;
-    data['messaggio'] = this.messaggio;
-    data['data'] = this.data;
-    data['ora'] = this.ora;
-    data['stato'] = this.stato;
-    data['pazienteOggetto'] = this.pazienteOggetto;
-    data['pazienteDestinatario'] = this.pazienteDestinatario;
-    data['tutoreDestinatario'] = this.tutoreDestinatario;
-    data['adminDestinatario'] = this.adminDestinatario;
-    data['dottoreDestinatario'] = this.dottoreDestinatario;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['id'] = id;
+    data['messaggio'] = messaggio;
+    data['data'] = data;
+    data['ora'] = ora;
+    data['stato'] = stato;
+    data['pazienteOggetto'] = pazienteOggetto;
+    data['pazienteDestinatario'] = pazienteDestinatario;
+    data['tutoreDestinatario'] = tutoreDestinatario;
+    data['adminDestinatario'] = adminDestinatario;
+    data['dottoreDestinatario'] = dottoreDestinatario;
     return data;
   }
 }

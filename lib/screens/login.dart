@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -22,7 +23,6 @@ class Login extends StatefulWidget {
   State<Login> createState() => _LoginState();
 }
 
-// TODO: better accessibility https://www.a11yproject.com/
 class _LoginState extends State<Login> {
   /// set this to true after first login API call
   bool? showOTPCodeInput;
@@ -30,7 +30,7 @@ class _LoginState extends State<Login> {
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
-  AuthBloc _bloc = AuthBloc();
+  final AuthBloc _bloc = AuthBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +38,15 @@ class _LoginState extends State<Login> {
       create: (context) => _bloc,
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {
-          // TODO: check if input is valid
           if (state is AuthLoading || state is AuthInitial) {
             Loader.show(context);
           } else if (state is AuthLoggedNeedsOtp) {
-            // TODO: show snackbar telling the user to insert otp
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.info,
+              title: "Hai l'OTP abilitato, per proseguire inserire codice",
+            ).show();
+
             Loader.hide();
             setState(() {
               showOTPCodeInput = true;
@@ -63,7 +67,13 @@ class _LoginState extends State<Login> {
               ),
             );
           } else if (state is AuthError) {
-            // TODO: error
+            AwesomeDialog(
+              context: context,
+              dialogType: DialogType.error,
+              title: "Errore nel login",
+              desc: state.error,
+            ).show();
+
             Loader.hide();
           }
         },
@@ -82,16 +92,7 @@ class _LoginState extends State<Login> {
                         child: TextFormField(
                           autovalidateMode: AutovalidateMode.always,
                           controller: emailController,
-                          validator: (value) {
-                            if (value == null ||
-                                value.isEmpty ||
-                                value == " ") {
-                              return null;
-                            }
-                            return EmailValidator.validate(value)
-                                ? null
-                                : "Email non valida";
-                          },
+                          validator: _validEmail,
                           decoration: InputDecoration(
                             hintText: "Email",
                             border: OutlineInputBorder(
@@ -138,12 +139,26 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           onPressed: () {
-                            _bloc.add(
-                              PerformLogin(
-                                emailController.text,
-                                passwordController.text,
-                              ),
-                            );
+                            if (_validEmail(emailController.text) == null &&
+                                passwordController.text.isNotEmpty) {
+                              if (showOTPCodeInput == false) {
+                                _bloc.add(
+                                  PerformLogin(
+                                    emailController.text,
+                                    passwordController.text,
+                                  ),
+                                );
+                              } else {
+                                // TODO: handle otp
+                              }
+                            } else {
+                              AwesomeDialog(
+                                context: context,
+                                dialogType: DialogType.error,
+                                title: "Email o password non valida",
+                              ).show();
+                              return;
+                            }
                           },
                           child: const Text(
                             "LOGIN",
@@ -159,6 +174,13 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
+  }
+
+  String? _validEmail(String? value) {
+    if (value == null || value.isEmpty || value == " ") {
+      return null;
+    }
+    return EmailValidator.validate(value) ? null : "Email non valida";
   }
 }
 
@@ -200,7 +222,7 @@ class _LogoState extends State<Logo> {
             });
             Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => ControlRoom(),
+                builder: (_) => const ControlRoom(),
               ),
             );
           }
@@ -229,7 +251,7 @@ class _LogoState extends State<Logo> {
 }
 
 class ControlRoom extends StatefulWidget {
-  ControlRoom({
+  const ControlRoom({
     super.key,
   });
 
@@ -291,8 +313,6 @@ class _ControlRoomState extends State<ControlRoom> {
                   ),
                   MaterialButton(
                     onPressed: () {
-                      print(SharedPreferenceService.customApiUrl);
-                      print(controller.text);
                       SharedPreferenceService.customApiUrl = controller.text;
                       Navigator.of(context).pop();
                       ScaffoldMessenger.of(context).showSnackBar(
@@ -302,7 +322,7 @@ class _ControlRoomState extends State<ControlRoom> {
                           ),
                         ),
                       );
-                      print(SharedPreferenceService.customApiUrl);
+                      debugPrint(SharedPreferenceService.customApiUrl);
                     },
                     color: Colors.green,
                     textColor: Colors.white,

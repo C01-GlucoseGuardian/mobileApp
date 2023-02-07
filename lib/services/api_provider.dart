@@ -11,6 +11,7 @@ import 'package:glucose_guardian/models/notifica.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/terapia.dart';
 import 'package:glucose_guardian/services/api_mixin.dart';
+import 'package:glucose_guardian/services/exceptions/api_exception.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 
 class ApiProvider implements ApiMixin {
@@ -33,7 +34,6 @@ class ApiProvider implements ApiMixin {
               ),
             );
 
-  //TODO: error handling
   @override
   Future<List<AssunzioneFarmaco>> fetchAssunzioneFarmacoByCF(
       String codiceFiscale) async {
@@ -47,12 +47,15 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return ((resp.data as Map)["list"] as List)
         .map<AssunzioneFarmaco>((af) => AssunzioneFarmaco.fromJson(af))
         .toList();
   }
 
-  //TODO: error handling
   @override
   Future<Dottore> fetchDottoreByPazienteCF(String codiceFiscale) async {
     var resp = await _makePostRequest(
@@ -65,10 +68,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Dottore.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<Farmaco> fetchFarmacoByID(int id) async {
     var resp = await _makePostRequest(
@@ -81,10 +87,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Farmaco.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<List<Glicemia>> fetchGlicemiaInRange(
       String codiceFiscale, int startTimestamp, int endTimestamp) async {
@@ -100,12 +109,15 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return ((resp.data as Map)["list"] as List)
         .map<Glicemia>((af) => Glicemia.fromJson(af))
         .toList();
   }
 
-  //TODO: error handling
   @override
   Future<Glicemia> fetchLastGlicemia(String codiceFiscale) async {
     var resp = await _makePostRequest(
@@ -118,10 +130,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Glicemia.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<Paziente> fetchLoggedPaziente(String codiceFiscale) async {
     var resp = await _makePostRequest(
@@ -134,10 +149,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Paziente.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale) async {
     var resp = await _makePostRequest(
@@ -150,12 +168,15 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return ((resp.data as Map)["list"] as List)
         .map<Notifica>((af) => Notifica.fromJson(af))
         .toList();
   }
 
-  //TODO: error handling
   @override
   Future<Notifica> fetchNotificaByID(int id) async {
     var resp = await _makePostRequest(
@@ -168,10 +189,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Notifica.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale) async {
     var resp = await _makePostRequest(
@@ -184,10 +208,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Terapia.fromJson(resp.data);
   }
 
-  //TODO:
   @override
   Future<LoginOutput> performLogin(LoginInput data) async {
     var resp = await _makePostRequest(
@@ -195,10 +222,14 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return LoginOutput.fromJson(resp.data);
   }
 
-  //TODO:
+  // TODO:
   @override
   Future<LoginOutput> performLoginOtp(LoginInput data) async {
     var resp = await _makePostRequest(
@@ -206,10 +237,13 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return LoginOutput.fromJson(resp.data);
   }
 
-  //TODO: error handling
   @override
   Future<Feedback> sendFeedback(FeedbackInput input) async {
     var resp = await _makePostRequest(
@@ -220,12 +254,14 @@ class ApiProvider implements ApiMixin {
 
     debugPrint(resp.toString());
 
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
     return Feedback.fromJson(resp.data);
   }
 
   /// Utility function for post requests
-  ///
-  /// TODO: error handling
   Future<Response> _makePostRequest({
     required String path,
     required Map body,

@@ -67,7 +67,10 @@ class _PazienteDoctorScreenState extends State<PazienteDoctorScreen> {
 
                 return _buildContent(context, dottore);
               } else {
-                return const ErrorScreen(text: "Errore"); // TODO:
+                return ErrorScreen(
+                  text:
+                      "Errore.\nMessaggio: ${state is DoctorError ? state.error : 'NON PRESENTE'}",
+                );
               }
             },
           ),

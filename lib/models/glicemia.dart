@@ -10,9 +10,9 @@ class Glicemia {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['livelloGlucosio'] = this.livelloGlucosio;
-    data['timestamp'] = this.timestamp;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['livelloGlucosio'] = livelloGlucosio;
+    data['timestamp'] = timestamp;
     return data;
   }
 }

@@ -48,7 +48,10 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
 
             return _buildContent(notifications);
           } else {
-            return const ErrorScreen(text: "Errore"); // TODO:
+            if (state is NotificationsError) {
+              return ErrorScreen(text: state.error ?? "Errore");
+            }
+            return const ErrorScreen(text: "Errore");
           }
         },
       ),

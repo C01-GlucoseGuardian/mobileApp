@@ -30,7 +30,6 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
 
   @override
   Widget build(BuildContext context) {
-    List<AssunzioneFarmaco> drugs;
     return BlocProvider(
       create: (context) => _bloc,
       child: BlocBuilder<AgendaBloc, AgendaState>(
@@ -52,7 +51,10 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
 
             return _buildContent(drugs);
           } else {
-            return const ErrorScreen(text: "Errore"); // TODO:
+            return ErrorScreen(
+              text:
+                  "Errore.\nMessaggio: ${state is AgendaError ? state.error : 'NON PRESENTE'}",
+            );
           }
         },
       ),

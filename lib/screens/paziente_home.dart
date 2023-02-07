@@ -62,7 +62,7 @@ class PazienteHome extends StatelessWidget {
                   Provider.of<BottomNavigationBarIndex>(context, listen: false)
                       .index = newIndex;
                 } else {
-                  // TODO: handle what should happen if the user re-clicks on the
+                  // user re-clicks on the
                   // current bottomnavigationbar item
                 }
               },
@@ -184,7 +184,7 @@ class PazienteHome extends StatelessWidget {
             onPressed: () {
               Navigator.of(context, rootNavigator: true).push(
                 MaterialPageRoute(
-                  builder: (_) => CGMConnect(),
+                  builder: (_) => const CGMConnect(),
                 ),
               );
             },
@@ -200,9 +200,7 @@ class PazienteHome extends StatelessWidget {
 }
 
 class _PazienteHomeDashboard extends StatefulWidget {
-  const _PazienteHomeDashboard({
-    super.key,
-  });
+  const _PazienteHomeDashboard();
 
   @override
   State<_PazienteHomeDashboard> createState() => _PazienteHomeDashboardState();
@@ -265,7 +263,10 @@ class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
                 measurementsOfSelectedDay: measurements,
               );
             } else {
-              return const ErrorScreen(text: "Errore"); // TODO:
+              return ErrorScreen(
+                text:
+                    "Errore.\nMessaggio: ${state is MeasurementsError ? state.error : 'NON PRESENTE'}",
+              );
             }
           },
         ),
@@ -283,7 +284,10 @@ class _PazienteHomeDashboardState extends State<_PazienteHomeDashboard> {
                 measurementsOfSelectedDay: measurements,
               );
             } else {
-              return const ErrorScreen(text: "Errore"); // TODO:
+              return ErrorScreen(
+                text:
+                    "Errore.\nMessaggio: ${state is MeasurementsError ? state.error : 'NON PRESENTE'}",
+              );
             }
           },
         ),
@@ -351,7 +355,7 @@ class _GlucoseCardState extends State<GlucoseCard> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Glucosio: ${last.livelloGlucosio!} ${kGlucoseUOM}",
+                        "Glucosio: ${last.livelloGlucosio!} $kGlucoseUOM",
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 16,

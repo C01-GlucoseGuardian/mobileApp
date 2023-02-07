@@ -53,21 +53,21 @@ class Paziente {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
-    data['codiceFiscale'] = this.codiceFiscale;
-    data['nome'] = this.nome;
-    data['cognome'] = this.cognome;
-    data['dataNascita'] = this.dataNascita;
-    data['indirizzo'] = this.indirizzo;
-    data['telefono'] = this.telefono;
-    data['email'] = this.email;
-    data['sesso'] = this.sesso;
-    data['tipoDiabete'] = this.tipoDiabete;
-    data['comorbilita'] = this.comorbilita;
-    data['farmaciAssunti'] = this.farmaciAssunti;
-    data['periodoDiMonitoraggio'] = this.periodoDiMonitoraggio;
-    if (this.numeriUtili != null) {
-      data['numeriUtili'] = this.numeriUtili!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['codiceFiscale'] = codiceFiscale;
+    data['nome'] = nome;
+    data['cognome'] = cognome;
+    data['dataNascita'] = dataNascita;
+    data['indirizzo'] = indirizzo;
+    data['telefono'] = telefono;
+    data['email'] = email;
+    data['sesso'] = sesso;
+    data['tipoDiabete'] = tipoDiabete;
+    data['comorbilita'] = comorbilita;
+    data['farmaciAssunti'] = farmaciAssunti;
+    data['periodoDiMonitoraggio'] = periodoDiMonitoraggio;
+    if (numeriUtili != null) {
+      data['numeriUtili'] = numeriUtili!.map((v) => v.toJson()).toList();
     }
     return data;
   }

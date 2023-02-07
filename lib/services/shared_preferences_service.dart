@@ -56,7 +56,7 @@ class SharedPreferenceService {
   /// Set after first login
   ///
   /// HACK: since set and get should have the same type,
-  /// HACK: this setter gets a String? but it should never be null
+  /// this setter gets a String? but it should never be null
   static set codiceFiscale(String? value) =>
       _instance.setString(_kCodiceFiscale, value!);
 

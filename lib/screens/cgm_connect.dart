@@ -34,8 +34,8 @@ class _CGMConnectState extends State<CGMConnect> {
       home: Scaffold(
         backgroundColor: kBackgroundColor,
         body: SharedPreferenceService.connectedCgm.isNotEmpty
-            ? const Padding(
-                padding: EdgeInsets.all(16),
+            ? Padding(
+                padding: const EdgeInsets.all(16),
                 child: Center(
                   child: SizedBox(height: 100, child: _buildCard()),
                 ),
@@ -88,7 +88,7 @@ class _CGMConnectState extends State<CGMConnect> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const _buildCard(),
+                          child: _buildCard(),
                         ),
                       ),
                   ],
@@ -97,38 +97,29 @@ class _CGMConnectState extends State<CGMConnect> {
       ),
     );
   }
-}
 
-class _buildCard extends StatelessWidget {
-  const _buildCard({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Hero(
-          tag: 'cgm',
-          child: SvgPicture.asset(
-            kCgmIcon,
-            width: 44,
-            height: 44,
-            color: kOrangePrimary,
+  Widget _buildCard() => Row(
+        children: [
+          Hero(
+            tag: 'cgm',
+            child: SvgPicture.asset(
+              kCgmIcon,
+              width: 44,
+              height: 44,
+              color: kOrangePrimary,
+            ),
           ),
-        ),
-        const SizedBox(
-          width: 16,
-        ),
-        Text(
-          "CGM di ${SharedPreferenceService.codiceFiscale}",
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+          const SizedBox(
+            width: 16,
           ),
-        ),
-      ],
-    );
-  }
+          Text(
+            "CGM di ${SharedPreferenceService.codiceFiscale}",
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      );
 }
 
 class ConfirmPairing extends StatefulWidget {
