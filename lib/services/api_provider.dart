@@ -218,31 +218,25 @@ class ApiProvider implements ApiMixin {
 
   @override
   Future<LoginOutput> performLogin(LoginInput data) async {
-    var resp = await _makePostRequest(
-        path: ApiEndPoints.login.value, body: data.toJson());
+    var resp;
+    try {
+      resp = await _makePostRequest(
+          path: ApiEndPoints.login.value, body: data.toJson());
+    } on DioError catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw NeedsOTPApiException();
+      }
 
-    debugPrint(resp.toString());
-
-    if (resp.statusCode != 200) {
-      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+      if (e.response?.statusCode != 200) {
+        throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+      }
     }
-
     return LoginOutput.fromJson(resp.data);
   }
 
-  // TODO:
   @override
   Future<LoginOutput> performLoginOtp(LoginInput data) async {
-    var resp = await _makePostRequest(
-        path: ApiEndPoints.loginOtp.value, body: data.toJson());
-
-    debugPrint(resp.toString());
-
-    if (resp.statusCode != 200) {
-      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
-    }
-
-    return LoginOutput.fromJson(resp.data);
+    return performLogin(data);
   }
 
   @override

@@ -71,7 +71,7 @@ class ApiRepository implements ApiMixin {
 
   @override
   Future<LoginOutput> performLoginOtp(LoginInput data) {
-    return provider.performLogin(data);
+    return provider.performLoginOtp(data);
   }
 
   @override

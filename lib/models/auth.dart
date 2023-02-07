@@ -1,7 +1,7 @@
 class LoginInput {
   String? email;
   String? password;
-  int? otp;
+  String? otp;
 
   LoginInput({this.email, this.password, this.otp});
 

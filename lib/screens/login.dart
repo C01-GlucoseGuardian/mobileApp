@@ -2,7 +2,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:glucose_guardian/bloc/auth/auth_bloc.dart';
 import 'package:glucose_guardian/constants/api.dart';
@@ -11,6 +10,7 @@ import 'package:glucose_guardian/screens/paziente_home.dart';
 import 'package:glucose_guardian/screens/tutore_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:passwordfield/passwordfield.dart';
+import 'package:otp_text_field/otp_field.dart';
 
 /// Login screen
 ///
@@ -27,6 +27,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   /// set this to true after first login API call
   bool? showOTPCodeInput;
+  String? otp;
 
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -68,7 +69,7 @@ class _LoginState extends State<Login> {
               ),
             );
           } else if (state is AuthError) {
-            debugPrint(state.error);
+            debugPrint("AUTHERROR: ${state.error}");
             AwesomeDialog(
               context: context,
               dialogType: DialogType.error,
@@ -123,11 +124,12 @@ class _LoginState extends State<Login> {
                       if (showOTPCodeInput ?? false)
                         Padding(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          child: OtpTextField(
-                            clearText: true,
-                            onSubmit: (value) {
-                              // ready to check if otp is valid
-                            },
+                          child: OTPTextField(
+                            onCompleted: (value) => setState(() {
+                              otp = value;
+                            }),
+                            length: 6,
+                            width: MediaQuery.of(context).size.width,
                           ),
                         ),
                       Semantics(
@@ -147,6 +149,15 @@ class _LoginState extends State<Login> {
                                 passwordController.text.isNotEmpty) {
                               if (showOTPCodeInput != null &&
                                   showOTPCodeInput!) {
+                                if (otp != null && otp!.isNotEmpty) {
+                                  _bloc.add(
+                                    PerformLoginNeedsOtp(
+                                      emailController.text,
+                                      passwordController.text,
+                                      otp!,
+                                    ),
+                                  );
+                                }
                               } else {
                                 _bloc.add(
                                   PerformLogin(

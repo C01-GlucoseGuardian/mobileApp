@@ -9,14 +9,24 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitial()) {
-    on<PerformLogin>((event, emit) async {
+    on<AuthEvent>((event, emit) async {
       try {
         emit(AuthLoading());
-
-        final LoginOutput loginOutput = await api.performLogin(LoginInput(
-          email: event.email,
-          password: event.password,
-        ));
+        LoginOutput loginOutput;
+        if (event is PerformLogin) {
+          loginOutput = await api.performLogin(LoginInput(
+            email: event.email,
+            password: event.password,
+          ));
+        } else if (event is PerformLoginNeedsOtp) {
+          loginOutput = await api.performLoginOtp(LoginInput(
+            email: event.email,
+            password: event.password,
+            otp: event.otp,
+          ));
+        } else {
+          throw Exception("never");
+        }
 
         if ((loginOutput.needOtp ?? false)) {
           emit(AuthLoggedNeedsOtp());
@@ -30,10 +40,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             ),
           );
         }
+      } on NeedsOTPApiException {
+        emit(AuthLoggedNeedsOtp());
       } on ApiException catch (e) {
         emit(AuthError(e.msg));
-      } catch (e) {
-        emit(AuthError(e.toString()));
       }
     });
   }

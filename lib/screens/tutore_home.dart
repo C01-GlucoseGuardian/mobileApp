@@ -9,6 +9,7 @@ import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/numero_utile.dart';
 import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/login.dart';
 import 'package:glucose_guardian/screens/tutore_paziente_details.dart';
 
 import '../components/loading.dart';
@@ -210,6 +211,19 @@ class _TutoreHomeState extends State<TutoreHome> {
             onPressed: () {},
             icon: const Icon(
               Icons.notifications,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              SharedPreferenceService.logout();
+              Navigator.of(context, rootNavigator: true).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const Login(),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.logout,
             ),
           )
         ],

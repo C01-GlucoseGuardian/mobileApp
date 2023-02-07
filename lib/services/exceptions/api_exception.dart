@@ -3,3 +3,5 @@ class ApiException implements Exception {
 
   ApiException({this.msg});
 }
+
+class NeedsOTPApiException implements Exception {}

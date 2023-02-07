@@ -9,7 +9,6 @@ const String kApiUrl = kAppStatus == 3
 
 enum ApiEndPoints {
   login("/auth/login"),
-  loginOtp("/auth/loginOtp"),
   notificaByID("/notifica/get"),
   notificheByCF("/notifica/getByPaziente"),
   terapiaByCF("/terapia/getByPaziente"),
