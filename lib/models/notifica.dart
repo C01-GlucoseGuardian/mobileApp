@@ -1,55 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:glucose_guardian/constants/general.dart';
+import 'package:intl/intl.dart';
 
 class Notifica {
-  int? id;
-  String? messaggio;
-  DateTime? data;
-  TimeOfDay? ora;
-  int? stato;
-  String? pazienteOggetto;
   String? pazienteDestinatario;
   String? tutoreDestinatario;
-  String? adminDestinatario;
   String? dottoreDestinatario;
+  String? messaggio;
+  DateTime? data;
+  TimeOfDay? time;
+  int? stato;
 
   Notifica(
-      {this.id,
+      {this.pazienteDestinatario,
+      this.tutoreDestinatario,
+      this.dottoreDestinatario,
       this.messaggio,
       this.data,
-      this.ora,
-      this.stato,
-      this.pazienteOggetto,
-      this.pazienteDestinatario,
-      this.tutoreDestinatario,
-      this.adminDestinatario,
-      this.dottoreDestinatario});
+      this.time,
+      this.stato});
 
   Notifica.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    messaggio = json['messaggio'];
-    data = DateTime.parse(json['data']);
-    ora = timeOfDayFromApiStringWithSeconds(json['ora']);
-    stato = json['stato'];
-    pazienteOggetto = json['pazienteOggetto'];
     pazienteDestinatario = json['pazienteDestinatario'];
     tutoreDestinatario = json['tutoreDestinatario'];
-    adminDestinatario = json['adminDestinatario'];
     dottoreDestinatario = json['dottoreDestinatario'];
+    messaggio = json['messaggio'];
+    data = DateFormat("dd/MM/yyyy").parse(json['data']);
+    time = timeOfDayFromApiStringWithSeconds(json['time']);
+    stato = json['stato'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['id'] = id;
-    data['messaggio'] = messaggio;
-    data['data'] = data;
-    data['ora'] = ora;
-    data['stato'] = stato;
-    data['pazienteOggetto'] = pazienteOggetto;
     data['pazienteDestinatario'] = pazienteDestinatario;
     data['tutoreDestinatario'] = tutoreDestinatario;
-    data['adminDestinatario'] = adminDestinatario;
     data['dottoreDestinatario'] = dottoreDestinatario;
+    data['messaggio'] = messaggio;
+    data['data'] = data;
+    data['time'] = time;
+    data['stato'] = stato;
     return data;
   }
 }

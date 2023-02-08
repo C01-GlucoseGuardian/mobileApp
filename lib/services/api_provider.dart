@@ -158,12 +158,9 @@ class ApiProvider implements ApiMixin {
   }
 
   @override
-  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale) async {
-    var resp = await _makePostRequest(
-      path: ApiEndPoints.notificheByCF.value,
-      body: {
-        "codiceFiscale": codiceFiscale,
-      },
+  Future<List<Notifica>> fetchNotificheByCF() async {
+    var resp = await _makeGetRequest(
+      path: ApiEndPoints.notifiche.value,
       generic: false,
     );
 
@@ -309,5 +306,19 @@ class ApiProvider implements ApiMixin {
           "Bearer ${SharedPreferenceService.bearerToken}";
     }
     return await _client.post(path, data: body);
+  }
+
+  /// Utility function for get requests
+  Future<Response> _makeGetRequest({
+    required String path,
+    bool generic = true,
+  }) async {
+    debugPrint("Url => ${kApiUrl + path}");
+
+    if (!generic) {
+      _client.options.headers['authorization'] =
+          "Bearer ${SharedPreferenceService.bearerToken}";
+    }
+    return await _client.get(path);
   }
 }

@@ -16,7 +16,7 @@ abstract class ApiMixin {
 
   Future<Notifica> fetchNotificaByID(int id);
 
-  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale);
+  Future<List<Notifica>> fetchNotificheByCF();
 
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
 
