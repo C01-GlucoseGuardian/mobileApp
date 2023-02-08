@@ -98,14 +98,24 @@ class _LoginState extends State<Login> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(bottom: 16),
-                            child: TextFormField(
-                              autovalidateMode: AutovalidateMode.always,
-                              controller: emailController,
-                              validator: _validEmail,
-                              decoration: InputDecoration(
-                                hintText: "Email",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Theme.of(context).primaryColor,
+                                colorScheme: Theme.of(context)
+                                    .colorScheme
+                                    .copyWith(
+                                        primary:
+                                            Theme.of(context).primaryColor),
+                              ),
+                              child: TextFormField(
+                                autovalidateMode: AutovalidateMode.always,
+                                controller: emailController,
+                                validator: _validEmail,
+                                decoration: InputDecoration(
+                                  hintText: "Email",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
                                 ),
                               ),
                             ),
