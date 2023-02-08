@@ -6,6 +6,7 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:glucose_guardian/bloc/auth/auth_bloc.dart';
 import 'package:glucose_guardian/constants/api.dart';
 import 'package:glucose_guardian/constants/assets.dart';
+import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
 import 'package:glucose_guardian/screens/tutore_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
@@ -148,6 +149,8 @@ class _LoginState extends State<Login> {
                                 minimumSize: const Size.fromHeight(
                                   40,
                                 ),
+                                foregroundColor: Colors.white,
+                                backgroundColor: kOrangePrimary,
                               ),
                               onPressed: () {
                                 if (_validEmail(emailController.text) == null &&

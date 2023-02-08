@@ -19,7 +19,8 @@ enum ApiEndPoints {
   farmacoByID("/farmaco/get"),
   lastGlicemia("/glicemia/getLast"),
   glicemiaInRange("/glicemia/getRange"),
-  getTutore("/tutore/get");
+  getTutore("/tutore/get"),
+  changePassword("/auth/changePw");
 
   final String value;
 

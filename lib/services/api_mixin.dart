@@ -37,4 +37,6 @@ abstract class ApiMixin {
       String codiceFiscale, int startTimestamp, int endTimestamp);
 
   Future<Tutore> fetchLoggedTutore(String codiceFiscale);
+
+  Future<bool> changePassword(String oldPassword, String newPassword);
 }

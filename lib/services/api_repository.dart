@@ -83,4 +83,9 @@ class ApiRepository implements ApiMixin {
   Future<Tutore> fetchLoggedTutore(String codiceFiscale) {
     return provider.fetchLoggedTutore(codiceFiscale);
   }
+
+  @override
+  Future<bool> changePassword(String oldPassword, String newPassword) {
+    return provider.changePassword(oldPassword, newPassword);
+  }
 }

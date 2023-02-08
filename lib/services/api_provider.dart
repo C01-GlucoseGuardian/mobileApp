@@ -275,6 +275,26 @@ class ApiProvider implements ApiMixin {
     return Tutore.fromJson(resp.data);
   }
 
+  @override
+  Future<bool> changePassword(String oldPassword, String newPassword) async {
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.changePassword.value,
+      body: {
+        "password": oldPassword,
+        "newPassword": newPassword,
+      },
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return true;
+  }
+
   /// Utility function for post requests
   Future<Response> _makePostRequest({
     required String path,
