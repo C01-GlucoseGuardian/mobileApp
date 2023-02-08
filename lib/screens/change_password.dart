@@ -7,18 +7,20 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:passwordfield/passwordfield.dart';
 
 class ChangePassword extends StatelessWidget {
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController newPasswordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController newPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
-  ChangePassword({super.key});
+  final bool tutore;
+  ChangePassword({super.key, this.tutore = false});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       themeMode: ThemeMode.light,
       theme: ThemeData.light(useMaterial3: true)
-          .copyWith(primaryColor: kOrangePrimary),
+          .copyWith(primaryColor: tutore ? kBlue : kOrangePrimary),
       home: Scaffold(
         backgroundColor: kBackgroundColor,
         appBar: AppBar(
@@ -92,7 +94,7 @@ class ChangePassword extends StatelessWidget {
                     40,
                   ),
                   foregroundColor: Colors.white,
-                  backgroundColor: kOrangePrimary,
+                  backgroundColor: tutore ? kBlue : kOrangePrimary,
                 ),
                 onPressed: () async {
                   Loader.show(context);
