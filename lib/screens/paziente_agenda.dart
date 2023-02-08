@@ -50,6 +50,8 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
             );
           } else if (state is AgendaLoaded) {
             List<AssunzioneFarmaco> drugs = state.agenda;
+            drugs.sort((a, b) =>
+                a.orarioAssunzione!.hour.compareTo(b.orarioAssunzione!.hour));
 
             return _buildContent(drugs);
           } else {
