@@ -136,11 +136,13 @@ class GlucoseChartCard extends StatelessWidget {
                   color: isGlucoseValueNormal(e.livelloGlucosio!)
                       ? kBlue
                       : Color.lerp(
-                          kOrange,
+                          kOrangeGraphBase,
                           kOrangePrimary,
-                          (e.livelloGlucosio! - lowest.livelloGlucosio!) /
-                              (highest.livelloGlucosio! -
-                                  lowest.livelloGlucosio!),
+                          measurementsOfSelectedDay.length == 1
+                              ? 1.0
+                              : (e.livelloGlucosio! - lowest.livelloGlucosio!) /
+                                  (highest.livelloGlucosio! -
+                                      lowest.livelloGlucosio!),
                         ),
                   toY: e.livelloGlucosio!.toDouble(), // Y axis
                 ),
