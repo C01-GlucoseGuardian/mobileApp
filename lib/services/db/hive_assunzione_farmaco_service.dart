@@ -1,4 +1,5 @@
 import 'package:glucose_guardian/models/assunzione_farmaco.dart';
+import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:hive/hive.dart';
 
 class HiveAssunzioneFarmacoService {
@@ -8,8 +9,9 @@ class HiveAssunzioneFarmacoService {
       box = await Hive.openBox<AssunzioneFarmaco>(boxName);
 
   static Future clearAndSaveAll(List<AssunzioneFarmaco> data) async {
-    //TODO: set save date in sharedPreferences, because it should be reset after 24 hours
     box.clear();
+    SharedPreferenceService.lastSavedAgenda =
+        DateTime.now().millisecondsSinceEpoch;
 
     for (AssunzioneFarmaco value in data) {
       await box.put(value.id!, value);
@@ -24,9 +26,21 @@ class HiveAssunzioneFarmacoService {
     box.put(id, farmaco);
   }
 
+  // if data has not been saved today
+  static bool isValid() {
+    int lastSavedAgenda = SharedPreferenceService.lastSavedAgenda;
+    if (DateTime.fromMillisecondsSinceEpoch(lastSavedAgenda)
+            .difference(DateTime.now())
+            .inDays !=
+        0) {
+      box.clear();
+
+      return false;
+    }
+    return true;
+  }
+
   static Future<List<AssunzioneFarmaco>> getAll() async {
-    // check shared Preferences if date is valid, if not return [] and clear db
-    print(box.values.cast<AssunzioneFarmaco>().toList());
     return box.values.cast<AssunzioneFarmaco>().toList();
   }
 }

@@ -19,7 +19,6 @@ class AuthLogged extends AuthState {
   const AuthLogged(this.token, this.tipoUtente, this.codiceFiscale);
 }
 
-// TODO:
 class AuthLoggedNeedsOtp extends AuthState {}
 
 class AuthError extends AuthState {

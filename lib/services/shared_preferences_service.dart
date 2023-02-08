@@ -15,6 +15,7 @@ class SharedPreferenceService {
   static const String _kUserType = "userType";
   static const String _kCodiceFiscale = "codiceFiscale";
   static const String _kCgmConnected = "cgmConnected";
+  static const String _kLastSavedAgenda = "lastSavedAgenda";
 
   /// Creates [SharedPreferenceService._instance], this should be called in the
   /// main function after `WidgetsFlutterBinding.ensureInitialized()`
@@ -66,6 +67,13 @@ class SharedPreferenceService {
 
   /// Get connected CGM
   static String get connectedCgm => _instance.getString(_kCgmConnected) ?? "";
+
+  /// Last saved agenda msSinceEpoch
+  static int get lastSavedAgenda => _instance.getInt(_kLastSavedAgenda) ?? 0;
+
+  /// Last saved agenda msSinceEpoch
+  static set lastSavedAgenda(int value) =>
+      _instance.setInt(_kLastSavedAgenda, value);
 
   /// Log out
   static void logout() {

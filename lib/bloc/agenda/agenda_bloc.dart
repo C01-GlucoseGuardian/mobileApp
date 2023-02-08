@@ -16,7 +16,7 @@ class AgendaBloc extends Bloc<AgendaEvent, AgendaState> {
         emit(AgendaLoading());
         final List<AssunzioneFarmaco> storedData =
             await HiveAssunzioneFarmacoService.getAll();
-        if (storedData.isNotEmpty) {
+        if (HiveAssunzioneFarmacoService.isValid() && storedData.isNotEmpty) {
           emit(AgendaLoaded(storedData));
         } else {
           List<AssunzioneFarmaco> agenda = await api.fetchAssunzioneFarmacoByCF(
@@ -37,7 +37,7 @@ class AgendaBloc extends Bloc<AgendaEvent, AgendaState> {
         emit(AgendaLoading());
         final List<AssunzioneFarmaco> storedData =
             await HiveAssunzioneFarmacoService.getAll();
-        if (storedData.isNotEmpty) {
+        if (HiveAssunzioneFarmacoService.isValid() && storedData.isNotEmpty) {
           HiveAssunzioneFarmacoService.setAsRead(event.id);
           emit(AgendaLoaded(storedData));
         } else {
