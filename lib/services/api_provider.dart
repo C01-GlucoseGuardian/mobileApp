@@ -228,6 +228,7 @@ class ApiProvider implements ApiMixin {
       }
 
       if (e.response?.statusCode != 200) {
+        if (resp == null) throw ApiException(msg: "Eccezione non gestita");
         throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
       }
     }
