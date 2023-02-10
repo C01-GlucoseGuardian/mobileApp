@@ -292,6 +292,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               );
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
+              measurements.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+
               if (measurements.isEmpty) {
                 return const EmptyData(
                   text: "Non ci sono misurazioni nel range selezionato",
@@ -314,6 +316,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               return Container(); // only one loading
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
+              measurements.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+
               if (measurements.isEmpty) {
                 return Container();
               }
@@ -348,7 +352,6 @@ class _GlucoseCardState extends State<GlucoseCard> {
 
   @override
   Widget build(BuildContext context) {
-    // assuming they're already sorted by date, last is least measurement
     Glicemia last = widget.measurementsOfSelectedDay.last;
     Glicemia lowest = getLowest(widget.measurementsOfSelectedDay);
     Glicemia highest = getHighest(widget.measurementsOfSelectedDay);
