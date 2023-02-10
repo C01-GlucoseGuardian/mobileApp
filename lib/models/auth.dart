@@ -20,7 +20,6 @@ class LoginInput {
   }
 }
 
-// TODO: if needOtp is true token will be null
 class LoginOutput {
   bool? needOtp;
   String? idUtente;

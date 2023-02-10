@@ -9,7 +9,9 @@ import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/numero_utile.dart';
 import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/change_password.dart';
 import 'package:glucose_guardian/screens/login.dart';
+import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/tutore_paziente_details.dart';
 
 import '../components/loading.dart';
@@ -208,9 +210,29 @@ class _TutoreHomeState extends State<TutoreHome> {
         foregroundColor: Colors.black,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (_) => const NotificheTutore(),
+                ),
+              );
+            },
             icon: const Icon(
               Icons.notifications,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              Navigator.of(context, rootNavigator: true).push(
+                MaterialPageRoute(
+                  builder: (_) => ChangePassword(
+                    tutore: true,
+                  ),
+                ),
+              );
+            },
+            icon: const Icon(
+              Icons.key_rounded,
             ),
           ),
           IconButton(
@@ -228,4 +250,32 @@ class _TutoreHomeState extends State<TutoreHome> {
           )
         ],
       );
+}
+
+class NotificheTutore extends StatelessWidget {
+  const NotificheTutore({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(
+          backgroundColor: kBackgroundColor,
+          elevation: 0,
+          centerTitle: false,
+          automaticallyImplyLeading: false,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          title: const Text("Notifiche"),
+          systemOverlayStyle: SystemUiOverlayStyle.dark,
+          foregroundColor: Colors.black,
+        ),
+        body: const PazienteNotifiche(),
+      ),
+    );
+  }
 }

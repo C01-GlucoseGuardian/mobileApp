@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:glucose_guardian/constants/general.dart';
+import 'package:intl/intl.dart';
 
 class Notifica {
   int? id;
   String? messaggio;
   DateTime? data;
-  TimeOfDay? ora;
+  TimeOfDay? time;
   int? stato;
   String? pazienteOggetto;
   String? pazienteDestinatario;
@@ -17,7 +18,7 @@ class Notifica {
       {this.id,
       this.messaggio,
       this.data,
-      this.ora,
+      this.time,
       this.stato,
       this.pazienteOggetto,
       this.pazienteDestinatario,
@@ -28,8 +29,8 @@ class Notifica {
   Notifica.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     messaggio = json['messaggio'];
-    data = DateTime.parse(json['data']);
-    ora = timeOfDayFromApiStringWithSeconds(json['ora']);
+    data = DateFormat("dd/MM/yyyy").parse(json["data"]);
+    time = timeOfDayFromApiStringWithSeconds(json["time"]);
     stato = json['stato'];
     pazienteOggetto = json['pazienteOggetto'];
     pazienteDestinatario = json['pazienteDestinatario'];
@@ -42,8 +43,10 @@ class Notifica {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['messaggio'] = messaggio;
-    data['data'] = data;
-    data['ora'] = ora;
+    if (this.data != null) {
+      data['data'] = DateFormat("dd/MM/yyy").format(this.data!);
+    }
+    if (time != null) data['time'] = "${time!.hour}:${time!.minute}:00}";
     data['stato'] = stato;
     data['pazienteOggetto'] = pazienteOggetto;
     data['pazienteDestinatario'] = pazienteDestinatario;

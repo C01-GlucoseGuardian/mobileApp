@@ -19,5 +19,5 @@ class PerformLoginNeedsOtp extends AuthEvent {
   final String password;
   final String otp;
 
-  const PerformLoginNeedsOtp(this.email, this.password, this.otp); // TODO:
+  const PerformLoginNeedsOtp(this.email, this.password, this.otp);
 }

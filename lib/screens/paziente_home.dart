@@ -1,3 +1,7 @@
+import 'dart:async';
+import 'dart:math';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +18,10 @@ import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/dates.dart';
 import 'package:glucose_guardian/constants/general.dart';
+import 'package:glucose_guardian/models/dottore.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:glucose_guardian/models/notifica.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
@@ -208,7 +215,9 @@ class PazienteHomeDashboard extends StatefulWidget {
 }
 
 class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
-  final MeasurementsBloc _bloc = MeasurementsBloc();
+  MeasurementsBloc _bloc = MeasurementsBloc();
+  late Timer dataGenTimer;
+  DateTime currentDay = DateTime.now();
 
   @override
   void initState() {
@@ -219,7 +228,31 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
         codiceFiscalePaziente: widget.codiceFiscalePaziente,
       ),
     );
+
+    if (widget.codiceFiscalePaziente == null) {
+      // start data generator
+      dataGenTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+        Glicemia glicemia = Glicemia(
+          livelloGlucosio: Random().nextInt(100) + 70, // 70 <= x < 170
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
+        // update UI only if selected date is today
+        if (isToday(currentDay)) {
+          if (_bloc.isClosed) {
+            _bloc = MeasurementsBloc();
+          }
+          _bloc.add(AddGlicemia(glicemia));
+        }
+      });
+    }
     super.initState();
+  }
+
+  bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return now.day == date.day &&
+        now.month == date.month &&
+        now.year == date.year;
   }
 
   @override
@@ -236,11 +269,146 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
       children: [
         DaySelector(
           callback: (day) {
+            setState(() {
+              currentDay = day;
+            });
             List<DateTime> span = getDayTimeSpan(day);
-            _bloc.add(GetMeasurementsInRange(span[0].millisecondsSinceEpoch,
-                span[1].millisecondsSinceEpoch));
+            _bloc.add(
+              GetMeasurementsInRange(
+                span[0].millisecondsSinceEpoch,
+                span[1].millisecondsSinceEpoch,
+              ),
+            );
           },
         ),
+        if (isToday(currentDay))
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, top: 16),
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  backgroundColor: kBackgroundColor,
+                  foregroundColor: kOrangePrimary,
+                ),
+                onPressed: () {
+                  final TextEditingController notificationTextController =
+                      TextEditingController();
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.question,
+                    body: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Inserisci testo notifica",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          TextFormField(
+                            controller: notificationTextController,
+                            maxLines: 4,
+                            maxLength: 1024,
+                            decoration: InputDecoration(
+                              hintText: "Testo notifica",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () async {
+                              if (notificationTextController.text.isEmpty) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  title:
+                                      "Il testo della notifica non può essere vuoto",
+                                ).show();
+                              } else {
+                                bool isTutore =
+                                    widget.codiceFiscalePaziente != null;
+                                final Dottore dottore =
+                                    await api.fetchDottoreByPazienteCF(
+                                  isTutore
+                                      ? widget.codiceFiscalePaziente!
+                                      : SharedPreferenceService.codiceFiscale!,
+                                );
+
+                                if (isTutore) {
+                                  Notifica notifica = Notifica(
+                                    pazienteDestinatario:
+                                        widget.codiceFiscalePaziente,
+                                    messaggio: notificationTextController.text,
+                                    pazienteOggetto:
+                                        widget.codiceFiscalePaziente,
+                                    dottoreDestinatario: dottore.codiceFiscale,
+                                    tutoreDestinatario:
+                                        SharedPreferenceService.codiceFiscale,
+                                  );
+
+                                  api.sendNotifica(notifica).then(
+                                      (value) => Navigator.of(context).pop());
+                                } else {
+                                  api
+                                      .fetchTutoreByPazienteCF(
+                                          SharedPreferenceService
+                                              .codiceFiscale!)
+                                      .then(
+                                        (List<Tutore> tutori) => tutori.forEach(
+                                          (tutore) {
+                                            Notifica notifica = Notifica(
+                                              pazienteDestinatario:
+                                                  SharedPreferenceService
+                                                      .codiceFiscale,
+                                              messaggio:
+                                                  notificationTextController
+                                                      .text,
+                                              pazienteOggetto:
+                                                  SharedPreferenceService
+                                                      .codiceFiscale,
+                                              dottoreDestinatario:
+                                                  dottore.codiceFiscale,
+                                              tutoreDestinatario:
+                                                  tutore.codiceFiscale,
+                                            );
+
+                                            api.sendNotifica(notifica).then(
+                                                (value) => Navigator.of(context)
+                                                    .pop());
+                                          },
+                                        ),
+                                      );
+                                }
+                              }
+                            },
+                            icon: const Icon(Icons.send),
+                            label: const Text("INVIA"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ).show();
+                },
+                label: Text(
+                    "Invia notifica ${widget.codiceFiscalePaziente == null ? 'a tutore e dottore' : ''}"),
+                icon: const Icon(
+                  Icons.send_rounded,
+                  color: kOrangePrimary,
+                ),
+              ),
+            ),
+          ),
         BlocBuilder<MeasurementsBloc, MeasurementsState>(
           builder: (context, state) {
             if (state is MeasurementsInitial || state is MeasurementsLoading) {
@@ -256,6 +424,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               );
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
+              measurements.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+
               if (measurements.isEmpty) {
                 return const EmptyData(
                   text: "Non ci sono misurazioni nel range selezionato",
@@ -278,6 +448,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               return Container(); // only one loading
             } else if (state is MeasurementsLoaded) {
               List<Glicemia> measurements = state.measurements;
+              measurements.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+
               if (measurements.isEmpty) {
                 return Container();
               }
@@ -312,7 +484,6 @@ class _GlucoseCardState extends State<GlucoseCard> {
 
   @override
   Widget build(BuildContext context) {
-    // assuming they're already sorted by date, last is least measurement
     Glicemia last = widget.measurementsOfSelectedDay.last;
     Glicemia lowest = getLowest(widget.measurementsOfSelectedDay);
     Glicemia highest = getHighest(widget.measurementsOfSelectedDay);

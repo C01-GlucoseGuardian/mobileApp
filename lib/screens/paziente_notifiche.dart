@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:glucose_guardian/bloc/common.dart';
 import 'package:glucose_guardian/bloc/notifications/notifications_bloc.dart';
 import 'package:glucose_guardian/components/empty_data.dart';
 import 'package:glucose_guardian/components/error_screen.dart';
@@ -11,8 +12,7 @@ import 'package:glucose_guardian/models/notifica.dart';
 import 'package:intl/intl.dart';
 
 class PazienteNotifiche extends StatefulWidget {
-  final String? codiceFiscalePaziente;
-  const PazienteNotifiche({super.key, this.codiceFiscalePaziente});
+  const PazienteNotifiche({super.key});
 
   @override
   State<PazienteNotifiche> createState() => _PazienteNotificheState();
@@ -23,8 +23,7 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
 
   @override
   void initState() {
-    _bloc.add(
-        GetNotifications(codiceFiscalePaziente: widget.codiceFiscalePaziente));
+    _bloc.add(GetNotifications());
     super.initState();
   }
 
@@ -51,7 +50,7 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
             return _buildContent(notifications);
           } else {
             if (state is NotificationsError) {
-              return ErrorScreen(text: state.error ?? "Errore");
+              return const ErrorScreen(text: "Errore");
             }
             return const ErrorScreen(text: "Errore");
           }
@@ -64,6 +63,14 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
     if (notifications.isEmpty) {
       return const EmptyData(text: "Non ci sono notifiche recenti!");
     }
+    DateTime fromDateAndTime(DateTime date, TimeOfDay time) =>
+        DateTime(date.year, date.month, date.day, time.hour, time.minute);
+
+    notifications.sort(
+      (a, b) => fromDateAndTime(b.data!, b.time!).compareTo(
+        fromDateAndTime(a.data!, a.time!),
+      ),
+    );
 
     return ListView.builder(
       itemCount: notifications.length,
@@ -74,72 +81,89 @@ class _PazienteNotificheState extends State<PazienteNotifiche> {
   }
 }
 
-class NotificationCard extends StatelessWidget {
+class NotificationCard extends StatefulWidget {
   final Notifica notification;
 
   const NotificationCard({super.key, required this.notification});
 
   @override
+  State<NotificationCard> createState() => _NotificationCardState();
+}
+
+class _NotificationCardState extends State<NotificationCard> {
+  bool enabled = true;
+
+  @override
   Widget build(BuildContext context) {
-    return Slidable(
-      enabled: true,
-      endActionPane: ActionPane(motion: const ScrollMotion(), children: [
-        SlidableAction(
-          borderRadius:
-              const BorderRadius.horizontal(right: Radius.circular(16)),
-          autoClose: true,
-          onPressed: (ctx) {},
-          backgroundColor: kBackgroundColor,
-          foregroundColor: Theme.of(context).primaryColor,
-          icon: Icons.check,
-          label: 'Letto',
-        ),
-      ]),
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(32),
-        ),
-        child: Row(
-          children: [
-            const Expanded(
-              flex: 3,
-              child: Center(
-                child: CircleAvatar(
-                  backgroundColor: kBackgroundColor,
-                  foregroundColor: kOrangePrimary,
-                  child: Icon(Icons.notifications_active_rounded),
+    return Opacity(
+      opacity: enabled ? 1 : 0.4,
+      child: Slidable(
+        enabled: enabled,
+        endActionPane: ActionPane(motion: const ScrollMotion(), children: [
+          SlidableAction(
+            borderRadius:
+                const BorderRadius.horizontal(right: Radius.circular(16)),
+            autoClose: true,
+            onPressed: (ctx) {
+              api.archiveNotifica(widget.notification);
+
+              setState(() {
+                enabled = false;
+              });
+            },
+            backgroundColor: kBackgroundColor,
+            foregroundColor: Theme.of(context).primaryColor,
+            icon: Icons.check,
+            label: 'Letto',
+          ),
+        ]),
+        child: Container(
+          width: double.infinity,
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(32),
+          ),
+          child: Row(
+            children: [
+              const Expanded(
+                flex: 3,
+                child: Center(
+                  child: CircleAvatar(
+                    backgroundColor: kBackgroundColor,
+                    foregroundColor: kOrangePrimary,
+                    child: Icon(Icons.notifications_active_rounded),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 8,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildInfoWidget(
-                    context,
-                    "Data",
-                    DateFormat("dd MMMM yyyy", 'it').format(notification.data!),
-                    Icons.access_time_rounded,
-                  ),
-                  _buildInfoWidget(
-                    context,
-                    "Ora",
-                    formatTime(notification.ora!),
-                    Icons.access_time_rounded,
-                  ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  Text(notification.messaggio!),
-                ],
-              ),
-            )
-          ],
+              Expanded(
+                flex: 8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildInfoWidget(
+                      context,
+                      "Data",
+                      DateFormat("dd MMMM yyyy", 'it')
+                          .format(widget.notification.data!),
+                      Icons.access_time_rounded,
+                    ),
+                    _buildInfoWidget(
+                      context,
+                      "Ora",
+                      formatTime(widget.notification.time!),
+                      Icons.access_time_rounded,
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    Text(widget.notification.messaggio!),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -1,3 +1,4 @@
+[![Codemagic build status](https://api.codemagic.io/apps/63d7f375d43a04b2091796b1/63d7f375d43a04b2091796b0/status_badge.svg)](https://codemagic.io/apps/63d7f375d43a04b2091796b1/63d7f375d43a04b2091796b0/latest_build)
 # Glucose Guardian
 
 #### Introduzione

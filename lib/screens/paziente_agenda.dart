@@ -50,6 +50,8 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
             );
           } else if (state is AgendaLoaded) {
             List<AssunzioneFarmaco> drugs = state.agenda;
+            drugs.sort((a, b) =>
+                a.orarioAssunzione!.hour.compareTo(b.orarioAssunzione!.hour));
 
             return _buildContent(drugs);
           } else {
@@ -77,6 +79,7 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
             child: ListView.builder(
               itemCount: drugs.length,
               itemBuilder: (context, index) => DrugCard(
+                _bloc,
                 assunzioneFarmaco: drugs[index],
               ),
             ),
@@ -87,28 +90,19 @@ class _PazienteAgendaState extends State<PazienteAgenda> {
   }
 }
 
-class DrugCard extends StatefulWidget {
+class DrugCard extends StatelessWidget {
   final AssunzioneFarmaco assunzioneFarmaco;
-  final bool enabled;
+  final AgendaBloc _bloc;
 
   const DrugCard(
-      {super.key, required this.assunzioneFarmaco, this.enabled = true});
-
-  @override
-  State<DrugCard> createState() => _DrugCardState();
-}
-
-class _DrugCardState extends State<DrugCard> {
-  late bool enabled;
-
-  @override
-  void initState() {
-    enabled = widget.enabled;
-    super.initState();
-  }
+    this._bloc, {
+    super.key,
+    required this.assunzioneFarmaco,
+  });
 
   @override
   Widget build(BuildContext context) {
+    bool enabled = !(assunzioneFarmaco.letta ?? false);
     return Opacity(
       opacity: enabled ? 1 : 0.5,
       child: Slidable(
@@ -119,9 +113,7 @@ class _DrugCardState extends State<DrugCard> {
                 const BorderRadius.horizontal(right: Radius.circular(16)),
             autoClose: true,
             onPressed: (ctx) {
-              setState(() {
-                enabled = !enabled;
-              });
+              _bloc.add(SetFarmacoAsTaken(assunzioneFarmaco.id!));
             },
             backgroundColor: kBackgroundColor,
             foregroundColor: Theme.of(context).primaryColor,
@@ -162,7 +154,7 @@ class _DrugCardState extends State<DrugCard> {
                   children: [
                     Expanded(
                       child: Text(
-                        widget.assunzioneFarmaco.nomeFarmaco ?? "NON PRESENTE",
+                        assunzioneFarmaco.nomeFarmaco ?? "NON PRESENTE",
                         maxLines: 1,
                         style: const TextStyle(
                           overflow: TextOverflow.clip,
@@ -174,16 +166,15 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Orario Assunzione",
-                      widget.assunzioneFarmaco.orarioAssunzione != null
-                          ? formatTime(
-                              widget.assunzioneFarmaco.orarioAssunzione!)
+                      assunzioneFarmaco.orarioAssunzione != null
+                          ? formatTime(assunzioneFarmaco.orarioAssunzione!)
                           : "NON PRESENTE",
                       Icons.access_time_rounded,
                     ),
                     _buildInfoWidget(
                       context,
                       "Dose",
-                      "${widget.assunzioneFarmaco.dosaggio!} mg",
+                      "${assunzioneFarmaco.dosaggio!} mg",
                       null,
                       iconAlt: SvgPicture.asset(
                         kSyringeIcon,
@@ -195,8 +186,7 @@ class _DrugCardState extends State<DrugCard> {
                     _buildInfoWidget(
                       context,
                       "Via di somministrazione",
-                      widget.assunzioneFarmaco.viaDiSomministrazione ??
-                          "NON PRESENTE",
+                      assunzioneFarmaco.viaDiSomministrazione ?? "NON PRESENTE",
                       Icons.remove_red_eye_rounded,
                     ),
                   ],

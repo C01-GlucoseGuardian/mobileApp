@@ -12,3 +12,9 @@ class GetAgenda extends AgendaEvent {
 
   const GetAgenda({this.codiceFiscalePaziente});
 }
+
+class SetFarmacoAsTaken extends AgendaEvent {
+  final int id;
+
+  const SetFarmacoAsTaken(this.id);
+}

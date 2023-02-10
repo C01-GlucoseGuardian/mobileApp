@@ -6,6 +6,7 @@ import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:glucose_guardian/bloc/auth/auth_bloc.dart';
 import 'package:glucose_guardian/constants/api.dart';
 import 'package:glucose_guardian/constants/assets.dart';
+import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/screens/paziente_home.dart';
 import 'package:glucose_guardian/screens/tutore_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
@@ -83,7 +84,7 @@ class _LoginState extends State<Login> {
         },
         child: Scaffold(
           body: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Column(
@@ -97,14 +98,24 @@ class _LoginState extends State<Login> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(bottom: 16),
-                            child: TextFormField(
-                              autovalidateMode: AutovalidateMode.always,
-                              controller: emailController,
-                              validator: _validEmail,
-                              decoration: InputDecoration(
-                                hintText: "Email",
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(16),
+                            child: Theme(
+                              data: ThemeData(
+                                primaryColor: Theme.of(context).primaryColor,
+                                colorScheme: Theme.of(context)
+                                    .colorScheme
+                                    .copyWith(
+                                        primary:
+                                            Theme.of(context).primaryColor),
+                              ),
+                              child: TextFormField(
+                                autovalidateMode: AutovalidateMode.always,
+                                controller: emailController,
+                                validator: _validEmail,
+                                decoration: InputDecoration(
+                                  hintText: "Email",
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(16),
+                                  ),
                                 ),
                               ),
                             ),
@@ -148,6 +159,8 @@ class _LoginState extends State<Login> {
                                 minimumSize: const Size.fromHeight(
                                   40,
                                 ),
+                                foregroundColor: Colors.white,
+                                backgroundColor: kOrangePrimary,
                               ),
                               onPressed: () {
                                 if (_validEmail(emailController.text) == null &&

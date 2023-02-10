@@ -28,6 +28,11 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
+  Future<List<Tutore>> fetchTutoreByPazienteCF(String codiceFiscale) {
+    return provider.fetchTutoreByPazienteCF(codiceFiscale);
+  }
+
+  @override
   Future<Farmaco> fetchFarmacoByID(int id) {
     return provider.fetchFarmacoByID(id);
   }
@@ -50,13 +55,33 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
-  Future<List<Notifica>> fetchNotificheByCF(String codiceFiscale) {
-    return provider.fetchNotificheByCF(codiceFiscale);
+  Future<List<Notifica>> fetchNotificheByCF() {
+    return provider.fetchNotificheByCF();
   }
 
   @override
   Future<Notifica> fetchNotificaByID(int id) {
     return provider.fetchNotificaByID(id);
+  }
+
+  @override
+  Future archiveNotifica(Notifica notifica) {
+    return provider.archiveNotifica(notifica);
+  }
+
+  @override
+  Future readNotifica(Notifica notifica) {
+    return provider.readNotifica(notifica);
+  }
+
+  @override
+  Future receiveNotifica(Notifica notifica) {
+    return provider.receiveNotifica(notifica);
+  }
+
+  @override
+  Future sendNotifica(Notifica notifica) {
+    return provider.sendNotifica(notifica);
   }
 
   @override
@@ -80,7 +105,17 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
+  Future sendGlicemia(Glicemia glicemia) {
+    return provider.sendGlicemia(glicemia);
+  }
+
+  @override
   Future<Tutore> fetchLoggedTutore(String codiceFiscale) {
     return provider.fetchLoggedTutore(codiceFiscale);
+  }
+
+  @override
+  Future<bool> changePassword(String oldPassword, String newPassword) {
+    return provider.changePassword(oldPassword, newPassword);
   }
 }

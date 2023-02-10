@@ -10,16 +10,21 @@ const String kApiUrl = kAppStatus == 3
 enum ApiEndPoints {
   login("/auth/login"),
   notificaByID("/notifica/get"),
-  notificheByCF("/notifica/getByPaziente"),
+  notifiche("/notifica/getAll"),
   terapiaByCF("/terapia/getByPaziente"),
   sendFeedback("/feedback/send"),
+  sendNotifica("/notifica/send"),
+  updateNotifica("/notifica/updateStato"),
+  sendGlicemia("/glicemia/send"),
   afByCF("/assunzioneFarmaco/getByPaziente"),
   getPaziente("/paziente/get"),
   dottByPCF("/dottore/getByPaziente"),
+  tutByPCF("/tutore/getByPaziente"),
   farmacoByID("/farmaco/get"),
   lastGlicemia("/glicemia/getLast"),
   glicemiaInRange("/glicemia/getRange"),
-  getTutore("/tutore/get");
+  getTutore("/tutore/get"),
+  changePassword("/auth/changePw");
 
   final String value;
 

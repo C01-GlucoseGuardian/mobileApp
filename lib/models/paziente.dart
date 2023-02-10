@@ -35,7 +35,7 @@ class Paziente {
     codiceFiscale = json['codiceFiscale'];
     nome = json['nome'];
     cognome = json['cognome'];
-    dataNascita = DateFormat("yyyy/MM/dd").parse(json['dataNascita']);
+    dataNascita = DateFormat("dd/MM/yyyy").parse(json['dataNascita']);
     indirizzo = json['indirizzo'];
     telefono = json['telefono'];
     email = json['email'];

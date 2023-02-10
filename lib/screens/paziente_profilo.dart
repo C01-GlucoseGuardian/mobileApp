@@ -6,6 +6,7 @@ import 'package:glucose_guardian/components/error_screen.dart';
 import 'package:glucose_guardian/components/loading.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/screens/change_password.dart';
 import 'package:glucose_guardian/screens/login.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
@@ -175,7 +176,26 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                       Icons.logout,
                       color: kOrangePrimary,
                     ),
-                  )
+                  ),
+                if (widget.codiceFiscalePaziente == null)
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      backgroundColor: kBackgroundColor,
+                      foregroundColor: kOrangePrimary,
+                    ),
+                    onPressed: () {
+                      Navigator.of(context, rootNavigator: true).push(
+                        MaterialPageRoute(
+                          builder: (_) => ChangePassword(),
+                        ),
+                      );
+                    },
+                    label: const Text("Cambia password"),
+                    icon: const Icon(
+                      Icons.key,
+                      color: kOrangePrimary,
+                    ),
+                  ),
               ],
             ),
           ),
