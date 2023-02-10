@@ -211,7 +211,7 @@ class PazienteHomeDashboard extends StatefulWidget {
 }
 
 class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
-  final MeasurementsBloc _bloc = MeasurementsBloc();
+  MeasurementsBloc _bloc = MeasurementsBloc();
   late Timer dataGenTimer;
   DateTime currentDay = DateTime.now();
 
@@ -233,6 +233,9 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
       );
       // update UI only if selected date is today
       if (isToday(currentDay)) {
+        if (_bloc.isClosed) {
+          _bloc = MeasurementsBloc();
+        }
         _bloc.add(AddGlicemia(glicemia));
       }
     });

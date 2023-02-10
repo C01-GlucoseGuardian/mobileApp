@@ -23,6 +23,7 @@ class AgendaBloc extends Bloc<AgendaEvent, AgendaState> {
               event.codiceFiscalePaziente ??
                   SharedPreferenceService.codiceFiscale!);
           HiveAssunzioneFarmacoService.clearAndSaveAll(agenda);
+          emit(const AgendaLoaded([]));
           emit(AgendaLoaded(agenda));
         }
       } on ApiException catch (e) {
