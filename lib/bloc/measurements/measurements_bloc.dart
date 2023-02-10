@@ -55,6 +55,8 @@ class MeasurementsBloc extends Bloc<MeasurementsEvent, MeasurementsState> {
         endTime,
       );
 
+      measurements.sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+
       emit(MeasurementsLoaded(measurements));
     } on ApiException catch (e) {
       emit(MeasurementsError(e.msg));
