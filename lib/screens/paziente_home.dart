@@ -225,21 +225,22 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
       ),
     );
 
-    // start data generator
-    dataGenTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
-      Glicemia glicemia = Glicemia(
-        livelloGlucosio: Random().nextInt(100) + 70, // 70 <= x < 170
-        timestamp: DateTime.now().millisecondsSinceEpoch,
-      );
-      // update UI only if selected date is today
-      if (isToday(currentDay)) {
-        if (_bloc.isClosed) {
-          _bloc = MeasurementsBloc();
+    if (widget.codiceFiscalePaziente == null) {
+      // start data generator
+      dataGenTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+        Glicemia glicemia = Glicemia(
+          livelloGlucosio: Random().nextInt(100) + 70, // 70 <= x < 170
+          timestamp: DateTime.now().millisecondsSinceEpoch,
+        );
+        // update UI only if selected date is today
+        if (isToday(currentDay)) {
+          if (_bloc.isClosed) {
+            _bloc = MeasurementsBloc();
+          }
+          _bloc.add(AddGlicemia(glicemia));
         }
-        _bloc.add(AddGlicemia(glicemia));
-      }
-    });
-
+      });
+    }
     super.initState();
   }
 
