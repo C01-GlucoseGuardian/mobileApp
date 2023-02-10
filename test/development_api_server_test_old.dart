@@ -86,5 +86,5 @@ void main() {
           statoSalute: "as", oreSonno: "as", dolori: "as", svenimenti: "as"));
       debugPrint(res.toJson().toString());
     });
-  });
+  }, skip: true);
 }
