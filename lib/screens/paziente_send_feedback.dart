@@ -118,14 +118,14 @@ class PazienteSendFeedback extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(32))),
                 onPressed: () async {
-                  if (fController.text.trim().isEmpty ||
-                      sController.text.trim().isEmpty ||
-                      tController.text.trim().isEmpty ||
-                      qController.text.trim().isEmpty) {
+                  String? validatorResponse = validate(fController.text,
+                      sController.text, tController.text, qController.text);
+                  if (validatorResponse != null) {
                     AwesomeDialog(
                       dialogType: DialogType.info,
                       context: context,
                       title: "Completa tutti i campi",
+                      desc: "Errore: $validatorResponse",
                     ).show();
                   } else {
                     try {
@@ -163,5 +163,34 @@ class PazienteSendFeedback extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String? validate(String a1, String a2, String a3, String a4) {
+    if (a1.isEmpty) {
+      return "Lo stato salute non può essere vuoto";
+    }
+    if (a2.isEmpty) {
+      return "Le ore di sonno non possono essere vuote";
+    }
+    if (a3.isEmpty) {
+      return "I dolori non possono essere vuoti";
+    }
+    if (a4.isEmpty) {
+      return "Gli svenimenti non possono essere vuoti";
+    }
+    if (a1.length > 300) {
+      return "Lunghezza stato salute non valida";
+    }
+    if (a2.length > 300) {
+      return "Lunghezza ore di sonno non valida";
+    }
+    if (a3.length > 300) {
+      return "Lunghezza dolori non valida";
+    }
+    if (a4.length > 300) {
+      return "Lunghezza svenimenti non valida";
+    }
+
+    return null; // ok
   }
 }
