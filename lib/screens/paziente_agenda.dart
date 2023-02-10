@@ -11,7 +11,6 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
-import 'package:glucose_guardian/services/db/hive_assunzione_farmaco_service.dart';
 
 class PazienteAgenda extends StatefulWidget {
   final String? codiceFiscalePaziente;

@@ -307,6 +307,7 @@ class ApiProvider implements ApiMixin {
 
   @override
   Future<LoginOutput> performLogin(LoginInput data) async {
+    // ignore: prefer_typing_uninitialized_variables
     var resp;
     try {
       resp = await _makePostRequest(

@@ -21,7 +21,6 @@ import 'package:glucose_guardian/constants/general.dart';
 import 'package:glucose_guardian/models/dottore.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
 import 'package:glucose_guardian/models/notifica.dart';
-import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/models/tutore.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';

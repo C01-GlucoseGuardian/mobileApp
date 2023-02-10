@@ -84,7 +84,7 @@ class _LoginState extends State<Login> {
         },
         child: Scaffold(
           body: SingleChildScrollView(
-            child: Container(
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Column(
