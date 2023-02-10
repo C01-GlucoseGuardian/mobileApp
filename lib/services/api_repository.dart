@@ -80,6 +80,11 @@ class ApiRepository implements ApiMixin {
   }
 
   @override
+  Future sendGlicemia(Glicemia glicemia) {
+    return provider.sendGlicemia(glicemia);
+  }
+
+  @override
   Future<Tutore> fetchLoggedTutore(String codiceFiscale) {
     return provider.fetchLoggedTutore(codiceFiscale);
   }

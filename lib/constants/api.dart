@@ -13,6 +13,7 @@ enum ApiEndPoints {
   notifiche("/notifica/getAll"),
   terapiaByCF("/terapia/getByPaziente"),
   sendFeedback("/feedback/send"),
+  sendGlicemia("/glicemia/send"),
   afByCF("/assunzioneFarmaco/getByPaziente"),
   getPaziente("/paziente/get"),
   dottByPCF("/dottore/getByPaziente"),

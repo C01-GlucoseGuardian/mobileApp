@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -209,6 +212,8 @@ class PazienteHomeDashboard extends StatefulWidget {
 
 class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
   final MeasurementsBloc _bloc = MeasurementsBloc();
+  late Timer dataGenTimer;
+  DateTime currentDay = DateTime.now();
 
   @override
   void initState() {
@@ -219,7 +224,27 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
         codiceFiscalePaziente: widget.codiceFiscalePaziente,
       ),
     );
+
+    // start data generator
+    dataGenTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      Glicemia glicemia = Glicemia(
+        livelloGlucosio: Random().nextInt(100) + 70, // 70 <= x < 170
+        timestamp: DateTime.now().millisecondsSinceEpoch,
+      );
+      // update UI only if selected date is today
+      if (isToday(currentDay)) {
+        _bloc.add(AddGlicemia(glicemia));
+      }
+    });
+
     super.initState();
+  }
+
+  bool isToday(DateTime date) {
+    final now = DateTime.now();
+    return now.day == date.day &&
+        now.month == date.month &&
+        now.year == date.year;
   }
 
   @override
@@ -236,9 +261,16 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
       children: [
         DaySelector(
           callback: (day) {
+            setState(() {
+              currentDay = day;
+            });
             List<DateTime> span = getDayTimeSpan(day);
-            _bloc.add(GetMeasurementsInRange(span[0].millisecondsSinceEpoch,
-                span[1].millisecondsSinceEpoch));
+            _bloc.add(
+              GetMeasurementsInRange(
+                span[0].millisecondsSinceEpoch,
+                span[1].millisecondsSinceEpoch,
+              ),
+            );
           },
         ),
         BlocBuilder<MeasurementsBloc, MeasurementsState>(

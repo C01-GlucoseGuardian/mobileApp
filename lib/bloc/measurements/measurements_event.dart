@@ -17,3 +17,9 @@ class GetMeasurementsInRange extends MeasurementsEvent {
   const GetMeasurementsInRange(this.startTime, this.endTime,
       {this.codiceFiscalePaziente});
 }
+
+class AddGlicemia extends MeasurementsEvent {
+  final Glicemia glicemia;
+
+  const AddGlicemia(this.glicemia);
+}

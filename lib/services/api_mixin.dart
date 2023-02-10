@@ -21,6 +21,7 @@ abstract class ApiMixin {
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
 
   Future<bool> sendFeedback(FeedbackInput input);
+  Future sendGlicemia(Glicemia glicemia);
 
   Future<List<AssunzioneFarmaco>> fetchAssunzioneFarmacoByCF(
       String codiceFiscale);

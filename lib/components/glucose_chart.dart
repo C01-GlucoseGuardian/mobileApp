@@ -36,8 +36,8 @@ class GlucoseChartCard extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: BarChart(
-                      mainBarData(),
+                    child: LineChart(
+                      mainLineData(),
                     ),
                   ),
                 ),
@@ -72,6 +72,65 @@ class GlucoseChartCard extends StatelessWidget {
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    );
+  }
+
+  LineChartData mainLineData() {
+    measurementsOfSelectedDay
+        .sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
+    return LineChartData(
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: false,
+        drawHorizontalLine: false,
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: false,
+          ),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            reservedSize: 50,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+        show: false,
+      ),
+      lineBarsData: [
+        LineChartBarData(
+          spots: [
+            for (int i = 0; i < measurementsOfSelectedDay.length; i++)
+              FlSpot(i.toDouble(),
+                  measurementsOfSelectedDay[i].livelloGlucosio!.toDouble()),
+          ],
+          isCurved: true,
+          gradient: const LinearGradient(
+            colors: [
+              kOrangePrimary,
+              kBlue,
+            ],
+          ),
+          barWidth: 2,
+          isStrokeCapRound: false,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: false,
           ),
         ),
       ],

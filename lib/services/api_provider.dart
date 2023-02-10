@@ -255,6 +255,25 @@ class ApiProvider implements ApiMixin {
   }
 
   @override
+  Future sendGlicemia(Glicemia glicemia) async {
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.sendGlicemia.value,
+      body: {
+        "list": [
+          glicemia.toJson(),
+        ]
+      },
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+  }
+
+  @override
   Future<Tutore> fetchLoggedTutore(String codiceFiscale) async {
     var resp = await _makePostRequest(
       path: ApiEndPoints.getTutore.value,
