@@ -11,6 +11,7 @@ E' possibile scaricare sul proprio dispositivo l'applicaione dal play store, una
 
 Per compilare l'applicazione per Android è necessario avere installato i tool di compilazione di base e l'sdk di Android.
 Successivamente bisognerà installare flutter seguendo le indicazioni sul [sito ufficiale](https://docs.flutter.dev/get-started/install)
+A quel punto bisognerà eseguire il tool di code generation con ```flutter packages pub run build_runner build```
 
 Per compilare l'applicazione in modalità release bisognerà generare un keystore con il comando:
 ```keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000```

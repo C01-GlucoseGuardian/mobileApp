@@ -79,8 +79,6 @@ class GlucoseChartCard extends StatelessWidget {
   }
 
   LineChartData mainLineData() {
-    measurementsOfSelectedDay
-        .sort((a, b) => a.timestamp!.compareTo(b.timestamp!));
     return LineChartData(
       gridData: FlGridData(
         show: true,
