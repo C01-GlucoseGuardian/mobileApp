@@ -21,7 +21,16 @@ abstract class ApiMixin {
   Future<Terapia> fetchTerapiaByCF(String codiceFiscale);
 
   Future<bool> sendFeedback(FeedbackInput input);
+
   Future sendGlicemia(Glicemia glicemia);
+
+  Future sendNotifica(Notifica notifica);
+
+  Future receiveNotifica(Notifica notifica);
+
+  Future readNotifica(Notifica notifica);
+
+  Future archiveNotifica(Notifica notifica);
 
   Future<List<AssunzioneFarmaco>> fetchAssunzioneFarmacoByCF(
       String codiceFiscale);
@@ -29,6 +38,8 @@ abstract class ApiMixin {
   Future<Paziente> fetchLoggedPaziente(String codiceFiscale);
 
   Future<Dottore> fetchDottoreByPazienteCF(String codiceFiscale);
+
+  Future<List<Tutore>> fetchTutoreByPazienteCF(String codiceFiscale);
 
   Future<Farmaco> fetchFarmacoByID(int id);
 

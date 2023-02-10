@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,7 +18,11 @@ import 'package:glucose_guardian/constants/assets.dart';
 import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/constants/dates.dart';
 import 'package:glucose_guardian/constants/general.dart';
+import 'package:glucose_guardian/models/dottore.dart';
 import 'package:glucose_guardian/models/glicemia.dart';
+import 'package:glucose_guardian/models/notifica.dart';
+import 'package:glucose_guardian/models/paziente.dart';
+import 'package:glucose_guardian/models/tutore.dart';
 import 'package:glucose_guardian/screens/cgm_connect.dart';
 import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
@@ -277,6 +282,134 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
             );
           },
         ),
+        if (isToday(currentDay))
+          Align(
+            alignment: Alignment.topRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16, top: 16),
+              child: TextButton.icon(
+                style: TextButton.styleFrom(
+                  backgroundColor: kBackgroundColor,
+                  foregroundColor: kOrangePrimary,
+                ),
+                onPressed: () {
+                  final TextEditingController notificationTextController =
+                      TextEditingController();
+                  AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.question,
+                    body: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            "Inserisci testo notifica",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleMedium!
+                                .copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                          ),
+                          const SizedBox(
+                            height: 16,
+                          ),
+                          TextFormField(
+                            controller: notificationTextController,
+                            maxLines: 4,
+                            maxLength: 1024,
+                            decoration: InputDecoration(
+                              hintText: "Testo notifica",
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () async {
+                              if (notificationTextController.text.isEmpty) {
+                                AwesomeDialog(
+                                  context: context,
+                                  dialogType: DialogType.error,
+                                  title:
+                                      "Il testo della notifica non può essere vuoto",
+                                ).show();
+                              } else {
+                                bool isTutore =
+                                    widget.codiceFiscalePaziente != null;
+                                final Dottore dottore =
+                                    await api.fetchDottoreByPazienteCF(
+                                  isTutore
+                                      ? widget.codiceFiscalePaziente!
+                                      : SharedPreferenceService.codiceFiscale!,
+                                );
+
+                                if (isTutore) {
+                                  Notifica notifica = Notifica(
+                                    pazienteDestinatario:
+                                        widget.codiceFiscalePaziente,
+                                    messaggio: notificationTextController.text,
+                                    pazienteOggetto:
+                                        widget.codiceFiscalePaziente,
+                                    dottoreDestinatario: dottore.codiceFiscale,
+                                    tutoreDestinatario:
+                                        SharedPreferenceService.codiceFiscale,
+                                  );
+
+                                  api.sendNotifica(notifica).then(
+                                      (value) => Navigator.of(context).pop());
+                                } else {
+                                  api
+                                      .fetchTutoreByPazienteCF(
+                                          SharedPreferenceService
+                                              .codiceFiscale!)
+                                      .then(
+                                        (List<Tutore> tutori) => tutori.forEach(
+                                          (tutore) {
+                                            Notifica notifica = Notifica(
+                                              pazienteDestinatario:
+                                                  SharedPreferenceService
+                                                      .codiceFiscale,
+                                              messaggio:
+                                                  notificationTextController
+                                                      .text,
+                                              pazienteOggetto:
+                                                  SharedPreferenceService
+                                                      .codiceFiscale,
+                                              dottoreDestinatario:
+                                                  dottore.codiceFiscale,
+                                              tutoreDestinatario:
+                                                  tutore.codiceFiscale,
+                                            );
+
+                                            api.sendNotifica(notifica).then(
+                                                (value) => Navigator.of(context)
+                                                    .pop());
+                                          },
+                                        ),
+                                      );
+                                }
+                              }
+                            },
+                            icon: const Icon(Icons.send),
+                            label: const Text("INVIA"),
+                          )
+                        ],
+                      ),
+                    ),
+                  ).show();
+                },
+                label: Text(
+                    "Invia notifica ${widget.codiceFiscalePaziente == null ? 'a tutore e dottore' : ''}"),
+                icon: const Icon(
+                  Icons.send_rounded,
+                  color: kOrangePrimary,
+                ),
+              ),
+            ),
+          ),
         BlocBuilder<MeasurementsBloc, MeasurementsState>(
           builder: (context, state) {
             if (state is MeasurementsInitial || state is MeasurementsLoading) {

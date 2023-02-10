@@ -77,6 +77,26 @@ class ApiProvider implements ApiMixin {
   }
 
   @override
+  Future<List<Tutore>> fetchTutoreByPazienteCF(String codiceFiscale) async {
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.tutByPCF.value,
+      body: {
+        "codiceFiscale": codiceFiscale,
+      },
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+    return ((resp.data as Map)["list"] as List)
+        .map<Tutore>((af) => Tutore.fromJson(af))
+        .toList();
+  }
+
+  @override
   Future<Farmaco> fetchFarmacoByID(int id) async {
     var resp = await _makePostRequest(
       path: ApiEndPoints.farmacoByID.value,
@@ -192,6 +212,78 @@ class ApiProvider implements ApiMixin {
     }
 
     return Notifica.fromJson(resp.data);
+  }
+
+  @override
+  Future archiveNotifica(Notifica notifica) async {
+    notifica.stato = 4;
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.updateNotifica.value,
+      body: notifica.toJson(),
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return;
+  }
+
+  @override
+  Future readNotifica(Notifica notifica) async {
+    notifica.stato = 3;
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.updateNotifica.value,
+      body: notifica.toJson(),
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return;
+  }
+
+  @override
+  Future receiveNotifica(Notifica notifica) async {
+    notifica.stato = 2;
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.updateNotifica.value,
+      body: notifica.toJson(),
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return;
+  }
+
+  @override
+  Future sendNotifica(Notifica notifica) async {
+    notifica.stato = 0;
+    var resp = await _makePostRequest(
+      path: ApiEndPoints.sendNotifica.value,
+      body: notifica.toJson(),
+      generic: false,
+    );
+
+    debugPrint(resp.toString());
+
+    if (resp.statusCode != 200) {
+      throw ApiException(msg: resp.data['msg'] ?? "Eccezione non gestita");
+    }
+
+    return;
   }
 
   @override

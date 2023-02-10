@@ -14,7 +14,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       try {
         emit(NotificationsLoading());
         List<Notifica> notifications = await api.fetchNotificheByCF();
+        notifications = notifications.where((n) => n.stato! <= 3).toList();
         emit(NotificationsLoaded(notifications));
+        for (Notifica notifica in notifications) {
+          if (notifica.stato != null && notifica.stato! <= 2) {
+            api.readNotifica(notifica);
+          }
+        }
       } on ApiException catch (e) {
         emit(NotificationsError(e.msg));
       } catch (e) {
