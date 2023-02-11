@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -163,6 +164,11 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                       foregroundColor: kOrangePrimary,
                     ),
                     onPressed: () {
+                      try {
+                        FirebaseMessaging.instance.unsubscribeFromTopic(
+                            SharedPreferenceService.codiceFiscale!);
+                      } catch (_) {}
+
                       SharedPreferenceService.logout();
                       Navigator.of(context, rootNavigator: true)
                           .pushReplacement(
