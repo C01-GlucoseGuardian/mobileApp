@@ -277,6 +277,7 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               GetMeasurementsInRange(
                 span[0].millisecondsSinceEpoch,
                 span[1].millisecondsSinceEpoch,
+                codiceFiscalePaziente: widget.codiceFiscalePaziente,
               ),
             );
           },
