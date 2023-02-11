@@ -7,16 +7,35 @@ import 'package:intl/intl.dart';
 const int kAppStatus = 2;
 
 /// checks if glucose value is normal or not
-bool isGlucoseValueNormal(int value) => value < 100;
+bool isGlucoseValueNormal(int value) {
+  if (value < 0 || value > 400) {
+    throw Exception();
+  }
+
+  return value < 100;
+}
+
 const String kGlucoseUOM = "mg/dL";
 
 /// Get lowest measurement in list
-Glicemia getLowest(List<Glicemia> list) => list.reduce((value, element) =>
-    value.livelloGlucosio! < element.livelloGlucosio! ? value : element);
+Glicemia getLowest(List<Glicemia> list) {
+  if (list.isEmpty) {
+    throw Exception();
+  }
+
+  return list.reduce((value, element) =>
+      value.livelloGlucosio! < element.livelloGlucosio! ? value : element);
+}
 
 /// Get highest measurement in list
-Glicemia getHighest(List<Glicemia> list) => list.reduce((value, element) =>
-    value.livelloGlucosio! > element.livelloGlucosio! ? value : element);
+Glicemia getHighest(List<Glicemia> list) {
+  if (list.isEmpty) {
+    throw Exception();
+  }
+
+  return list.reduce((value, element) =>
+      value.livelloGlucosio! > element.livelloGlucosio! ? value : element);
+}
 
 /// Define a "wrapper class" to be used by provider to find the bottomNavigationBar
 /// index up in the widget tree not confusing it with other simple integers that
