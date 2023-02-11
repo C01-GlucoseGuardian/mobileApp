@@ -149,7 +149,7 @@ class _LandingPageContent extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: shrinkIcon ? 2 : 1,
+          flex: asset == null ? 2 : 1,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
