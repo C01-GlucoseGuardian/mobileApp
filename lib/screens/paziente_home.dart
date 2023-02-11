@@ -57,105 +57,98 @@ class _PazienteHomeState extends State<PazienteHome> {
           create: (_) => BottomNavigationBarIndex(0),
         ),
       ],
-      child: Banner(
-        location: BannerLocation.topEnd,
-        message: "HACKER",
-        child: Scaffold(
-          backgroundColor: kBackgroundColor,
-          appBar: _createAppBar(context),
-          bottomNavigationBar: Builder(
-            builder: (context) => BottomNavigationBar(
-              elevation: 0,
-              backgroundColor: Colors.white,
-              enableFeedback: true,
-              selectedFontSize: 0,
-              currentIndex:
-                  Provider.of<BottomNavigationBarIndex>(context).index,
-              onTap: (newIndex) {
-                int currentIndex = Provider.of<BottomNavigationBarIndex>(
-                        context,
-                        listen: false)
-                    .index;
-                if (currentIndex != newIndex) {
-                  String nextRoute = kHomeNavigatorPaths[newIndex];
-                  homeNavigatorKey.currentState
-                      ?.pushReplacementNamed(nextRoute);
+      child: Scaffold(
+        backgroundColor: kBackgroundColor,
+        appBar: _createAppBar(context),
+        bottomNavigationBar: Builder(
+          builder: (context) => BottomNavigationBar(
+            elevation: 0,
+            backgroundColor: Colors.white,
+            enableFeedback: true,
+            selectedFontSize: 0,
+            currentIndex: Provider.of<BottomNavigationBarIndex>(context).index,
+            onTap: (newIndex) {
+              int currentIndex =
                   Provider.of<BottomNavigationBarIndex>(context, listen: false)
-                      .index = newIndex;
-                } else {
-                  // user re-clicks on the
-                  // current bottomnavigationbar item
-                }
-              },
-              items: [
-                _createBottomNavigationBarItem(
-                  context,
-                  0,
-                  'home',
-                  FontAwesomeIcons.house,
-                ),
-                _createBottomNavigationBarItem(
-                  context,
-                  1,
-                  'agenda',
-                  FontAwesomeIcons.calendar,
-                ),
-                _createBottomNavigationBarItem(
-                  context,
-                  2,
-                  'notifiche',
-                  FontAwesomeIcons.bell,
-                ),
-                _createBottomNavigationBarItem(
-                  context,
-                  3,
-                  'dottore',
-                  FontAwesomeIcons.userDoctor,
-                ),
-                _createBottomNavigationBarItem(
-                  context,
-                  4,
-                  'profilo',
-                  FontAwesomeIcons.user,
-                ),
-              ],
-            ),
-          ),
-          body: Navigator(
-            key: homeNavigatorKey,
-            onGenerateRoute: (settings) {
-              // local function, animations disabled
-              PageRouteBuilder builder(Widget page) => PageRouteBuilder(
-                    pageBuilder: (_, __, ___) => page,
-                    transitionDuration: Duration.zero,
-                    reverseTransitionDuration: Duration.zero,
-                  );
-
-              switch (settings.name) {
-                case 'agenda':
-                  return builder(
-                    const PazienteAgenda(),
-                  );
-                case 'notifiche':
-                  return builder(
-                    const PazienteNotifiche(),
-                  );
-                case 'dottore':
-                  return builder(
-                    const PazienteDoctorScreen(),
-                  );
-                case 'profilo':
-                  return builder(
-                    const PazienteProfilo(),
-                  );
-                case 'home':
-                default:
-                  return builder(
-                    const PazienteHomeDashboard(),
-                  );
+                      .index;
+              if (currentIndex != newIndex) {
+                String nextRoute = kHomeNavigatorPaths[newIndex];
+                homeNavigatorKey.currentState?.pushReplacementNamed(nextRoute);
+                Provider.of<BottomNavigationBarIndex>(context, listen: false)
+                    .index = newIndex;
+              } else {
+                // user re-clicks on the
+                // current bottomnavigationbar item
               }
             },
+            items: [
+              _createBottomNavigationBarItem(
+                context,
+                0,
+                'home',
+                FontAwesomeIcons.house,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                1,
+                'agenda',
+                FontAwesomeIcons.calendar,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                2,
+                'notifiche',
+                FontAwesomeIcons.bell,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                3,
+                'dottore',
+                FontAwesomeIcons.userDoctor,
+              ),
+              _createBottomNavigationBarItem(
+                context,
+                4,
+                'profilo',
+                FontAwesomeIcons.user,
+              ),
+            ],
           ),
+        ),
+        body: Navigator(
+          key: homeNavigatorKey,
+          onGenerateRoute: (settings) {
+            // local function, animations disabled
+            PageRouteBuilder builder(Widget page) => PageRouteBuilder(
+                  pageBuilder: (_, __, ___) => page,
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                );
+
+            switch (settings.name) {
+              case 'agenda':
+                return builder(
+                  const PazienteAgenda(),
+                );
+              case 'notifiche':
+                return builder(
+                  const PazienteNotifiche(),
+                );
+              case 'dottore':
+                return builder(
+                  const PazienteDoctorScreen(),
+                );
+              case 'profilo':
+                return builder(
+                  const PazienteProfilo(),
+                );
+              case 'home':
+              default:
+                return builder(
+                  const PazienteHomeDashboard(),
+                );
+            }
+          },
         ),
       ),
     );
