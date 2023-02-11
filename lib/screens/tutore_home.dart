@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,6 +14,7 @@ import 'package:glucose_guardian/screens/change_password.dart';
 import 'package:glucose_guardian/screens/login.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/tutore_paziente_details.dart';
+import 'package:glucose_guardian/services/firebase.dart';
 
 import '../components/loading.dart';
 import '../services/shared_preferences_service.dart';
@@ -32,6 +34,9 @@ class _TutoreHomeState extends State<TutoreHome> {
 
   @override
   void initState() {
+    askNotificationPermission(context);
+    listenOnActiveApp(context);
+
     _bloc.add(GetTutore());
     super.initState();
   }
@@ -238,6 +243,10 @@ class _TutoreHomeState extends State<TutoreHome> {
           IconButton(
             onPressed: () {
               SharedPreferenceService.logout();
+              try {
+                FirebaseMessaging.instance.unsubscribeFromTopic(
+                    SharedPreferenceService.codiceFiscale!);
+              } catch (_) {}
               Navigator.of(context, rootNavigator: true).pushReplacement(
                 MaterialPageRoute(
                   builder: (_) => const Login(),

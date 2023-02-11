@@ -27,13 +27,27 @@ import 'package:glucose_guardian/screens/paziente_agenda.dart';
 import 'package:glucose_guardian/screens/paziente_doctor_screen.dart';
 import 'package:glucose_guardian/screens/paziente_notifiche.dart';
 import 'package:glucose_guardian/screens/paziente_profilo.dart';
+import 'package:glucose_guardian/services/firebase.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
 
-class PazienteHome extends StatelessWidget {
+class PazienteHome extends StatefulWidget {
   const PazienteHome({super.key});
+
+  @override
+  State<PazienteHome> createState() => _PazienteHomeState();
+}
+
+class _PazienteHomeState extends State<PazienteHome> {
+  @override
+  void initState() {
+    askNotificationPermission(context);
+    listenOnActiveApp(context);
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -277,6 +291,7 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
               GetMeasurementsInRange(
                 span[0].millisecondsSinceEpoch,
                 span[1].millisecondsSinceEpoch,
+                codiceFiscalePaziente: widget.codiceFiscalePaziente,
               ),
             );
           },
@@ -353,8 +368,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
                                     pazienteOggetto:
                                         widget.codiceFiscalePaziente,
                                     dottoreDestinatario: dottore.codiceFiscale,
-                                    tutoreDestinatario:
-                                        SharedPreferenceService.codiceFiscale,
+                                    //tutoreDestinatario:
+                                    //    SharedPreferenceService.codiceFiscale,
                                   );
 
                                   api.sendNotifica(notifica).then(
@@ -365,6 +380,7 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
                                           SharedPreferenceService
                                               .codiceFiscale!)
                                       .then(
+                                        // ignore: avoid_function_literals_in_foreach_calls
                                         (List<Tutore> tutori) => tutori.forEach(
                                           (tutore) {
                                             Notifica notifica = Notifica(

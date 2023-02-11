@@ -50,7 +50,9 @@ class AssunzioneFarmaco {
     data['id'] = id;
     data['idFarmaco'] = idFarmaco;
     data['dosaggio'] = dosaggio;
-    data['orarioAssunzione'] = orarioAssunzione;
+    if (orarioAssunzione != null) {
+      data['orarioAssunzione'] = formatTime(orarioAssunzione!);
+    }
     data['viaDiSomministrazione'] = viaDiSomministrazione;
     data['noteAggiuntive'] = noteAggiuntive;
     data['nomeFarmaco'] = nomeFarmaco;

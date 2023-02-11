@@ -9,7 +9,7 @@ class HiveAssunzioneFarmacoService {
       box = await Hive.openBox<AssunzioneFarmaco>(boxName);
 
   static Future clearAndSaveAll(List<AssunzioneFarmaco> data) async {
-    box.clear();
+    await box.clear();
     SharedPreferenceService.lastSavedAgenda =
         DateTime.now().millisecondsSinceEpoch;
 
