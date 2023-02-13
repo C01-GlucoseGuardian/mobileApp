@@ -243,6 +243,25 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
           livelloGlucosio: Random().nextInt(100) + 60, // 60 <= x < 160
           timestamp: DateTime.now().millisecondsSinceEpoch,
         );
+
+        if (glicemia.livelloGlucosio! > 120) {
+          api
+              .fetchDottoreByPazienteCF(SharedPreferenceService.codiceFiscale!)
+              .then((dottore) {
+            api
+                .fetchTutoreByPazienteCF(SharedPreferenceService.codiceFiscale!)
+                .then((tutore) {
+              Notifica notifica = Notifica(
+                messaggio: "ALERT GLICEMIA ELEVATA",
+                pazienteOggetto: SharedPreferenceService.codiceFiscale,
+                dottoreDestinatario: dottore.codiceFiscale,
+                tutoreDestinatario: tutore[0].codiceFiscale,
+              );
+
+              api.sendNotifica(notifica);
+            });
+          });
+        }
         // update UI only if selected date is today
         if (isToday(currentDay)) {
           if (_bloc.isClosed) {
