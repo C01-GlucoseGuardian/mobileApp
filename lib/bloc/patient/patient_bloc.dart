@@ -8,6 +8,9 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 part 'patient_state.dart';
 part 'patient_event.dart';
 
+/// BLoC implementation of the patient
+///
+/// This handles the patient profile
 class PatientBloc extends Bloc<PatientEvent, PatientState> {
   PatientBloc() : super(PatientInitial()) {
     on<GetPatient>((event, emit) async {

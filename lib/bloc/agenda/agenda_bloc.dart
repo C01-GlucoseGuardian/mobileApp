@@ -9,7 +9,17 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 part 'agenda_event.dart';
 part 'agenda_state.dart';
 
+/// BLoC implementation of the Agenda
+///
+/// This handles the list of assunzioneFarmaco to be shown on the Agenda
+/// section of the app
 class AgendaBloc extends Bloc<AgendaEvent, AgendaState> {
+  /// The constructor defines what the app will do on:
+  /// on<[GetAgenda]> when a getAgenda event is fired gets the data from the api
+  /// and emits a [AgendaLoaded] state with the data
+  ///
+  /// on<[SetFarmacoAsTaken]> sets assunzioneFarmaco as taken on the hivedb and
+  /// sends back the updated list
   AgendaBloc() : super(AgendaInitial()) {
     on<GetAgenda>((event, emit) async {
       try {
