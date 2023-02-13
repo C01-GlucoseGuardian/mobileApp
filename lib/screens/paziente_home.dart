@@ -33,6 +33,8 @@ import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> homeNavigatorKey = GlobalKey<NavigatorState>();
 
+late Timer dataGenTimer;
+
 class PazienteHome extends StatefulWidget {
   const PazienteHome({super.key});
 
@@ -223,7 +225,6 @@ class PazienteHomeDashboard extends StatefulWidget {
 
 class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
   MeasurementsBloc _bloc = MeasurementsBloc();
-  late Timer dataGenTimer;
   DateTime currentDay = DateTime.now();
 
   @override
