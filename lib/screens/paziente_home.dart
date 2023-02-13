@@ -253,7 +253,8 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
                 .fetchTutoreByPazienteCF(SharedPreferenceService.codiceFiscale!)
                 .then((tutore) {
               Notifica notifica = Notifica(
-                messaggio: "ALERT GLICEMIA ELEVATA",
+                messaggio:
+                    "ALERT GLICEMIA ELEVATA PAZIENTE ${SharedPreferenceService.codiceFiscale}",
                 pazienteOggetto: SharedPreferenceService.codiceFiscale,
                 dottoreDestinatario: dottore.codiceFiscale,
                 tutoreDestinatario: tutore[0].codiceFiscale,
@@ -397,9 +398,6 @@ class _PazienteHomeDashboardState extends State<PazienteHomeDashboard> {
                                         (List<Tutore> tutori) => tutori.forEach(
                                           (tutore) {
                                             Notifica notifica = Notifica(
-                                              pazienteDestinatario:
-                                                  SharedPreferenceService
-                                                      .codiceFiscale,
                                               messaggio:
                                                   notificationTextController
                                                       .text,
