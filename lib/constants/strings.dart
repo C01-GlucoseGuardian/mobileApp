@@ -8,6 +8,6 @@ final List<String> kFeedbackSendStrings = [
 ];
 
 const String kAppCreators =
-    "Progetto realizzato dagli studenti:\nAldi Matteo,\nCifelli Domenico,\nMarchese Marco Maria,\nMennillo Andrea,\nPiegari Vito official";
+    "Progetto realizzato dagli studenti:\nAldi Matteo,\nCifelli Domenico,\nMarchese Marco Maria,\nMennillo Andrea,\nPiegari Vito Gerardo";
 const String kAppUniLectureDesc =
     "Progetto realizzato per il corso di Ingegneria del Software nel corso di Laurea Triennale in Informatica presso l'Università di Salerno, tenuto dalla Prof.ssa Ferrucci e il Prof. Palomba.";

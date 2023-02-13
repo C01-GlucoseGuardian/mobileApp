@@ -9,6 +9,7 @@ import 'package:glucose_guardian/constants/colors.dart';
 import 'package:glucose_guardian/models/paziente.dart';
 import 'package:glucose_guardian/screens/change_password.dart';
 import 'package:glucose_guardian/screens/login.dart';
+import 'package:glucose_guardian/screens/paziente_home.dart';
 import 'package:glucose_guardian/services/shared_preferences_service.dart';
 import 'package:intl/intl.dart';
 
@@ -168,6 +169,10 @@ class _PazienteProfiloState extends State<PazienteProfilo> {
                         FirebaseMessaging.instance.unsubscribeFromTopic(
                             SharedPreferenceService.codiceFiscale!);
                       } catch (_) {}
+
+                      if (dataGenTimer.isActive) {
+                        dataGenTimer.cancel();
+                      }
 
                       SharedPreferenceService.logout();
                       Navigator.of(context, rootNavigator: true)

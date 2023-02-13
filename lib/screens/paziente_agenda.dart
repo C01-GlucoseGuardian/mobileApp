@@ -174,7 +174,7 @@ class DrugCard extends StatelessWidget {
                     _buildInfoWidget(
                       context,
                       "Dose",
-                      "${assunzioneFarmaco.dosaggio!} mg",
+                      assunzioneFarmaco.dosaggio!,
                       null,
                       iconAlt: SvgPicture.asset(
                         kSyringeIcon,
