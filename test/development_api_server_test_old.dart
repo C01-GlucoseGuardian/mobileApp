@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+/*import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:glucose_guardian/models/assunzione_farmaco.dart';
 import 'package:glucose_guardian/models/auth.dart';
@@ -88,3 +88,4 @@ void main() {
     });
   }, skip: true);
 }
+*/

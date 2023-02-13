@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "879495212525",
+    "project_id": "glucoseguardian",
+    "storage_bucket": "glucoseguardian.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:879495212525:android:4f868f5a4d5827f2830be4",
+        "android_client_info": {
+          "package_name": "com.vitp.glucose_guardian"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "879495212525-4je5pcrr3n9uq6qb211a8a5qfvmjs4og.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACWcARFaLYXMZm8xY55908QGuE0vYYX50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "879495212525-4je5pcrr3n9uq6qb211a8a5qfvmjs4og.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
