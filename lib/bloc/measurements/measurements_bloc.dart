@@ -9,7 +9,15 @@ import 'package:glucose_guardian/services/shared_preferences_service.dart';
 part 'measurements_event.dart';
 part 'measurements_state.dart';
 
+/// BLoC implementation of Glicemia
+///
+/// This handles the sending/receiving of glucose measurements
 class MeasurementsBloc extends Bloc<MeasurementsEvent, MeasurementsState> {
+  /// The constructor defines what the app will do on:
+  /// on<[GetLast]> gets the last measurement from the api
+  /// on<[GetMeasurementsInRange]> gets the measurements from the api in the
+  /// selected range (timestamp)
+  /// on<[AddGlicemia]> sends a new measurement to the server
   MeasurementsBloc() : super(MeasurementsInitial()) {
     on<GetLast>((event, emit) async {
       try {
@@ -35,6 +43,7 @@ class MeasurementsBloc extends Bloc<MeasurementsEvent, MeasurementsState> {
     });
   }
 
+  /// Gets data from API and the emits the state to the caller
   Future<void> _getDataFromApi(
       Emitter<MeasurementsState> emit, GetMeasurementsInRange? event) async {
     try {

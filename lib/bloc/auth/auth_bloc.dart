@@ -7,7 +7,14 @@ import 'package:glucose_guardian/services/exceptions/api_exception.dart';
 part 'auth_event.dart';
 part 'auth_state.dart';
 
+/// BLoC implementation of the Auth phase
+///
+/// This handles login and login with otp
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  /// The constructor defines what the app will do on:
+  /// on<[AuthEvent]> when the user wants to login, calls the api with
+  /// the correct data gotten from the event that can be [PerformLogin] or
+  /// [PerformLoginNeedsOtp]
   AuthBloc() : super(AuthInitial()) {
     on<AuthEvent>((event, emit) async {
       try {

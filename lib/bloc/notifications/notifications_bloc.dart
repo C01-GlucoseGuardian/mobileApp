@@ -7,7 +7,13 @@ import 'package:glucose_guardian/services/exceptions/api_exception.dart';
 part 'notifications_event.dart';
 part 'notifications_state.dart';
 
+/// BLoC implementation of notifications
+///
+/// This handles the list of notifications
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
+  /// The constructor defines what the app will do on:
+  /// on<[GetNotifications]> when a GetNotifications is called gets the
+  /// notifications from the api and marks them as received/read
   NotificationsBloc() : super(NotificationsInitial()) {
     on<GetNotifications>((event, emit) async {
       try {
